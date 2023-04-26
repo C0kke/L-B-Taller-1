@@ -3,7 +3,7 @@ import java.util.*;
 
 
 public class app {
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws IOException {
 		
 		//scanners y archivos
 		Scanner scan = new Scanner(System.in);
@@ -28,7 +28,7 @@ public class app {
 		while(leer3.hasNextLine()){
 			String linea3 = leer3.nextLine();
 			String partes3[] = linea3.split(",");
-			String us = partes3[0];
+			String us = partes3[0].toLowerCase();
 			String pass = partes3[1];
 			
 			users[contador] = us;
@@ -46,36 +46,50 @@ public class app {
 			int archivoACorromper = (int) (Math.random()*3+1);
 			switch(archivoACorromper){
 				case 1:
+					//FileWriter corromper1 = new FileWriter(arch1);
+					System.out.println("Se corrompe el archivo " + archivoACorromper);
 					break;
 				case 2:
+					System.out.println("Se corrompe el archivo " + archivoACorromper);
 					break;
 				case 3:
+					System.out.println("Se corrompe el archivo " + archivoACorromper);
 					break;
 			}
 					
 			//Verificar existencia del usuario
 			System.out.println("User: ");
-			String user = scan.nextLine();
+			String user = scan.nextLine().toLowerCase();
 			System.out.println("Password: ");
 			String password = scan.nextLine();
 			
-			//tiene error
-			int posicion = -1;
-			for(int i = 0; i<10;i++){
-				if(users[i] == user){
-					posicion = i;
-				}
-			}
-			/*
+			boolean valido = Login(10, user, password, users, passwords);
+			
 			if(valido == false){
 				System.out.println("Acceso Denegado");
 			}else{
 				System.out.println("Acceso Correcto");
+				
+				//Login correcto, iniciar programa
 			}
-			*/
+			
 			System.out.println("Para finalizar sesión escriba 'fin', si desea continuar, pulse Enter");
 			iniciar = scan.nextLine();
 			
 		}
+	}
+	private static boolean Login(int tamaño, String user, String pass, String listaUser[], String listaPassword[]){
+		
+		boolean valido = false;
+		
+		for(int i = 0; i<10;i++){
+
+			if(user.equals(listaUser[i])){
+				if(pass.equals(listaPassword[i])){
+					valido = true;
+				}
+			}
+		}
+		return valido;
 	}
 }
