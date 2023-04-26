@@ -1,0 +1,5 @@
+Pablo, 2456, mejora de ia, 32
+Cristobal, 1365, programador, 19
+Jorge, 820, programador, 19
+Marcelo, 3650, Ia Master, 35
+Lucas, 2561, mejora de ia, 27

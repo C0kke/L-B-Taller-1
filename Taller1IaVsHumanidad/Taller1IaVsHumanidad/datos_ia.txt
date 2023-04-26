@@ -1,0 +1,5 @@
+nako, 2003, 15, simple, Fernando, 0
+joba, 2008, 20, simple, Jorge, 0
+HulaAi, 2014, 30, avanzada, Lucas, 15
+Mimic, 2010, 25, media, Cristobal, 9
+KiKiAi, 2011, 15, media, Marcelo, 7 
