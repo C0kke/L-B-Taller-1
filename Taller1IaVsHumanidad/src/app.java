@@ -7,12 +7,16 @@ public class app {
 		
 		//scanners y archivos
 		Scanner scan = new Scanner(System.in);
+		
 		File txtIA = new File("datos_ia.txt");
 		Scanner leer1 = new Scanner(txtIA);
+		
 		File txtCreadores = new File("datos_creadores.txt");
 		Scanner leer2 = new Scanner(txtCreadores);
+		
 		File txtUsuarios = new File("datos_usuarios.txt");
 		Scanner leer3 = new Scanner(txtUsuarios);
+		
 		//Pantalla Inicio
 		String iniciar = "WELCOME TO I.A. AGAINST TO HUMANITY";
 		System.out.println(iniciar);
@@ -23,8 +27,6 @@ public class app {
 		String users[] = new String [10];
 		String passwords[] = new String[10];
 		int contador = 0;
-		
-		System.out.println(leer3.nextLine());
 		
 		while(leer3.hasNextLine()){
 			String linea3 = leer3.nextLine();
@@ -44,43 +46,17 @@ public class app {
 			System.out.println("Se han corrompido " + datosACorromper + " datos" );
 			System.out.println("");
 
-			RandomAccessFile arch1 =new RandomAccessFile("datos_ia.txt", "rw");
-			RandomAccessFile arch2 = new RandomAccessFile("datos_creadores.txt", "rw");
-			RandomAccessFile arch3 = new RandomAccessFile("datos_usuarios.txt", "rw");
-			
 			int archivoACorromper = (int) (Math.random()*3+1);
-			int random;
 			
 			switch(archivoACorromper){
 				case 1:
 					System.out.println("Se corrompe el archivo " + archivoACorromper);
-					long tamaño1 = arch1.length();
-					for(int i =0; i<datosACorromper;i++){
-						random = (int) (Math.random() * tamaño1);
-						arch1.seek(random);
-						arch1.writeBytes(", " + "!#IA.Win$#¡" + " ,");;
-					}
-					arch1.close();
 					break;
 				case 2:
 					System.out.println("Se corrompe el archivo " + archivoACorromper);
-					long tamaño2 = arch2.length();
-					for(int i =0; i<datosACorromper;i++){
-					random = (int) (Math.random() * tamaño2);
-						arch2.seek(random);
-						arch2.writeBytes(", " + "!#IA.Win$#¡" + " ,");
-					}
-					arch2.close();
 					break;
 				case 3:
 					System.out.println("Se corrompe el archivo " + archivoACorromper);
-					long tamaño3 = arch3.length();
-					for(int i =0; i<datosACorromper;i++){
-					random = (int) (Math.random() * tamaño3);
-					arch3.seek(random);
-					arch3.writeBytes(", " + "!#IA.Win$#¡" + " ,");;
-					}
-					arch3.close();
 					break;
 			}
 					
