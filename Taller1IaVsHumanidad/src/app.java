@@ -7,11 +7,11 @@ public class app {
 		
 		//scanners y archivos
 		Scanner scan = new Scanner(System.in);
-		File txtIA = new File("datos_ia.txt");
+		File txtIA = new File("Taller1IaVsHumanidad/datos_creadores.txt");
 		Scanner leer1 = new Scanner(txtIA);
-		File txtCreadores = new File("datos_creadores.txt");
+		File txtCreadores = new File("Taller1IaVsHumanidad/datos_ia.txt");
 		Scanner leer2 = new Scanner(txtCreadores);
-		File txtUsuarios = new File("datos_usuarios.txt");
+		File txtUsuarios = new File("Taller1IaVsHumanidad/datos_usuarios.txt");
 		Scanner leer3 = new Scanner(txtUsuarios);
 		//Pantalla Inicio
 		String iniciar = "WELCOME TO I.A. AGAINST TO HUMANITY";
