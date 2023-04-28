@@ -26,6 +26,7 @@ public class app {
 		//Creacion de listas para user/password
 		String users[] = new String [10];
 		String passwords[] = new String[10];
+		String categorias[] = new String [10];
 		int contador = 0;
 		
 		while(leer3.hasNextLine()){
@@ -33,9 +34,11 @@ public class app {
 			String partes3[] = linea3.split(",");
 			String us = partes3[0].toLowerCase();
 			String pass = partes3[1];
+			String rol = partes3[2];
 			
 			users[contador] = us;
 			passwords[contador] = pass;
+			categorias[contador] = rol;
 			contador++;
 			
 		}
@@ -65,8 +68,10 @@ public class app {
 			String user = scan.nextLine().toLowerCase();
 			System.out.println("Password: ");
 			String password = scan.nextLine();
+			String categoria = "";
 			
 			boolean valido = Login(10, user, password, users, passwords);
+			categoria = IndicarCategoria(user, users, passwords, password, categorias, categoria);
 			
 			if(valido == false){
 				System.out.println("Acceso Denegado");
@@ -74,6 +79,11 @@ public class app {
 				System.out.println("Acceso Correcto");
 				
 				//Login correcto, iniciar programa
+				if (categoria.equals("normal")){
+					
+				}else if (categoria.equals("administrador")){
+					
+				}
 			}
 			
 			System.out.println("Para finalizar sesión escriba 'fin', si desea continuar, pulse Enter");
@@ -86,7 +96,7 @@ public class app {
 		
 		boolean valido = false;
 		
-		for(int i = 0; i<10;i++){
+		for(int i = 0; i<tamaño;i++){
 
 			if(user.equals(listaUser[i])){
 				if(pass.equals(listaPassword[i])){
@@ -96,4 +106,14 @@ public class app {
 		}
 		return valido;
 	}
+	private static String IndicarCategoria(String user, String listaUser[], String listaPassword[], String password, String lista[], String var){
+		for(int i = 0; i<10;i++){
+			if(user.equals(listaUser[i])){
+				if(password.equals(listaPassword[i])){
+					 var = lista[i];
+					}
+				}
+			}
+		return var;
+	}	
 }
