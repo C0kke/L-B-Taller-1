@@ -8,20 +8,25 @@ public class app {
 		//scanners y archivos
 		Scanner scan = new Scanner(System.in);
 		
-		File txtIA = new File("datos_ia.txt");
-		Scanner leer1 = new Scanner(txtIA);
-		
 		File txtCreadores = new File("datos_creadores.txt");
 		Scanner leer2 = new Scanner(txtCreadores);
 		
 		File txtUsuarios = new File("datos_usuarios.txt");
 		Scanner leer3 = new Scanner(txtUsuarios);
 		
-		//Pantalla Inicio
-		String iniciar = "WELCOME TO I.A. AGAINST TO HUMANITY";
-		System.out.println(iniciar);
-		System.out.println("Press Enter to Start");
-		iniciar = scan.nextLine();
+		//Creacion lista IA
+
+		
+		File txtIA = new File("datos_ia.txt");
+		Scanner leer1 = new Scanner(txtIA);
+		
+		String nombreIAs[] = new String [10];
+		int añoCreacion[] = new int [10];
+		int velocidades[] = new int[10];
+		String tipos[] = new String [10];
+		int tiposInt[] = new int[10];
+		String creadores[] = new String[10];
+		int cantMejoras[] = new int[10];
 		
 		//Creacion de listas para user/password
 		String users[] = new String [10];
@@ -43,33 +48,14 @@ public class app {
 			
 		}
 		
-		//Creacion lista IA
-		String nombreIAs[] = new String [10];
-		int añoCreacion[] = new int [10];
-		int velocidades[] = new int[10];
-		String tipos[] = new String [10];
-		String creadores[] = new String[10];
-		int cantMejoras[] = new int[10];
 		
-		contador = 0;
-		while(leer1.hasNextLine()){
-			String linea1 = leer1.nextLine();
-			String partes1[] = linea1.split(",");
-			String nombreIA = partes1[0].toLowerCase();
-			int año = Integer.parseInt(partes1[1]);
-			int veloz = Integer.parseInt(partes1[2]);
-			String tipo = partes1[3];
-			String creador = partes1[4];
-			int Mejora = Integer.valueOf(partes1[5]);
-			
-			nombreIAs[contador] = nombreIA;
-			añoCreacion[contador] = año;
-			velocidades[contador] = veloz;
-			tipos[contador] = tipo;
-			creadores[contador] = creador;
-			cantMejoras[contador] = Mejora;
-			contador++;
-		}
+
+		//Pantalla Inicio
+		System.out.println("***************************************************");
+		System.out.println("	WELCOME TO I.A. AGAINST TO HUMANITY		");
+		System.out.println("		Press Enter to Start				");
+		System.out.println("***************************************************");
+		String iniciar = scan.nextLine();
 		
 		
 		while(!iniciar.equals("fin")){
@@ -92,7 +78,6 @@ public class app {
 					System.out.println("Se corrompe el archivo " + archivoACorromper);
 					break;
 			}
-					
 			//Verificar existencia del usuario
 			System.out.println("User: ");
 			String user = scan.nextLine().toLowerCase();
@@ -107,12 +92,20 @@ public class app {
 				System.out.println("Acceso Denegado");
 			}else{
 				System.out.println("Acceso Correcto");
-				
+
 				//Login correcto, iniciar programa
+				
+				String logged = "";
+				while(!logged.equals("si")){
+					
 				if (categoria.equals("normal")){
 					
 				}else if (categoria.equals("administrador")){
 					
+
+					
+					CrearListas1(txtIA, nombreIAs, añoCreacion, velocidades, tipos, tiposInt, creadores, cantMejoras);
+				
 					System.out.println("Elija el menu al que desea acceder");
 			        System.out.println("Opcion 1) Submenu A.I.");
 			        System.out.println("Opcion 2) Submenu Users&Creators");
@@ -122,42 +115,46 @@ public class app {
 			            Limitar(1,2,alt);
 			            switch(alt){
 			                case 1:
-			                    System.out.println("Submenu A.I.");
-			                    System.out.println("");
-                        		System.out.println(Arrays.toString((nombreIAs)));
-			                    System.out.println("Como desea ordenar las IA");
-			                    System.out.println("1) por nombre");
-			                    System.out.println("2) antiguedad");
-			                    System.out.println("3) velocidad");
-			                    System.out.println("4) tipo");
-			                    System.out.println("5) creador");
-			                    System.out.println("6) cantidad de mejoras");
-			                    alt = Integer.parseInt(scan.nextLine());
-			                    
-			                    Limitar(1,6,alt);
-			                        
-			                        switch(alt){
-			                            case 1:
-			                                System.out.println("por nombre");
-			                                OrdenarMayorAMenor(nombreIAs);
-			                        		System.out.println(Arrays.toString((nombreIAs)));
+				                    System.out.println("Submenu A.I.");
+				                    System.out.println("");
+	                        		System.out.println(Arrays.toString((nombreIAs)));
+				                    System.out.println("Como desea ordenar las IA");
+				                    System.out.println("1) por nombre");
+				                    System.out.println("2) más reciente primero");
+				                    System.out.println("3) velocidad");
+				                    System.out.println("4) tipo");
+				                    System.out.println("5) creador");
+				                    System.out.println("6) cantidad de mejoras");
+				                    int orden = Integer.parseInt(scan.nextLine());	
+				                    
+				                    Limitar(1,6,orden);
+				                        
+				                        switch(orden){
+				                            case 1:
+				                                OrdenarMayorAMenorStr(nombreIAs, nombreIAs);
+				                        		System.out.println(Arrays.toString(nombreIAs));
+				                                break;
+				                            case 2:
+				                                OrdenarMayorAMenorInt(añoCreacion, nombreIAs);
+				                        		System.out.println(Arrays.toString(nombreIAs));
 			                                break;
-			                            case 2:
-			                                System.out.println("antiguedad");
-			                                break;
-			                            case 3:
-			                                System.out.println("velocidad");
-			                                break;
-			                            case 4:
-			                                System.out.println("tipo");
-			                                break;
-			                            case 5:
-			                                System.out.println("creador");
-			                                break;
-			                            case 6:
-			                                System.out.println("cantidad de mejoras");
-			                                break;
-			                        }
+				                            case 3:
+				                            	OrdenarMayorAMenorInt(velocidades, nombreIAs);
+				                            	System.out.println(Arrays.toString(nombreIAs));
+				                            	break;
+				                            case 4:
+				                            	OrdenarMayorAMenorInt(tiposInt, nombreIAs);
+				                            	System.out.println(Arrays.toString(nombreIAs));
+				                            	break;
+				                            case 5:
+				                            	OrdenarMayorAMenorStr(creadores, nombreIAs);
+				                            	System.out.println(Arrays.toString(nombreIAs));
+				                            	break;
+				                            case 6:
+				                            	OrdenarMayorAMenorInt(cantMejoras, nombreIAs);
+				                            	System.out.println(Arrays.toString(nombreIAs));
+				                            	break;
+				                        }
 			                    
 			                    
 			                    break;
@@ -221,11 +218,17 @@ public class app {
 			            }
 				}
 			}
-			
-			System.out.println("Para finalizar sesión escriba 'fin', si desea continuar, pulse Enter");
+
+			System.out.println("¿Desea finalizar la sesión?");
+			logged = scan.nextLine();
+			}
+
+			System.out.println("Para finalizar escriba 'fin', si desea continuar, pulse Enter");
 			iniciar = scan.nextLine();
 			
-		}	
+		}
+		scan.close();leer1.close();
+		scan.close();leer2.close();
 		scan.close();leer3.close();
 	}
 	private static boolean Login(int tamaño, String user, String pass, String listaUser[], String listaPassword[]){
@@ -260,17 +263,74 @@ public class app {
             var = Integer.parseInt(scan.nextLine());
         }
         return var;
-    }
-	public static void OrdenarMayorAMenor(String[] lista) {
+	}
+	
+	public static void OrdenarMayorAMenorStr(String[] lista, String[] lista2) {
 	    int tamaño = lista.length;
-	    for (int i = 1; i < tamaño; i++) {
-	        for (int j = 1; j < tamaño - i; j++) {
+	    for (int i = 0; i < tamaño; i++) {
+	    	for (int j = 1; j < tamaño; j++) {
 	        	if(lista[(j-1)] != null && lista[j] != null && (int)(lista[(j-1)].compareTo(lista[j])) < 0){
 	                String aux = lista[j-1];
 	                lista[j-1] = lista[j];
 	                lista[j] = aux;
+	                if(!lista.equals(lista2)){
+	                	String auxStr = lista2[j-1];
+	                	lista2[j-1] = lista2[j];
+	                	lista2[j] = auxStr;
+	                }
 	            }
 	        }
 	    }
+	}
+	public static void OrdenarMayorAMenorInt(int[] lista, String[] lista2) {
+	    int tamaño = lista.length;
+	    for (int i = 0; i < tamaño; i++) {
+	        for (int j = 1; j < tamaño; j++) {
+	        	if(lista[(j-1)]<lista[j]){
+	                int aux = lista[j-1];
+	                String auxStr = lista2[j-1];
+	                lista[j-1] = lista[j];
+	                lista2[j-1] = lista2[j];
+	                lista[j] = aux;
+	                lista2[j] = auxStr;
+	            }
+	        }
+	    }
+	}
+	private static void CrearListas1(File txt, String listaIas[], int listaAños[], int listaVelocidades[], String listaTipos[], int listaTiposInt[], String listaCreadores[], int listaMejoras[]) throws FileNotFoundException{
+		int contador = 0;
+		Scanner leer = new Scanner(txt);
+		
+		while(leer.hasNextLine()){
+			String linea = leer.nextLine();
+			String partes1[] = linea.split(",");
+			String nombreIA = partes1[0].toLowerCase();
+			int año = Integer.parseInt(partes1[1]);
+			int veloz = Integer.parseInt(partes1[2]);
+			String tipo = partes1[3].toLowerCase();
+			int tipoInt = 0;
+			String creador = partes1[4];
+			int Mejora = Integer.valueOf(partes1[5]);
+			
+			switch(tipo){
+			case "simple" :
+				tipoInt = 0;
+				break;
+			case "media":
+				tipoInt = 1;
+				break;
+			case "avanzada":
+				tipoInt = 2;
+			}
+			listaIas[contador] = nombreIA;
+			listaAños[contador] = año;
+			listaVelocidades[contador] = veloz;
+			listaTipos[contador] = tipo;
+			listaTiposInt[contador] = tipoInt;
+			listaCreadores[contador] = creador;
+			listaMejoras[contador] = Mejora;
+		contador++;
+		}
+		leer.close();
 	}
 }
