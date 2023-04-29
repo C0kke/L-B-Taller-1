@@ -8,15 +8,7 @@ public class app {
 		//scanners y archivos
 		Scanner scan = new Scanner(System.in);
 		
-		File txtCreadores = new File("datos_creadores.txt");
-		Scanner leer2 = new Scanner(txtCreadores);
-		
-		File txtUsuarios = new File("datos_usuarios.txt");
-		Scanner leer3 = new Scanner(txtUsuarios);
-		
-		//Creacion lista IA
-
-		
+		//para TXT de IA's
 		File txtIA = new File("datos_ia.txt");
 		Scanner leer1 = new Scanner(txtIA);
 		
@@ -28,36 +20,33 @@ public class app {
 		String creadores[] = new String[10];
 		int cantMejoras[] = new int[10];
 		
-		//Creacion de listas para user/password
+		//para TXT de Creadores
+		File txtCreadores = new File("datos_creadores.txt");
+		Scanner leer2 = new Scanner(txtCreadores);
+		
+		String[] nombresCreadores = new String[10];
+		int[] experiencias = new int[10];
+		String[] especialidades = new String[10]; 
+		int[] edades = new int[10];
+		
+		//para TXT de Usuarios
+		File txtUsuarios = new File("datos_usuarios.txt");
+		Scanner leer3 = new Scanner(txtUsuarios);
+		
 		String users[] = new String [10];
 		String passwords[] = new String[10];
 		String categorias[] = new String [10];
+		String creadoresUs[] = new String[10];
 		
-		int contador = 0;
-		while(leer3.hasNextLine()){
-			String linea3 = leer3.nextLine();
-			String partes3[] = linea3.split(",");
-			String us = partes3[0].toLowerCase();
-			String pass = partes3[1];
-			String rol = partes3[2];
-			
-			users[contador] = us;
-			passwords[contador] = pass;
-			categorias[contador] = rol;
-			contador++;
-			
-		}
+		CrearListas3(txtUsuarios, users, passwords, categorias, creadoresUs);
 		
-		
-
 		//Pantalla Inicio
 		System.out.println("***************************************************");
-		System.out.println("	WELCOME TO I.A. AGAINST TO HUMANITY		");
-		System.out.println("		Press Enter to Start				");
+		System.out.println("	WELCOME TO I.A. AGAINST TO HUMANITY!		");
+		System.out.println("	       Press Any Key to Start				");
 		System.out.println("***************************************************");
 		String iniciar = scan.nextLine();
-		
-		
+
 		while(!iniciar.equals("fin")){
 			
 			//corromper
@@ -98,21 +87,21 @@ public class app {
 				String logged = "";
 				while(!logged.equals("si")){
 					
-				if (categoria.equals("normal")){
-					
-				}else if (categoria.equals("administrador")){
-					
-
-					
-					CrearListas1(txtIA, nombreIAs, añoCreacion, velocidades, tipos, tiposInt, creadores, cantMejoras);
-				
-					System.out.println("Elija el menu al que desea acceder");
-			        System.out.println("Opcion 1) Submenu A.I.");
-			        System.out.println("Opcion 2) Submenu Users&Creators");
-			            
-			            int alt = Integer.parseInt(scan.nextLine());
-			            
-			            Limitar(1,2,alt);
+					if (categoria.equals("normal")){
+						
+					}else if (categoria.equals("administrador")){
+						
+						CrearListas1(txtIA, nombreIAs, añoCreacion, velocidades, tipos, tiposInt, creadores, cantMejoras);
+						CrearListas2(txtCreadores, nombresCreadores,experiencias, especialidades, edades);
+						CrearListas3(txtUsuarios, users, passwords, categorias, creadoresUs);
+						
+						System.out.println("Elija el menu al que desea acceder");
+						System.out.println("Opcion 1) Submenu A.I.");
+						System.out.println("Opcion 2) Submenu Users&Creators");
+			        
+						int alt = Integer.parseInt(scan.nextLine());
+						
+						Limitar(1,2,alt);
 			            switch(alt){
 			                case 1:
 				                    System.out.println("Submenu A.I.");
@@ -231,6 +220,7 @@ public class app {
 		scan.close();leer2.close();
 		scan.close();leer3.close();
 	}
+	
 	private static boolean Login(int tamaño, String user, String pass, String listaUser[], String listaPassword[]){
 		
 		boolean valido = false;
@@ -333,4 +323,45 @@ public class app {
 		}
 		leer.close();
 	}
+	private static void CrearListas2(File txt, String nombres[],int xps[],  String roles[], int edades[]) throws FileNotFoundException{
+		int contador = 0;
+		Scanner leer = new Scanner(txt);
+	
+		while(leer.hasNextLine()){
+			String linea = leer.nextLine();
+			String partes3[] = linea.split(",");
+			String nombre = partes3[0].toLowerCase();
+			int exp = Integer.parseInt(partes3[1].trim());
+			String rol = partes3[2];
+			int edad = Integer.parseInt(partes3[3].trim());
+			
+			nombres[contador] = nombre;
+			xps[contador] = exp;
+			roles[contador] = rol;
+			edades[contador] = edad;
+			contador++;
+		}
+		leer.close();
+	}
+	private static void CrearListas3(File txt, String users[],String passwords[],  String categorias[],  String creadores[]) throws FileNotFoundException{
+		int contador = 0;
+		Scanner leer = new Scanner(txt);
+	
+		while(leer.hasNextLine()){
+			String linea = leer.nextLine();
+			String partes3[] = linea.split(",");
+			String us = partes3[0].toLowerCase();
+			String pass = partes3[1];
+			String rol = partes3[2];
+			String creator = partes3[3];
+			
+			users[contador] = us;
+			passwords[contador] = pass;
+			categorias[contador] = rol;
+			creadores[contador] = creator;
+			contador++;
+		}
+		leer.close();
+	}
+
 }
