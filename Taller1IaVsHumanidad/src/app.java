@@ -1,88 +1,220 @@
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
 
 public class app {
 	public static void main(String[] args) throws IOException {
 		Scanner scan = new Scanner(System.in);
+
 		
+		//Pantalla Inicio
+		PantallaInicio();
+		String inicio = scan.nextLine();
+
 		//Archivos para TXT de IA's
 		File txtIA = new File("datos_ia.txt");
-		Scanner leer1 = new Scanner(txtIA);
-		String nombreIAs[] = new String [10];
-		String añoCreacion[] = new String [10];
-		String velocidades[] = new String[10];
-		String tipos[] = new String [10];
-		String tiposInt[] = new String[10];
-		String creadores[] = new String[10];
-		String cantMejoras[] = new String[10];
+		FileWriter escribirIA = new FileWriter(txtIA, true);
+		String nombreIAs[] = new String [1000];
+		String añoCreacion[] = new String [1000];
+		String velocidades[] = new String[1000];
+		String tipos[] = new String [1000];
+		String tiposInt[] = new String[1000];
+		String creadores[] = new String[1000];
+		String cantMejoras[] = new String[1000];
+		CrearListas1(txtIA, nombreIAs, añoCreacion, velocidades, tipos, tiposInt, creadores, cantMejoras);
 		
 		//Archivos para TXT de Creadores
 		File txtCreadores = new File("datos_creadores.txt");
-		Scanner leer2 = new Scanner(txtCreadores);
+		FileWriter escribirCreadores = new FileWriter(txtCreadores,true);
 		String[] nombresCreadores = new String[10];
 		String[] experiencias = new String[10];
 		String[] especialidades = new String[10]; 
 		String[] edades = new String[10];
+		CrearListas2(txtCreadores, nombresCreadores,experiencias, especialidades, edades);
 		
 		//Archivos para TXT de Usuarios
 		File txtUsuarios = new File("datos_usuarios.txt");
-		Scanner leer3 = new Scanner(txtUsuarios);
+		FileWriter escribirUsuarios = new FileWriter(txtUsuarios,true);
 		String users[] = new String [10];
 		String passwords[] = new String[10];
 		String categorias[] = new String [10];
 		String creadoresUs[] = new String[10];
+		CrearListas3(txtUsuarios, users, passwords, categorias, creadoresUs);
 		
-		//Pantalla Inicio
-		PantallaInicio();
-		String iniciar = scan.nextLine();
-
-		while(!iniciar.equals("fin")){
+		//Verificar existencia del usuario
+		System.out.println("LOGIN");
+		System.out.println("\nUser: ");
+		String user = scan.nextLine().toLowerCase();
+		System.out.println("Password: ");
+		String password = scan.nextLine();
+		String categoria = "";
 			
-			//Creacion de todas las listas
-			CrearListas1(txtIA, nombreIAs, añoCreacion, velocidades, tipos, tiposInt, creadores, cantMejoras);
-			FileWriter escribirIA = new FileWriter(txtIA, true);
-			CrearListas2(txtCreadores, nombresCreadores,experiencias, especialidades, edades);
-			FileWriter escribirCreadores = new FileWriter(txtCreadores,true);
-			CrearListas3(txtUsuarios, users, passwords, categorias, creadoresUs);
-			FileWriter escribirUsuarios = new FileWriter(txtUsuarios,true);
+		boolean valido = Login(users.length, user, password, users, passwords);
+		categoria = IndicarCategoria(user, users, passwords, password, categorias, categoria);
 			
-			//corromper
-			int datosACorromper = (int)(Math.random()*5+1);
-			int archivoACorromper = (int) (Math.random()*3+1);
+		if(valido == false){
+			System.out.println("Acceso Denegado");
+		}else{
+			System.out.println("Acceso Correcto");
 
-			switch(archivoACorromper){
-				case 1:
-					FileWriter borrar1 = new FileWriter(txtIA);
-					borrar1.write("");
-					borrar1.close();
-					System.out.println("Se corrompieron " + datosACorromper + " archivos de 'datos_ia.txt'");
+			//Login correcto, iniciar programa
+			while(!inicio.equals("si")){
+				
+				if (categoria.equals("normal")){
 					
-					for(int k = 0; k < datosACorromper;k++){
-						int listaCorrupta = (int)(Math.random()*6+1);
-						int posCorrupta = (int)(Math.random()*(cantMejoras.length-1));
-						switch(listaCorrupta){
-						case 1:
-							Corromper(posCorrupta, nombreIAs);
-							break;
-						case 2:
-							Corromper(posCorrupta, añoCreacion);
-							break;
-						case 3:
-							Corromper(posCorrupta, velocidades);
-							break;
-						case 4:
-							Corromper(posCorrupta, tipos);
-							break;
-						case 5:
-							Corromper(posCorrupta, creadores);
-							break;
-						case 6:
-							Corromper(posCorrupta, cantMejoras);
-							break;
-						}
+				}else if (categoria.equals("administrador")){
+					
+					System.out.println("\nElija el menu al que desea acceder");
+					System.out.println("\nOpcion 1) Submenu A.I.");
+					System.out.println("Opcion 2) Submenu Users&Creators");
+		        
+					int alt = Integer.parseInt(scan.nextLine());
+					
+					alt = Limitar(1,2,alt,scan);
+					
+		            switch(alt){
+		                case 1:
+		                	System.out.println("SUBMENÚ I.A.\n");
+		                	PrintListaStr(nombreIAs);
+			                System.out.println("\n¿Cómo desea ordenar las IA?\n");
+			                System.out.println("1) Por nombre");
+			                System.out.println("2) Más reciente primero");
+			                System.out.println("3) Por velocidad");
+			                System.out.println("4) Por tipo");
+			                System.out.println("5) Por nombre del creador");
+			                System.out.println("6) Por cantidad de mejoras");
+			                int orden = Integer.parseInt(scan.nextLine());
+			                orden = Limitar(1,6,orden,scan);
+			                switch(orden){
+			                case 1:
+			                	OrdenarMayorAMenorStr(nombreIAs, nombreIAs,nombreIAs);
+			                	PrintListaStr(nombreIAs);
+			                    break;
+			                case 2:
+			                	OrdenarMayorAMenorStr(añoCreacion, nombreIAs,nombreIAs);
+			                	PrintListaStr(nombreIAs);
+			                	PrintListaStr(añoCreacion);
+			                	break;
+			                case 3:
+			                	OrdenarMayorAMenorStr(velocidades, nombreIAs, nombreIAs);
+			                	PrintListaStr(nombreIAs);
+			                	PrintListaStr(velocidades);
+			                	break;
+			                case 4:
+			                	OrdenarMayorAMenorStr(tiposInt, tipos, nombreIAs);
+			                	PrintListaStr(nombreIAs);
+			                	PrintListaStr(tipos);
+			                    break;
+			                case 5:
+			                	OrdenarMayorAMenorStr(creadores, nombreIAs,nombreIAs);
+			                	PrintListaStr(nombreIAs);
+			                	PrintListaStr(creadores);
+			                	break;
+			                case 6:
+			                	OrdenarMayorAMenorStr(cantMejoras, nombreIAs, nombreIAs);
+			                	PrintListaStr(nombreIAs);
+			                	PrintListaStr(cantMejoras);
+			                	break;
+			                	}
+			                break;
+		                case 2:
+		                    System.out.println("Submenu Users&Creators");
+		                    System.out.println("");
+		                    System.out.println("Que desea hacer");
+		                    System.out.println("1) ver usuarios");
+		                    System.out.println("2) anadir usuario o creador");
+		                    System.out.println("3) editar usuario o creador");
+		                    System.out.println("4) eliminar usuario o creador");
+		                    alt = Integer.parseInt(scan.nextLine());
+		                    alt = Limitar(1,4,alt,scan);
+		                    
+		                    switch(alt){
+		                        case 1:
+		                            System.out.println("ver cantidad de usuarios");
+		                            System.out.println("");
+		                            System.out.println("1) Administrador");
+		                            System.out.println("2) Normal");
+		                            alt = Integer.parseInt(scan.nextLine());
+		                            alt = Limitar(1,2,alt,scan);
+		                            switch(alt){
+		                                case 1:
+		                                    System.out.println("Administradores = (total), (%)");  
+		                                    break;
+		                                case 2:
+		                                    System.out.println("Usuarios Normales = (total), (%)");
+		                                    break;
+		                            }
+		                            break;
+		                        case 2:
+		                            System.out.println("Anadir usuario o creador");
+		                            System.out.println("");
+		                            System.out.println("Ingrese nombre de usuario");
+		                            String NomUsuarioCreado = scan.nextLine();
+		                            System.out.println("Ingrese contrasena del usuario");
+		                            String PassUsuarioCreado = scan.nextLine();
+		                            System.out.println("Ingrese la categoria del usuario");
+		                            String CategoriaUsuarioCreado = scan.nextLine();
+		                            System.out.println("nombre del creador del usuario");
+		                            String CreadorUsuarioCreado = scan.nextLine();
+		                            System.out.println(NomUsuarioCreado + ", " + PassUsuarioCreado + ", " +  CategoriaUsuarioCreado + ", " + CreadorUsuarioCreado);
+			                            break;
+		                       case 3:
+		                            System.out.println("editar usuario o creador");
+		                            System.out.println("Usuario a buscar");
+			                            String NomUsuarioBuscado = scan.nextLine();
+		                            
+		                            break;
+		                        case 4:
+		                            System.out.println("eliminar usuario o creador");
+		                            System.out.println("");
+		                            System.out.println("Usuario a buscar");
+		                            NomUsuarioBuscado = scan.nextLine().toLowerCase();
+		                            
+		                            break;
+			                    		}
+		            		}
+				}
+					
+				CrearListas1(txtIA, nombreIAs, añoCreacion, velocidades, tipos, tiposInt, creadores, cantMejoras);
+				CrearListas2(txtCreadores, nombresCreadores,experiencias, especialidades, edades);
+				CrearListas3(txtUsuarios, users, passwords, categorias, creadoresUs);
+				
+					System.out.println("¿Desea finalizar la sesión?");
+				inicio = scan.nextLine();
+			}
+		}
+		int datosACorromper = (int)(Math.random()*5+1);
+		int archivoACorromper = (int) (Math.random()*3+1);
+
+		switch(archivoACorromper){
+			case 1:
+				FileWriter borrar1 = new FileWriter(txtIA);
+				borrar1.write("");
+				borrar1.close();
+				for(int k = 0; k < datosACorromper;k++){
+					int listaCorrupta = (int)(Math.random()*6+1);
+					int posCorrupta = (int)(Math.random()*(cantMejoras.length-1));
+					switch(listaCorrupta){
+					case 1:
+						Corromper(posCorrupta, nombreIAs);
+						break;
+					case 2:
+						Corromper(posCorrupta, añoCreacion);
+						break;
+					case 3:
+						Corromper(posCorrupta, velocidades);
+						break;
+					case 4:
+						Corromper(posCorrupta, tipos);
+					break;
+					case 5:
+						Corromper(posCorrupta, creadores);
+						break;
+					case 6:
+						Corromper(posCorrupta, cantMejoras);
+						break;
 					}
+				}
 					for(int b = 0;b<nombreIAs.length;b++){
 						if(nombreIAs[b] != null){
 							if(b>0){escribirIA.write("\n");}
@@ -91,7 +223,7 @@ public class app {
 							escribirIA.write(String.valueOf(velocidades[b]) + ",");
 							escribirIA.write(tipos[b] + ",");
 							escribirIA.write(creadores[b] + ",");
-							escribirIA.write((String.valueOf(cantMejoras[b])) + ",");
+							escribirIA.write((String.valueOf(cantMejoras[b])));
 						}
 					}
 					escribirIA.close();
@@ -99,8 +231,7 @@ public class app {
 				case 2:
 					FileWriter borrar2 = new FileWriter(txtCreadores);
 					borrar2.write("");
-					borrar2.close();
-					System.out.println("Se corrompieron " + datosACorromper + " archivos de 'datos_creadores.txt'");
+					borrar2.close();;
 					for(int k = 0; k < datosACorromper;k++){
 						int listaCorrupta = (int)(Math.random()*4+1);
 						int posCorrupta = (int)(Math.random()*(nombresCreadores.length-1));
@@ -125,7 +256,7 @@ public class app {
 							escribirCreadores.write(nombresCreadores[b] + ",");
 							escribirCreadores.write(String.valueOf(experiencias[b]) + ",");
 							escribirCreadores.write(especialidades[b] + ",");
-							escribirCreadores.write(String.valueOf(edades[b]) + ",");
+							escribirCreadores.write(String.valueOf(edades[b]));
 						}
 					}
 					escribirCreadores.close();
@@ -134,7 +265,6 @@ public class app {
 					FileWriter borrar3 = new FileWriter(txtUsuarios);
 					borrar3.write("");
 					borrar3.close();
-					System.out.println("Se corrompieron " + datosACorromper + " archivos de 'datos_usuarios.txt'");
 					for(int k = 0; k < datosACorromper;k++){
 						int listaCorrupta = (int)(Math.random()*4+1);
 						int posCorrupta = (int)(Math.random()*(users.length-1));
@@ -159,165 +289,12 @@ public class app {
 							escribirUsuarios.write(users[b] + ",");
 							escribirUsuarios.write(passwords[b] + ",");
 							escribirUsuarios.write(categorias[b] + ",");
-							escribirUsuarios.write(creadoresUs[b] + ",");
+							escribirUsuarios.write(creadoresUs[b]);
 						}
 					}
 					escribirUsuarios.close();
 					break;
 			}
-			//Verificar existencia del usuario
-			System.out.println("\nLOGIN");
-			System.out.println("\nUser: ");
-			String user = scan.nextLine().toLowerCase();
-			System.out.println("Password: ");
-			String password = scan.nextLine();
-			String categoria = "";
-			
-			boolean valido = Login(users.length, user, password, users, passwords);
-			categoria = IndicarCategoria(user, users, passwords, password, categorias, categoria);
-			
-			if(valido == false){
-				System.out.println("Acceso Denegado");
-			}else{
-				System.out.println("Acceso Correcto");
-
-				//Login correcto, iniciar programa
-				
-				String logged = "";
-				while(!logged.equals("si")){
-					
-					if (categoria.equals("normal")){
-						
-					}else if (categoria.equals("administrador")){
-						
-						System.out.println("\nElija el menu al que desea acceder");
-						System.out.println("\nOpcion 1) Submenu A.I.");
-						System.out.println("Opcion 2) Submenu Users&Creators");
-			        
-						int alt = Integer.parseInt(scan.nextLine());
-						
-						alt = Limitar(1,2,alt,scan);
-						
-			            switch(alt){
-			                case 1:
-			                	System.out.println("SUBMENÚ I.A.\n");
-			                	System.out.println(PrintListaStr(nombreIAs));
-				                System.out.println("\n¿Cómo desea ordenar las IA?\n");
-				                System.out.println("1) Por nombre");
-				                System.out.println("2) Más reciente primero");
-				                System.out.println("3) Por velocidad");
-				                System.out.println("4) Por tipo");
-				                System.out.println("5) Por nombre del creador");
-				                System.out.println("6) Por cantidad de mejoras");
-				                int orden = Integer.parseInt(scan.nextLine());
-				                orden = Limitar(1,6,orden,scan);
-				                switch(orden){
-				                case 1:
-				                	OrdenarMayorAMenorStr(nombreIAs, nombreIAs);
-				                	System.out.println(PrintListaStr(nombreIAs));
-				                    break;
-				                case 2:
-				                	OrdenarMayorAMenorStr(añoCreacion, nombreIAs);
-				                	System.out.println(PrintListaStr(nombreIAs));
-				                	System.out.println(PrintListaStr(añoCreacion));
-				                	break;
-				                case 3:
-				                	OrdenarMayorAMenorStr(velocidades, nombreIAs);
-				                	System.out.println(PrintListaStr(nombreIAs));
-				                	System.out.println(PrintListaStr(velocidades));
-				                	break;
-				                case 4:
-				                	OrdenarMayorAMenorStr(tiposInt, nombreIAs);
-				                	System.out.println(PrintListaStr(nombreIAs));
-				                	System.out.println(PrintListaStr(tiposInt));
-				                    break;
-				                case 5:
-				                	OrdenarMayorAMenorStr(creadores, nombreIAs);
-				                	System.out.println(PrintListaStr(nombreIAs));
-				                	System.out.println(PrintListaStr(creadores));
-				                	break;
-				                case 6:
-				                	OrdenarMayorAMenorStr(cantMejoras, nombreIAs);
-				                	System.out.println(PrintListaStr(nombreIAs));
-				                	System.out.println(PrintListaStr(cantMejoras));
-				                	break;
-				                	}
-				                break;
-			                case 2:
-			                    System.out.println("Submenu Users&Creators");
-			                    System.out.println("");
-			                    System.out.println("Que desea hacer");
-			                    System.out.println("1) ver usuarios");
-			                    System.out.println("2) anadir usuario o creador");
-			                    System.out.println("3) editar usuario o creador");
-			                    System.out.println("4) eliminar usuario o creador");
-			                    alt = Integer.parseInt(scan.nextLine());
-			                    alt = Limitar(1,4,alt,scan);
-			                    
-			                    switch(alt){
-			                        case 1:
-			                            System.out.println("ver cantidad de usuarios");
-			                            System.out.println("");
-			                            System.out.println("1) Administrador");
-			                            System.out.println("2) Normal");
-			                            alt = Integer.parseInt(scan.nextLine());
-			                            alt = Limitar(1,2,alt,scan);
-			                            switch(alt){
-			                                case 1:
-			                                    System.out.println("Administradores = (total), (%)");  
-			                                    break;
-			                                case 2:
-			                                    System.out.println("Usuarios Normales = (total), (%)");
-			                                    break;
-			                            }
-			                            break;
-			                        case 2:
-			                            System.out.println("Anadir usuario o creador");
-			                            System.out.println("");
-			                            System.out.println("Ingrese nombre de usuario");
-			                            String NomUsuarioCreado = scan.nextLine();
-			                            System.out.println("Ingrese contrasena del usuario");
-			                            String PassUsuarioCreado = scan.nextLine();
-			                            System.out.println("Ingrese la categoria del usuario");
-			                            String CategoriaUsuarioCreado = scan.nextLine();
-			                            System.out.println("nombre del creador del usuario");
-			                            String CreadorUsuarioCreado = scan.nextLine();
-			                            System.out.println(NomUsuarioCreado + ", " + PassUsuarioCreado + ", " +  CategoriaUsuarioCreado + ", " + CreadorUsuarioCreado);
-			                            break;
-			                        case 3:
-			                            System.out.println("editar usuario o creador");
-			                            System.out.println("Usuario a buscar");
-			                            String NomUsuarioBuscado = scan.nextLine();
-			                            
-			                            break;
-			                        case 4:
-			                            System.out.println("eliminar usuario o creador");
-			                            System.out.println("");
-			                            System.out.println("Usuario a buscar");
-			                            NomUsuarioBuscado = scan.nextLine().toLowerCase();
-			                            
-			                            break;
-			                    		}
-			            		}
-					}
-
-					
-					CrearListas1(txtIA, nombreIAs, añoCreacion, velocidades, tipos, tiposInt, creadores, cantMejoras);
-					CrearListas2(txtCreadores, nombresCreadores,experiencias, especialidades, edades);
-					CrearListas3(txtUsuarios, users, passwords, categorias, creadoresUs);
-					
-					System.out.println("¿Desea finalizar la sesión?");
-					logged = scan.nextLine();
-				}
-			}
-
-			System.out.println("Sesion finalizada, escriba 'fin' para terminar el programa");
-			iniciar = scan.nextLine();
-			
-		}
-		scan.close();leer1.close();
-		scan.close();leer2.close();
-		scan.close();leer3.close();
 	}
 	private static void PantallaInicio(){
 		System.out.println("**************************************************");
@@ -352,7 +329,7 @@ public class app {
         }
         return var;
 	}
-	public static void OrdenarMayorAMenorStr(String[] lista, String[] lista2) {
+	public static void OrdenarMayorAMenorStr(String[] lista, String[] lista2, String lista3[]) {
 	    int tamaño = lista.length;
 	    for (int i = 0; i < tamaño; i++) {
 	    	for (int j = 1; j < tamaño; j++) {
@@ -361,9 +338,14 @@ public class app {
 	                lista[j-1] = lista[j];
 	                lista[j] = aux;
 	                if(!lista.equals(lista2)){
-	                	String auxStr = lista2[j-1];
+	                	String aux2 = lista2[j-1];
 	                	lista2[j-1] = lista2[j];
-	                	lista2[j] = auxStr;
+	                	lista2[j] = aux2;
+	                }
+	                	if(!lista2.equals(lista3)){
+	                		String aux3 = lista3[j-1];
+	                		lista3[j-1] = lista3[j];
+	                		lista3[j] = aux3;
 	                }
 	            }
 	        }
@@ -371,18 +353,37 @@ public class app {
 	}
 	private static void CrearListas1(File txt, String listaIas[], String listaAños[], String listaVelocidades[], String listaTipos[], String listaTiposInt[], String listaCreadores[], String listaMejoras[]) throws FileNotFoundException{
 		int contador = 0;
+		int datosCorruptos = 0;
 		Scanner leer = new Scanner(txt);
+		
 		while(leer.hasNextLine()){
 			String linea = leer.nextLine();
 			String partes1[] = linea.split(",");
-			String nombreIA = partes1[0].toLowerCase().trim();
+			String nombreIA = partes1[0].trim();
+			if(nombreIA.equals("¡@IA¿WIN$#")){
+				datosCorruptos++;
+			}
 			String año = partes1[1].trim();
+			if(año.equals("¡@IA¿WIN$#")){
+				datosCorruptos++;
+			}
 			String veloz = partes1[2].trim();
-			String tipo = partes1[3].toLowerCase().trim();
+			if(veloz.equals("¡@IA¿WIN$#")){
+				datosCorruptos++;
+			}
+			String tipo = partes1[3].trim();
+			if(tipo.equals("¡@IA¿WIN$#")){
+				datosCorruptos++;
+			}
 			int tipoInt = 0;
 			String creador = partes1[4].trim();
+			if(creador.equals("¡@IA¿WIN$#")){
+				datosCorruptos++;
+			}
 			String mejora = partes1[5].trim();
-			
+			if(mejora.equals("¡@IA¿WIN$#")){
+				datosCorruptos++;
+			}
 			switch(tipo){
 			case "simple" :
 				tipoInt = 1;
@@ -392,59 +393,93 @@ public class app {
 				break;
 			case "avanzada":
 				tipoInt = 3;
+				break;
 			}
-			listaIas[contador] = nombreIA;
+			listaIas[contador] = nombreIA.toLowerCase();
 			listaAños[contador] = String.valueOf(año);
 			listaVelocidades[contador] = String.valueOf(veloz);
-			listaTipos[contador] = tipo;
+			listaTipos[contador] = tipo.toLowerCase();
 			listaTiposInt[contador] = String.valueOf(tipoInt);
 			listaCreadores[contador] = creador;
 			listaMejoras[contador] = String.valueOf(mejora);
 		contador++;
 		}
 		leer.close();
+		if(datosCorruptos >0){
+			System.out.println("Datos afectados de 'datos_ia.txt': " + datosCorruptos + "\n");;
+		}
 	}
 	private static void CrearListas2(File txt, String nombres[],String xps[],  String roles[], String edades[]) throws FileNotFoundException{
 		int contador = 0;
+		int datosCorruptos = 0;
 		Scanner leer = new Scanner(txt);
 	
 		while(leer.hasNextLine()){
 			String linea = leer.nextLine();
-			String partes3[] = linea.split(",");
-			String nombre = partes3[0].toLowerCase().trim();
-			String exp = partes3[1].trim();
-			String rol = partes3[2].trim();
-			String edad = partes3[3].trim();
-			
-			nombres[contador] = nombre;
+			String partes2[] = linea.split(",");
+			String nombre = partes2[0].trim();
+			if(nombre.equals("¡@IA¿WIN$#")){
+				datosCorruptos++;
+			}
+			String exp = partes2[1].trim();
+			if(exp.equals("¡@IA¿WIN$#")){
+				datosCorruptos++;
+			}
+			String rol = partes2[2].trim();
+			if(rol.equals("¡@IA¿WIN$#")){
+				datosCorruptos++;
+			}
+			String edad = partes2[3].trim();
+			if(edad.equals("¡@IA¿WIN$#")){
+				datosCorruptos++;
+			}
+			nombres[contador] = nombre.toLowerCase();
 			xps[contador] = exp;
 			roles[contador] = rol;
 			edades[contador] =  String.valueOf(edad);
 			contador++;
 		}
 		leer.close();
+		if(datosCorruptos >0){
+			System.out.println("Datos afectados de 'datos_creadores.txt': " + datosCorruptos + "\n");;
+		}
 	}
 	private static void CrearListas3(File txt, String users[],String passwords[],  String categorias[],  String creadores[]) throws FileNotFoundException{
 		int contador = 0;
+		int datosCorruptos = 0;
 		Scanner leer = new Scanner(txt);
 	
 		while(leer.hasNextLine()){
 			String linea = leer.nextLine();
 			String partes3[] = linea.split(",");
-			String us = partes3[0].toLowerCase().trim();
+			String us = partes3[0].trim();
+			if(us.equals("¡@IA¿WIN$#")){
+				datosCorruptos++;
+			}
 			String pass = partes3[1].trim();
+			if(pass.equals("¡@IA¿WIN$#")){
+				datosCorruptos++;
+			}
 			String rol = partes3[2].trim();
+			if(rol.equals("¡@IA¿WIN$#")){
+				datosCorruptos++;
+			}
 			String creator = partes3[3].trim();
-			
-			users[contador] = us;
+			if(creator.equals("¡@IA¿WIN$#")){
+				datosCorruptos++;
+			}
+			users[contador] = us.toLowerCase();
 			passwords[contador] = pass;
 			categorias[contador] = rol;
 			creadores[contador] = creator;
 			contador++;
 		}
 		leer.close();
+		if(datosCorruptos >0){
+			System.out.println("Datos afectados de 'datos_usuarios.txt': " + datosCorruptos + "\n");
+		}
 	}
-	private static String PrintListaStr(String[] lista){
+	private static void PrintListaStr(String[] lista){
 		String listaFinal = "[";
 		for(int i = 0; i<lista.length;i++){
 			if(lista[i] != null){
@@ -455,7 +490,7 @@ public class app {
 			}
 		}
 		listaFinal +="]";
-		return listaFinal;
+		System.out.println(listaFinal);
 	}
 	private static void Corromper(int posicion, String[] lista){
 		while(lista[posicion] == null){
