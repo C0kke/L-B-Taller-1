@@ -59,63 +59,129 @@ public class app {
 
 			//Login correcto, iniciar programa
 			while(!inicio.equals("si")){
-				
 				if (categoria.equals("normal")){
-					
+					//para normal
 				}else if (categoria.equals("administrador")){
-					
+					//para admin
 					System.out.println("\nElija el menu al que desea acceder");
 					System.out.println("\nOpcion 1) Submenu A.I.");
 					System.out.println("Opcion 2) Submenu Users&Creators");
-		        
 					int alt = Integer.parseInt(scan.nextLine());
-					
 					alt = Limitar(1,2,alt,scan);
-					
 		            switch(alt){
+		            	//Submenú IA
 		                case 1:
-		                	System.out.println("SUBMENÚ I.A.\n");
-		                	PrintListaStr(nombreIAs);
-			                System.out.println("\n¿Cómo desea ordenar las IA?\n");
+		                	System.out.println("SUBMENÚ I.A.");
+			                System.out.println("Edición de I.A.'s");
+		                	
+			                System.out.println("¿Cómo desea ordenarlas?\n");
 			                System.out.println("1) Por nombre");
-			                System.out.println("2) Más reciente primero");
+			                System.out.println("2) Más reciente primero");    
 			                System.out.println("3) Por velocidad");
 			                System.out.println("4) Por tipo");
 			                System.out.println("5) Por nombre del creador");
 			                System.out.println("6) Por cantidad de mejoras");
+			                System.out.println("0) atrás");
+			                
 			                int orden = Integer.parseInt(scan.nextLine());
-			                orden = Limitar(1,6,orden,scan);
+			                orden = Limitar(0,6,orden,scan);    
+			                if(orden == 0){
+				                	break;
+				                }
 			                switch(orden){
+			                //Ordenar las listas
+				            case 1:
+				            	OrdenarMayorAMenorStr(nombreIAs,añoCreacion,velocidades,tipos,creadores,cantMejoras, tiposInt);
+				                PrintListaStr(nombreIAs);
+				                break;
+				            case 2:
+				            	OrdenarMayorAMenorStr(añoCreacion, nombreIAs,velocidades,tipos,creadores,cantMejoras,tiposInt);
+				            	PrintListaStr(nombreIAs);
+				            	PrintListaStr(añoCreacion);
+				            	break;
+				            case 3:
+				            	OrdenarMayorAMenorStr(velocidades,nombreIAs,tipos,creadores,cantMejoras,añoCreacion,tiposInt);
+				            	PrintListaStr(nombreIAs);
+				            	PrintListaStr(velocidades);
+				            	break;
+				            case 4:
+				            	OrdenarMayorAMenorStr(tiposInt,nombreIAs,tipos,creadores,cantMejoras,añoCreacion,velocidades);
+				                PrintListaStr(nombreIAs);
+				                PrintListaStr(tipos);
+				                break;
+				            case 5:
+				            	OrdenarMayorAMenorStr(creadores,nombreIAs,tipos,cantMejoras,añoCreacion,velocidades,tiposInt);
+				                PrintListaStr(nombreIAs);
+				                PrintListaStr(creadores);
+				                break;
+				            case 6:
+				               	OrdenarMayorAMenorStr(cantMejoras,nombreIAs,tipos,añoCreacion,velocidades,creadores,tiposInt);
+				               	PrintListaStr(nombreIAs);
+				               	PrintListaStr(cantMejoras);
+				               	break;
+				               	}
+			                //Editar las listas
+			                System.out.print("Ingrese el nombre de la I.A. que desea editar: ");
+			                String editarIA = scan.nextLine().toLowerCase();
+			                int posicion = Buscar(nombreIAs, nombreIAs.length, editarIA);
+			                while(posicion == nombreIAs.length){
+			                	System.out.println("no se encontró la I.A, intente denuevo");
+			                	editarIA = scan.nextLine().toLowerCase();
+			                	posicion = Buscar(nombreIAs, nombreIAs.length, editarIA);
+			                }	
+			                System.out.println("¿Qué desea editar?");
+			                System.out.println("1) Nombre: " + nombreIAs[posicion]);
+			                System.out.println("2) Año de creaión: " + añoCreacion[posicion]);
+			                System.out.println("3) Velocidad de aprendizaje: "+ velocidades[posicion] + " días");
+			                System.out.println("4) Tipo de I.A.: " + tipos[posicion]);
+			                System.out.println("5) Creador: "+creadores[posicion]);
+			                System.out.println("6) Fue mejorada " + cantMejoras[posicion] + " veces");
+			                System.out.println("0) Volver atrás");
+			                int mod = Integer.parseInt(scan.nextLine());
+			                mod = Limitar(0,6,mod,scan);   	
+			                if(mod == 0){
+			                	break;
+			                }
+			                switch(mod){
 			                case 1:
-			                	OrdenarMayorAMenorStr(nombreIAs, nombreIAs,nombreIAs);
-			                	PrintListaStr(nombreIAs);
-			                    break;
+			                	System.out.println("Ingrese un nuevo nombre :");
+			                	String nuevoNombreIA = scan.nextLine();
+			                	nombreIAs[posicion] = nuevoNombreIA;
+			                	break;
 			                case 2:
-			                	OrdenarMayorAMenorStr(añoCreacion, nombreIAs,nombreIAs);
-			                	PrintListaStr(nombreIAs);
-			                	PrintListaStr(añoCreacion);
+			                	System.out.println("¿En qué año se creó?");
+			                	String nuevoAñoIA = scan.nextLine();
+			                	añoCreacion[posicion] = nuevoAñoIA;
 			                	break;
 			                case 3:
-			                	OrdenarMayorAMenorStr(velocidades, nombreIAs, nombreIAs);
-			                	PrintListaStr(nombreIAs);
-			                	PrintListaStr(velocidades);
+			                	if(velocidades[posicion].equals("¡@IA¿WIN$#".toLowerCase())){
+			                		System.out.println("¡ATENCIÓN, este dato está corrupto!");
+			                	}else{
+			                		System.out.println("Ingrese nueva velocidad");
+			                		String nuevaVelocidadIA = scan.nextLine();
+			                		velocidades[posicion] = nuevaVelocidadIA;
+			                	}
 			                	break;
 			                case 4:
-			                	OrdenarMayorAMenorStr(tiposInt, tipos, nombreIAs);
-			                	PrintListaStr(nombreIAs);
-			                	PrintListaStr(tipos);
-			                    break;
+			                	System.out.println("Ingrese el tipo de la IA: ");
+			                	String nuevoTipoIA = scan.nextLine();
+			                	tipos[posicion] = nuevoTipoIA;
+			                	break;
 			                case 5:
-			                	OrdenarMayorAMenorStr(creadores, nombreIAs,nombreIAs);
-			                	PrintListaStr(nombreIAs);
-			                	PrintListaStr(creadores);
+			                	System.out.println("¿Quién creó esta IA?");
+			                	String nuevoCreadorIA = scan.nextLine();
+			                	creadores[posicion] = nuevoCreadorIA;
 			                	break;
 			                case 6:
-			                	OrdenarMayorAMenorStr(cantMejoras, nombreIAs, nombreIAs);
-			                	PrintListaStr(nombreIAs);
-			                	PrintListaStr(cantMejoras);
+			                	if(cantMejoras[posicion].equals("¡@IA¿WIN$#".toLowerCase())){
+			                		System.out.println("¡ATENCIÓN, este dato está corrupto!");
+			                	}else{
+			                	System.out.println("¿Cuántas veces ha sido mejorada?");
+			                	String nuevaMejoraIA = scan.nextLine();
+			                	cantMejoras[posicion] = nuevaMejoraIA;
+			                }
 			                	break;
-			                	}
+			                }
 			                break;
 		                case 2:
 		                    System.out.println("Submenu Users&Creators");
@@ -174,23 +240,17 @@ public class app {
 			                    		}
 		            		}
 				}
-					
-				CrearListas1(txtIA, nombreIAs, añoCreacion, velocidades, tipos, tiposInt, creadores, cantMejoras);
-				CrearListas2(txtCreadores, nombresCreadores,experiencias, especialidades, edades);
-				CrearListas3(txtUsuarios, users, passwords, categorias, creadoresUs);
-				
-					System.out.println("¿Desea finalizar la sesión?");
+				System.out.println("¿Desea finalizar la sesión?");
 				inicio = scan.nextLine();
 			}
 		}
+		
+		//corromper
 		int datosACorromper = (int)(Math.random()*5+1);
 		int archivoACorromper = (int) (Math.random()*3+1);
 
 		switch(archivoACorromper){
 			case 1:
-				FileWriter borrar1 = new FileWriter(txtIA);
-				borrar1.write("");
-				borrar1.close();
 				for(int k = 0; k < datosACorromper;k++){
 					int listaCorrupta = (int)(Math.random()*6+1);
 					int posCorrupta = (int)(Math.random()*(cantMejoras.length-1));
@@ -213,25 +273,10 @@ public class app {
 					case 6:
 						Corromper(posCorrupta, cantMejoras);
 						break;
-					}
-				}
-					for(int b = 0;b<nombreIAs.length;b++){
-						if(nombreIAs[b] != null){
-							if(b>0){escribirIA.write("\n");}
-							escribirIA.write(nombreIAs[b] + ",");
-							escribirIA.write(String.valueOf(añoCreacion[b]) + ",");
-							escribirIA.write(String.valueOf(velocidades[b]) + ",");
-							escribirIA.write(tipos[b] + ",");
-							escribirIA.write(creadores[b] + ",");
-							escribirIA.write((String.valueOf(cantMejoras[b])));
 						}
 					}
-					escribirIA.close();
 					break;
 				case 2:
-					FileWriter borrar2 = new FileWriter(txtCreadores);
-					borrar2.write("");
-					borrar2.close();;
 					for(int k = 0; k < datosACorromper;k++){
 						int listaCorrupta = (int)(Math.random()*4+1);
 						int posCorrupta = (int)(Math.random()*(nombresCreadores.length-1));
@@ -250,21 +295,8 @@ public class app {
 							break;
 						}
 					}
-					for(int b = 0;b<nombresCreadores.length;b++){
-						if(nombresCreadores[b] != null){
-							if(b>0){escribirCreadores.write("\n");}
-							escribirCreadores.write(nombresCreadores[b] + ",");
-							escribirCreadores.write(String.valueOf(experiencias[b]) + ",");
-							escribirCreadores.write(especialidades[b] + ",");
-							escribirCreadores.write(String.valueOf(edades[b]));
-						}
-					}
-					escribirCreadores.close();
 					break;
 				case 3:
-					FileWriter borrar3 = new FileWriter(txtUsuarios);
-					borrar3.write("");
-					borrar3.close();
 					for(int k = 0; k < datosACorromper;k++){
 						int listaCorrupta = (int)(Math.random()*4+1);
 						int posCorrupta = (int)(Math.random()*(users.length-1));
@@ -283,18 +315,53 @@ public class app {
 							break;
 						}
 					}
-					for(int b = 0;b<users.length;b++){
-						if(users[b] != null){
-							if(b>0){escribirUsuarios.write("\n");}
-							escribirUsuarios.write(users[b] + ",");
-							escribirUsuarios.write(passwords[b] + ",");
-							escribirUsuarios.write(categorias[b] + ",");
-							escribirUsuarios.write(creadoresUs[b]);
-						}
-					}
-					escribirUsuarios.close();
-					break;
+				break;
 			}
+		
+		//reescribir txt's
+		int b;
+		FileWriter borrar1 = new FileWriter(txtIA);
+		borrar1.write("");
+		borrar1.close();
+		for(b = 0;b<nombreIAs.length;b++){
+			if(nombreIAs[b] != null){
+				if(b>0){escribirIA.write("\n");}
+				escribirIA.write(nombreIAs[b] + ",");
+				escribirIA.write(String.valueOf(añoCreacion[b]) + ",");
+				escribirIA.write(String.valueOf(velocidades[b]) + ",");
+				escribirIA.write(tipos[b] + ",");
+				escribirIA.write(creadores[b] + ",");
+				escribirIA.write((String.valueOf(cantMejoras[b])));
+			}
+		}
+		FileWriter borrar2 = new FileWriter(txtCreadores);
+		borrar2.write("");
+		borrar2.close();;
+		for(b = 0;b<nombresCreadores.length;b++){
+			if(nombresCreadores[b] != null){
+				if(b>0){escribirCreadores.write("\n");}
+				escribirCreadores.write(nombresCreadores[b] + ",");
+				escribirCreadores.write(String.valueOf(experiencias[b]) + ",");
+				escribirCreadores.write(especialidades[b] + ",");
+				escribirCreadores.write(String.valueOf(edades[b]));
+			}
+		}
+		FileWriter borrar3 = new FileWriter(txtUsuarios);
+		borrar3.write("");
+		borrar3.close();
+		for(b = 0;b<users.length;b++){
+			if(users[b] != null){
+				if(b>0){escribirUsuarios.write("\n");}
+				escribirUsuarios.write(users[b] + ",");
+				escribirUsuarios.write(passwords[b] + ",");
+				escribirUsuarios.write(categorias[b] + ",");
+				escribirUsuarios.write(creadoresUs[b]);
+			}
+		}
+
+		escribirIA.close();
+		escribirCreadores.close();
+		escribirUsuarios.close();
 	}
 	private static void PantallaInicio(){
 		System.out.println("**************************************************");
@@ -329,24 +396,32 @@ public class app {
         }
         return var;
 	}
-	public static void OrdenarMayorAMenorStr(String[] lista, String[] lista2, String lista3[]) {
+	public static void OrdenarMayorAMenorStr(String[] lista, String[] lista2, String lista3[], String lista4[],String lista5[],String lista6[], String lista7[]) {
 	    int tamaño = lista.length;
 	    for (int i = 0; i < tamaño; i++) {
 	    	for (int j = 1; j < tamaño; j++) {
 	        	if(lista[(j-1)] != null && lista[j] != null && (int)(lista[(j-1)].compareTo(lista[j])) < 0){
-	                String aux = lista[j-1];
+	                String temp1 = lista[j-1];
 	                lista[j-1] = lista[j];
-	                lista[j] = aux;
-	                if(!lista.equals(lista2)){
-	                	String aux2 = lista2[j-1];
-	                	lista2[j-1] = lista2[j];
-	                	lista2[j] = aux2;
-	                }
-	                	if(!lista2.equals(lista3)){
-	                		String aux3 = lista3[j-1];
-	                		lista3[j-1] = lista3[j];
-	                		lista3[j] = aux3;
-	                }
+	                lista[j] = temp1;
+	                String temp2 = lista2[j-1];
+	                lista2[j-1] = lista2[j];
+	                lista2[j] = temp2;
+	                String temp3 = lista3[j-1];
+	                lista3[j-1] = lista3[j];
+	                lista3[j] = temp3;
+	                String temp4 = lista4[j-1];
+	                lista4[j-1] = lista4[j];
+	                lista4[j] = temp4;
+	                String temp5 = lista5[j-1];
+	                lista5[j-1] = lista5[j];
+	                lista5[j] = temp5;
+	                String temp6 = lista6[j-1];
+	                lista6[j-1] = lista6[j];
+	                lista6[j] = temp6;
+                	String temp7 = lista7[j-1];
+                	lista7[j-1] = lista7[j];
+                	lista7[j] = temp7;
 	            }
 	        }
 	    }
@@ -497,5 +572,16 @@ public class app {
 			posicion = (int)(Math.random()*(lista.length-1));
 		}
 		lista[posicion] = "¡@IA¿WIN$#";
+	}
+	private static int Buscar(String[] lista, int tamaño, String valor){
+		int i;
+		for(i=0;i<tamaño;i++) {
+			if(lista[i] != null){
+				if(lista[i].equals(valor)) {
+				break;
+				}
+			}
+		}
+		return i;
 	}
 }
