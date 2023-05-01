@@ -1,17 +1,15 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 
 public class app {
 	public static void main(String[] args) throws IOException {
-		
-		//scanners y archivos
 		Scanner scan = new Scanner(System.in);
 		
-		//para TXT de IA's
+		//Archivos para TXT de IA's
 		File txtIA = new File("datos_ia.txt");
 		Scanner leer1 = new Scanner(txtIA);
-		
 		String nombreIAs[] = new String [10];
 		String añoCreacion[] = new String [10];
 		String velocidades[] = new String[10];
@@ -20,39 +18,36 @@ public class app {
 		String creadores[] = new String[10];
 		String cantMejoras[] = new String[10];
 		
-		//para TXT de Creadores
+		//Archivos para TXT de Creadores
 		File txtCreadores = new File("datos_creadores.txt");
 		Scanner leer2 = new Scanner(txtCreadores);
-		
 		String[] nombresCreadores = new String[10];
 		String[] experiencias = new String[10];
 		String[] especialidades = new String[10]; 
 		String[] edades = new String[10];
 		
-		//para TXT de Usuarios
+		//Archivos para TXT de Usuarios
 		File txtUsuarios = new File("datos_usuarios.txt");
 		Scanner leer3 = new Scanner(txtUsuarios);
-		
 		String users[] = new String [10];
 		String passwords[] = new String[10];
 		String categorias[] = new String [10];
 		String creadoresUs[] = new String[10];
 		
 		//Pantalla Inicio
-		System.out.println("***************************************************");
-		System.out.println("	WELCOME TO I.A. AGAINST TO HUMANITY!		");
-		System.out.println("	       Press Any Key to Start				");
-		System.out.println("***************************************************");
+		PantallaInicio();
 		String iniciar = scan.nextLine();
 
 		while(!iniciar.equals("fin")){
 			
+			//Creacion de todas las listas
 			CrearListas1(txtIA, nombreIAs, añoCreacion, velocidades, tipos, tiposInt, creadores, cantMejoras);
 			FileWriter escribirIA = new FileWriter(txtIA, true);
 			CrearListas2(txtCreadores, nombresCreadores,experiencias, especialidades, edades);
 			FileWriter escribirCreadores = new FileWriter(txtCreadores,true);
 			CrearListas3(txtUsuarios, users, passwords, categorias, creadoresUs);
 			FileWriter escribirUsuarios = new FileWriter(txtUsuarios,true);
+			
 			//corromper
 			int datosACorromper = (int)(Math.random()*5+1);
 			int archivoACorromper = (int) (Math.random()*3+1);
@@ -178,7 +173,7 @@ public class app {
 			String password = scan.nextLine();
 			String categoria = "";
 			
-			boolean valido = Login(10, user, password, users, passwords);
+			boolean valido = Login(users.length, user, password, users, passwords);
 			categoria = IndicarCategoria(user, users, passwords, password, categorias, categoria);
 			
 			if(valido == false){
@@ -324,17 +319,18 @@ public class app {
 		scan.close();leer2.close();
 		scan.close();leer3.close();
 	}
-	
+	private static void PantallaInicio(){
+		System.out.println("**************************************************");
+		System.out.println("*            I.A. AGAINST TO HUMANITY	   	 *");
+		System.out.println("*     Presiona cualquier tecla para comenzar	 *");
+		System.out.println("**************************************************");
+	}
 	private static boolean Login(int tamaño, String user, String pass, String listaUser[], String listaPassword[]){
 		
 		boolean valido = false;
-		
 		for(int i = 0; i<tamaño;i++){
-
-			if(user.equals(listaUser[i])){
-				if(pass.equals(listaPassword[i])){
-					valido = true;
-				}
+			if(listaUser[i] != null && user.equals(listaUser[i]) && pass.equals(listaPassword[i])){
+				valido = true;
 			}
 		}
 		return valido;
@@ -379,13 +375,13 @@ public class app {
 		while(leer.hasNextLine()){
 			String linea = leer.nextLine();
 			String partes1[] = linea.split(",");
-			String nombreIA = partes1[0].toLowerCase();
-			String año = partes1[1];
-			String veloz = partes1[2];
-			String tipo = partes1[3].toLowerCase();
+			String nombreIA = partes1[0].toLowerCase().trim();
+			String año = partes1[1].trim();
+			String veloz = partes1[2].trim();
+			String tipo = partes1[3].toLowerCase().trim();
 			int tipoInt = 0;
-			String creador = partes1[4];
-			String mejora = partes1[5];
+			String creador = partes1[4].trim();
+			String mejora = partes1[5].trim();
 			
 			switch(tipo){
 			case "simple" :
@@ -415,9 +411,9 @@ public class app {
 		while(leer.hasNextLine()){
 			String linea = leer.nextLine();
 			String partes3[] = linea.split(",");
-			String nombre = partes3[0].toLowerCase();
+			String nombre = partes3[0].toLowerCase().trim();
 			String exp = partes3[1].trim();
-			String rol = partes3[2];
+			String rol = partes3[2].trim();
 			String edad = partes3[3].trim();
 			
 			nombres[contador] = nombre;
@@ -435,10 +431,10 @@ public class app {
 		while(leer.hasNextLine()){
 			String linea = leer.nextLine();
 			String partes3[] = linea.split(",");
-			String us = partes3[0].toLowerCase();
-			String pass = partes3[1];
-			String rol = partes3[2];
-			String creator = partes3[3];
+			String us = partes3[0].toLowerCase().trim();
+			String pass = partes3[1].trim();
+			String rol = partes3[2].trim();
+			String creator = partes3[3].trim();
 			
 			users[contador] = us;
 			passwords[contador] = pass;
