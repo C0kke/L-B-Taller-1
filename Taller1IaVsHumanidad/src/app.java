@@ -454,7 +454,8 @@ public class app {
 		            	CantidadTipos(especialidades, "programador");
 		            	CantidadTipos(especialidades, "ia master");
 		            	System.out.println("\nIA más probables para revelarse: ");
-		            	
+		            	OrdenarCreadores(creadores, nombresCreadores, experiencias, especialidades, edades);
+		            	RevelacionIA(tipos, nombreIAs,añoCreacion, experiencias, velocidades);
 		            	break;
 		            	}
 		            break;
@@ -582,28 +583,71 @@ public class app {
 		escribirCreadores.close();
 		escribirUsuarios.close();
 	}
+	private static void OrdenarCreadores(String[] creadores,String[] nombresCreadores, String[]experiencias, String[]especialidades, String[] edades){
+		int i;
+		String temp;
+		for(int k=0;k<creadores.length;k++){
+			if(creadores[k] != null){
+				i=Buscar(nombresCreadores, nombresCreadores.length, creadores[k]);
+				if(k != i){
+					temp = nombresCreadores[i];
+					nombresCreadores[i] = nombresCreadores[k];
+					nombresCreadores[k] = temp;
+					temp = experiencias[i];
+					experiencias[i] = experiencias[k];
+					experiencias[k] = temp;
+					temp = especialidades[i];
+					especialidades[i] = especialidades[k];
+					especialidades[k] = temp;
+					temp = edades[i];
+					edades[i] = edades[k];
+					edades[k] = temp;
+				}
+				
+			}
+		}
+	}
 	private static void RevelacionIA(String[] tipos, String[] nombreIAs, String[]años, String[]experiencias, String[]velocidades){
 		String[] probabilidadRevelacion = new String [100];
+		double[] probabilidadRevelacionInt = new double[100];
 		double probabilidad;
 		for(int i=0; i<tipos.length;i++){
 			if(tipos[i] != null){
 				String tipo = tipos[i];
 				switch(tipo){
 				case "simple":
-					probabilidad =Integer.parseInt(años[i]) *5* Integer.parseInt(experiencias[i]) /Integer.parseInt(velocidades[i]);
+					probabilidad =Integer.parseInt(años[i]) *5* (Integer.parseInt(experiencias[i])/30) /Integer.parseInt(velocidades[i]);
 					probabilidadRevelacion[i] = nombreIAs[i];
+					probabilidadRevelacionInt[i] = probabilidad;
 					break;
 				case "media":
-					probabilidad =Integer.parseInt(años[i]) *10* Integer.parseInt(experiencias[i]) /Integer.parseInt(velocidades[i]);
+					probabilidad =Integer.parseInt(años[i]) *10* Integer.parseInt(experiencias[i])/30 /Integer.parseInt(velocidades[i]);
 					probabilidadRevelacion[i] = nombreIAs[i];
+					probabilidadRevelacionInt[i] = probabilidad;
 					break;
 				case "avanzada":
-					probabilidad =Integer.parseInt(años[i]) *15* Integer.parseInt(experiencias[i]) /Integer.parseInt(velocidades[i]);
+					probabilidad =Integer.parseInt(años[i]) *15* Integer.parseInt(experiencias[i])/30 /Integer.parseInt(velocidades[i]);
 					probabilidadRevelacion[i] = nombreIAs[i];
+					probabilidadRevelacionInt[i] = probabilidad;
 					break;
 				}
 			}
 		}
+	    for (int i = 0; i < probabilidadRevelacion.length; i++) {
+	    	for (int j = 1; j < probabilidadRevelacion.length; j++) {
+	        	if(probabilidadRevelacion[(j-1)] != null && probabilidadRevelacion[j] != null && probabilidadRevelacionInt[(j-1)]<probabilidadRevelacionInt[j]){
+	                double temp1 = probabilidadRevelacionInt[j-1];
+	                probabilidadRevelacionInt[j-1] = probabilidadRevelacionInt[j];
+	                probabilidadRevelacionInt[j] = temp1;
+	                String temp2 = probabilidadRevelacion[j-1];
+	                probabilidadRevelacion[j-1] = probabilidadRevelacion[j];
+	                probabilidadRevelacion[j] = temp2;
+	        	}
+	    	}
+	    }
+	    System.out.println("La IA más probable en revelarse es " + probabilidadRevelacion[0]);
+	    System.out.print("El orden de probabilidad de revelación es: ");
+		PrintListaStr(probabilidadRevelacion);
 	}
 	private static void CantidadTipos(String[] tipos, String tipo) {
 		int cont = 0;
@@ -708,7 +752,10 @@ public class app {
 			if(veloz.equals("¡@IA¿WIN$#")){
 				datosCorruptos++;
 			}
-			String tipo = partes1[3].trim();
+			String tipo = partes1[3].toLowerCase().trim();
+			if(tipo.equals("mejora de ia")){
+				tipo = "mejora ia";
+			}
 			if(tipo.equals("¡@IA¿WIN$#")){
 				datosCorruptos++;
 			}
