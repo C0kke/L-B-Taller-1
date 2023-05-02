@@ -5,7 +5,6 @@ import java.util.*;
 public class app {
 	public static void main(String[] args) throws IOException {
 		Scanner scan = new Scanner(System.in);
-
 		
 		//Pantalla Inicio
 		PantallaInicio();
@@ -14,31 +13,31 @@ public class app {
 		//Archivos para TXT de IA's
 		File txtIA = new File("datos_ia.txt");
 		FileWriter escribirIA = new FileWriter(txtIA, true);
-		String nombreIAs[] = new String [1000];
-		String añoCreacion[] = new String [1000];
-		String velocidades[] = new String[1000];
-		String tipos[] = new String [1000];
-		String tiposInt[] = new String[1000];
-		String creadores[] = new String[1000];
-		String cantMejoras[] = new String[1000];
+		String nombreIAs[] = new String [100];
+		String añoCreacion[] = new String [100];
+		String velocidades[] = new String[100];
+		String tipos[] = new String [100];
+		String tiposInt[] = new String[100];
+		String creadores[] = new String[100];
+		String cantMejoras[] = new String[100];
 		CrearListas1(txtIA, nombreIAs, añoCreacion, velocidades, tipos, tiposInt, creadores, cantMejoras);
 		
 		//Archivos para TXT de Creadores
 		File txtCreadores = new File("datos_creadores.txt");
 		FileWriter escribirCreadores = new FileWriter(txtCreadores,true);
-		String[] nombresCreadores = new String[10];
-		String[] experiencias = new String[10];
-		String[] especialidades = new String[10]; 
-		String[] edades = new String[10];
+		String[] nombresCreadores = new String[100];
+		String[] experiencias = new String[100];
+		String[] especialidades = new String[100]; 
+		String[] edades = new String[100];
 		CrearListas2(txtCreadores, nombresCreadores,experiencias, especialidades, edades);
 		
 		//Archivos para TXT de Usuarios
 		File txtUsuarios = new File("datos_usuarios.txt");
 		FileWriter escribirUsuarios = new FileWriter(txtUsuarios,true);
-		String users[] = new String [10];
-		String passwords[] = new String[10];
-		String categorias[] = new String [10];
-		String creadoresUs[] = new String[10];
+		String users[] = new String [100];
+		String passwords[] = new String[100];
+		String categorias[] = new String [100];
+		String creadoresUs[] = new String[100];
 		CrearListas3(txtUsuarios, users, passwords, categorias, creadoresUs);
 		
 		//Verificar existencia del usuario
@@ -52,9 +51,18 @@ public class app {
 		boolean valido = Login(users.length, user, password, users, passwords);
 		categoria = IndicarCategoria(user, users, passwords, password, categorias, categoria);
 			
-		if(valido == false){
-			System.out.println("Acceso Denegado");
-		}else{
+		while(valido == false){
+			System.out.println("Credeciales inválidas,");
+			System.out.println("\nUser: ");
+			user = scan.nextLine().toLowerCase();
+			System.out.println("Password: ");
+			password = scan.nextLine();
+			categoria = "";
+				
+			valido = Login(users.length, user, password, users, passwords);
+			categoria = IndicarCategoria(user, users, passwords, password, categorias, categoria);
+		}
+		if(valido == true){
 			System.out.println("Acceso Correcto");
 
 			//Login correcto, iniciar programa
@@ -63,6 +71,7 @@ public class app {
 					//para normal
 				}else if (categoria.equals("administrador")){
 					//para admin
+
 					System.out.println("\nElija el menu al que desea acceder");
 					System.out.println("\nOpcion 1) Submenu A.I.");
 					System.out.println("Opcion 2) Submenu Users&Creators");
@@ -154,8 +163,8 @@ public class app {
 			                	añoCreacion[posicion] = nuevoAñoIA;
 			                	break;
 			                case 3:
-			                	if(velocidades[posicion].equals("¡@IA¿WIN$#".toLowerCase())){
-			                		System.out.println("¡ATENCIÓN, este dato está corrupto!");
+			                	if(velocidades[posicion].equals("¡@IA¿WIN$#")){
+			                		System.out.println("¡[0RrVp73Q>!");
 			                	}else{
 			                		System.out.println("Ingrese nueva velocidad");
 			                		String nuevaVelocidadIA = scan.nextLine();
@@ -173,8 +182,8 @@ public class app {
 			                	creadores[posicion] = nuevoCreadorIA;
 			                	break;
 			                case 6:
-			                	if(cantMejoras[posicion].equals("¡@IA¿WIN$#".toLowerCase())){
-			                		System.out.println("¡ATENCIÓN, este dato está corrupto!");
+			                	if(cantMejoras[posicion].equals("¡@IA¿WIN$#")){
+			                		System.out.println("¡[0RrVp73Q>!");
 			                	}else{
 			                	System.out.println("¿Cuántas veces ha sido mejorada?");
 			                	String nuevaMejoraIA = scan.nextLine();
@@ -183,20 +192,21 @@ public class app {
 			                	break;
 			                }
 			                break;
+			                //Submenú Usuarios y creadores
 		                case 2:
-		                    System.out.println("Submenu Users&Creators");
+		                    System.out.println("Submenu Usuarios y Creadores");
 		                    System.out.println("");
 		                    System.out.println("Que desea hacer");
-		                    System.out.println("1) ver usuarios");
-		                    System.out.println("2) anadir usuario o creador");
-		                    System.out.println("3) editar usuario o creador");
-		                    System.out.println("4) eliminar usuario o creador");
+		                    System.out.println("1) Ver usuarios");
+		                    System.out.println("2) Añadir usuario/creador");
+		                    System.out.println("3) Editar usuario/creador");
+		                    System.out.println("4) Eliminar usuario/creador");
 		                    alt = Integer.parseInt(scan.nextLine());
 		                    alt = Limitar(1,4,alt,scan);
 		                    
 		                    switch(alt){
 		                        case 1:
-		                            System.out.println("ver cantidad de usuarios");
+		                            System.out.println("¿Qué tipo de usuario desea ver?: ");
 		                            System.out.println("");
 		                            System.out.println("1) Administrador");
 		                            System.out.println("2) Normal");
@@ -204,37 +214,184 @@ public class app {
 		                            alt = Limitar(1,2,alt,scan);
 		                            switch(alt){
 		                                case 1:
-		                                    System.out.println("Administradores = (total), (%)");  
-		                                    break;
+				                            String[] listaAdmin = new String[100];
+				                            int tam=0;
+				                            int max = DeterminarCantElementos(categorias);
+				                            for(int i=0;i<users.length;i++){
+				                            	if(categorias[i]!=(null)){
+				                            		if(categorias[i].equals("administrador")){
+				                            			listaAdmin[tam] = users[i];
+				                            			tam++;
+				                            		}
+				                            	}
+				                            }
+				                            int porcAdmin = tam * 100 / max; 
+				                            PrintListaStr(listaAdmin);  
+			                                System.out.println("Los Administradores son el "+ porcAdmin+" % de los usuarios");
+			                            	break;
 		                                case 2:
-		                                    System.out.println("Usuarios Normales = (total), (%)");
+		                                	String[] listaUser = new String[100];
+		                                	tam=0;
+		                                	max = DeterminarCantElementos(categorias);
+		                                	for(int i=0;i<users.length;i++){
+				                            	if(categorias[i]!=(null)){
+				                            		if(categorias[i].equals("normal")){
+				                            			listaUser[tam] = users[i];
+				                            			tam++;
+				                            		}
+				                            		max++;
+				                            	}
+				                            }
+				                            int porcUser = tam * 100 / max; 
+				                            PrintListaStr(listaUser);  
+			                                System.out.println("Los Usuarios nomales son el "+ porcUser+" % de los usuarios");
 		                                    break;
 		                            }
 		                            break;
 		                        case 2:
-		                            System.out.println("Anadir usuario o creador");
-		                            System.out.println("");
-		                            System.out.println("Ingrese nombre de usuario");
-		                            String NomUsuarioCreado = scan.nextLine();
-		                            System.out.println("Ingrese contrasena del usuario");
-		                            String PassUsuarioCreado = scan.nextLine();
-		                            System.out.println("Ingrese la categoria del usuario");
-		                            String CategoriaUsuarioCreado = scan.nextLine();
-		                            System.out.println("nombre del creador del usuario");
-		                            String CreadorUsuarioCreado = scan.nextLine();
-		                            System.out.println(NomUsuarioCreado + ", " + PassUsuarioCreado + ", " +  CategoriaUsuarioCreado + ", " + CreadorUsuarioCreado);
-			                            break;
-		                       case 3:
-		                            System.out.println("editar usuario o creador");
-		                            System.out.println("Usuario a buscar");
-			                            String NomUsuarioBuscado = scan.nextLine();
-		                            
+		                        	int tamaño = DeterminarCantElementos(users);
+		                            System.out.println("Añadir usuario o creador\n");
+		                            System.out.println("¿Desea agregar un (1)usuario o un (2)creador?");
+		                            int seleccion = Integer.parseInt(scan.nextLine());
+		                            seleccion = Limitar(1, 2, seleccion, scan);
+		                            switch(seleccion){
+		                            	case 1:
+		                            		System.out.println("Ingrese nombre de usuario");
+		                            		String NomUsuarioCreado = scan.nextLine();
+		                            		users[tamaño+1] = NomUsuarioCreado;
+		                            		System.out.println("Ingrese contrasena del usuario");
+		                            		String PassUsuarioCreado = scan.nextLine();
+		                            		passwords[tamaño+1] = PassUsuarioCreado;
+		                            		System.out.println("Ingrese la categoria del usuario");
+		                            		String CategoriaUsuarioCreado = scan.nextLine();
+		                            		categorias[tamaño+1] = CategoriaUsuarioCreado;
+		                            		System.out.println("nombre del creador del usuario");
+		                            		String CreadorUsuarioCreado = scan.nextLine();
+		                            		creadoresUs[tamaño+1] = CreadorUsuarioCreado;
+		                            		System.out.println(users[tamaño+1]+","+passwords[tamaño+1]+","+categorias[tamaño+1]+","+creadoresUs[tamaño+1]);
+		                            		break;
+		                            	case 2:
+		                            		System.out.println("Ingrese nombre del creador");
+		                            		String nomCreadorCreado = scan.nextLine();
+		                            		nombresCreadores[tamaño+1] = nomCreadorCreado;
+		                            		System.out.println("Ingrese días de experiencia del creador");
+		                            		String experienciaCreadorCreado = scan.nextLine();
+		                            		experiencias[tamaño+1] = experienciaCreadorCreado;
+		                            		System.out.println("Ingrese la especialidad del creador");
+		                            		String especialidadCreadorCreado = scan.nextLine();
+		                            		especialidades[tamaño+1] = especialidadCreadorCreado;
+		                            		System.out.println("Ingrese la edad del creador");
+		                            		String edadUsuarioCreado = scan.nextLine();
+		                            		edades[tamaño+1] = edadUsuarioCreado;
+		                            		break;
+		                            }
 		                            break;
+		                       case 3:
+		                            System.out.println("Editar usuario o creador\n");
+		                            System.out.println("¿Desea editar un (1)usuario o un (2)creador?");
+		                            seleccion = Integer.parseInt(scan.nextLine());
+		                            seleccion = Limitar(1, 2, seleccion, scan);
+		                            switch(seleccion){
+	                            	case 1:
+	                            		PrintListaStr(users);
+	                            		System.out.println("Ingrese nombre de usuario a editar");
+	                            		String editarUs = scan.nextLine();
+					                	posicion = Buscar(users, users.length, editarUs);
+	                            		while(posicion == users.length){
+						                	System.out.println("El usuario " + editarUs + " no existe, intente denuevo");
+						                	editarUs = scan.nextLine().toLowerCase();
+						                }
+	                            		System.out.println("¿Qué desea editar?");
+	        			                System.out.println("1) Nombre: " + users[posicion]);
+	        			                System.out.println("2) Contraseña: " + passwords[posicion]);
+	        			                System.out.println("3) Tipo de Usuario: "+ tipos[posicion]);
+	        			                System.out.println("4) Creador: " + creadoresUs[posicion]);
+	        			                System.out.println("0) Volver atrás");
+	        			                mod = Integer.parseInt(scan.nextLine());
+						                mod = Limitar(0,4,mod,scan);   	
+						                if(mod == 0){
+						                	break;
+						                }
+						                switch(mod){
+						                case 1:
+						                	if(users[posicion].equals("¡@IA¿WIN$#")){
+						                		System.out.println("¡[0RrVp73Q>!");
+						                	}else{
+						                		System.out.println("Ingrese un nuevo nombre :");
+						                		String nuevoNombreUs = scan.nextLine();
+						                		users[posicion] = nuevoNombreUs;
+						                	}
+						                	break;
+						                case 2:
+						                	System.out.println("Ingrese nueva contraseña");
+						                	String nuevaPass = scan.nextLine();
+						                	passwords[posicion] = nuevaPass;
+						                	break;
+						                case 3:
+						                	System.out.println("Ingrese el tipo de Usuario: ");
+						                	String nuevoTipoUs = scan.nextLine();
+						                	tipos[posicion] = nuevoTipoUs;
+						                	break;
+						                case 4:
+						                	System.out.println("¿Quién creó a este Usuario?");
+						                	String nuevoCreadorUs = scan.nextLine();
+						                	creadoresUs[posicion] = nuevoCreadorUs;
+						                	break;
+						                }
+	        			                break;
+	                            	case 2:
+	                            		PrintListaStr(creadores);
+	                            		System.out.println("Ingrese nombre del Creador a editar");
+	                            		String editarCreador = scan.nextLine();
+					                	posicion = Buscar(creadores, creadores.length, editarCreador);
+	                            		while(posicion == creadores.length){
+						                	System.out.println("El Creador " + editarCreador + " no existe, intente denuevo");
+						                	editarCreador = scan.nextLine().toLowerCase();
+						                }
+	                            		System.out.println("¿Qué desea editar?");
+	        			                System.out.println("1) Nombre: " + nombresCreadores[posicion]);
+	        			                System.out.println("2) Experiencia: " + experiencias[posicion] + " días");
+	        			                System.out.println("3) Especialidad: "+ especialidades[posicion]);
+	        			                System.out.println("4) Edad: " + edades[posicion]);
+	        			                System.out.println("0) Volver atrás");
+	        			                mod = Integer.parseInt(scan.nextLine());
+						                mod = Limitar(0,4,mod,scan);   	
+						                if(mod == 0){
+						                	break;
+						                }
+						                switch(mod){
+						                case 1:
+						                	if(nombresCreadores[posicion].equals("¡@IA¿WIN$#")){
+						                		System.out.println("¡[0RrVp73Q>!");
+						                	}else{
+						                		System.out.println("Ingrese un nuevo nombre :");
+						                		String nuevoNombreCreador = scan.nextLine();
+						                		nombresCreadores[posicion] = nuevoNombreCreador;
+						                	}
+						                	break;
+						                case 2:
+						                	System.out.println("Ingrese nueva experiencia (dias)");
+						                	String nuevaExp = scan.nextLine();
+						                	experiencias[posicion] = nuevaExp;
+						                	break;
+						                case 3:
+						                	System.out.println("Ingrese la Especialidad del Creador: ");
+						                	String nuevaEspecialidad = scan.nextLine();
+						                	especialidades[posicion] = nuevaEspecialidad;
+						                	break;
+						                case 4:
+						                	System.out.println("¿Cuál es la edad?");
+						                	String nuevaEdad = scan.nextLine();
+						                	edades[posicion] = nuevaEdad;
+						                	break;
+						                }
+						                break;
+	                            }
+	                            break;
 		                        case 4:
 		                            System.out.println("eliminar usuario o creador");
 		                            System.out.println("");
 		                            System.out.println("Usuario a buscar");
-		                            NomUsuarioBuscado = scan.nextLine().toLowerCase();
 		                            
 		                            break;
 			                    		}
@@ -245,7 +402,8 @@ public class app {
 			}
 		}
 		
-		//corromper
+		//corromperTXT
+		
 		int datosACorromper = (int)(Math.random()*5+1);
 		int archivoACorromper = (int) (Math.random()*3+1);
 
@@ -363,6 +521,15 @@ public class app {
 		escribirCreadores.close();
 		escribirUsuarios.close();
 	}
+	private static int DeterminarCantElementos(String[] lista) {
+		int tamaño = 0;
+		for(int i=0; i<lista.length;i++){
+			if(lista[i] != null){
+			tamaño++;
+			}
+		}
+		return tamaño;
+	}
 	private static void PantallaInicio(){
 		System.out.println("**************************************************");
 		System.out.println("*            I.A. AGAINST TO HUMANITY	   	 *");
@@ -475,7 +642,7 @@ public class app {
 			listaVelocidades[contador] = String.valueOf(veloz);
 			listaTipos[contador] = tipo.toLowerCase();
 			listaTiposInt[contador] = String.valueOf(tipoInt);
-			listaCreadores[contador] = creador;
+			listaCreadores[contador] = creador.toLowerCase();
 			listaMejoras[contador] = String.valueOf(mejora);
 		contador++;
 		}
@@ -509,8 +676,8 @@ public class app {
 				datosCorruptos++;
 			}
 			nombres[contador] = nombre.toLowerCase();
-			xps[contador] = exp;
-			roles[contador] = rol;
+			xps[contador] = String.valueOf(exp);
+			roles[contador] = rol.toLowerCase();
 			edades[contador] =  String.valueOf(edad);
 			contador++;
 		}
@@ -545,8 +712,8 @@ public class app {
 			}
 			users[contador] = us.toLowerCase();
 			passwords[contador] = pass;
-			categorias[contador] = rol;
-			creadores[contador] = creator;
+			categorias[contador] = rol.toLowerCase();
+			creadores[contador] = creator.toLowerCase();
 			contador++;
 		}
 		leer.close();
