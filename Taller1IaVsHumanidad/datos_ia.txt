@@ -1,5 +1,5 @@
-nako,2003,15,simple,Pablo,0
-mimic,2010,25,media,Cristobal,09
-kimbawe,2011,20,media,Marcelo,07
-joba,2008,20,simple,Jorge,0
-hula,2014,30,avanzada,Lucas,15
+kikimbawe,2014,15,simple,pablo,15
+gpt,2010,25,media,cristobal,10
+joba,2008,20,simple,jorge,0
+marimba,2007,20,media,marcelo,7
+hula,2005,25,avanzada,lucas,0

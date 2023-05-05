@@ -1,6 +1,6 @@
-Bocchi lurker,hs123,administrador,Pablo
-Cokke,jrg666,administrador,Jorge
-Tobal,lntbl,administrador, Cristobal
-pjBlack,blanco,normal,Jorge
-mAMa,1234,normal,Juan
-Yuyu12,yuyu12,normal,Maria
+bocchi lurker,hs123,administrador,pablo
+cokke,jrg666,administrador,jorge
+tobal,lntbl,administrador,cristobal
+pjwhite,blanco,normal,jorge
+mama,mimamamemima,normal,juan
+anto,252525,normal,jorge

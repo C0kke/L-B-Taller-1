@@ -1,5 +1,5 @@
-pablo,2456,mejora de ia,32
-cristobal,1365,programador,19
-jorge,820,programador,19
-marcelo,3650,Ia Master,35
-lucas,2561,mejora de ia,27
+pablo,1986,mejora ia,23
+cristobal,0900,programador,19
+marcelo,3050,programador,25
+jorge,3650,ia master,19
+lucas,895,mejora ia,28
