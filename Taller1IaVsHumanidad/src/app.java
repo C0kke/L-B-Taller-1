@@ -74,8 +74,9 @@ public class app {
 				System.out.println("\nElija el menu al que desea acceder");
 				System.out.println("\nOpcion 1) Submenu A.I.");
 				System.out.println("Opcion 2) Submenu Users&Creators");
+				System.out.println("Opción 3) Finalizar");
 				int alt = Integer.parseInt(scan.nextLine());
-				alt = Limitar(1,2,alt,scan);
+				alt = Limitar(1,3,alt,scan);
 		        switch(alt){
 		        //Submenú IA
 		        case 1:
@@ -101,12 +102,12 @@ public class app {
 				        PrintListaStr(nombreIAs);
 				        break;
 				    case 2:
-				    	OrdenarMayorAMenorStr(añoCreacion, nombreIAs,velocidades,tipos,creadores,cantMejoras,tiposInt);
+				    	OrdenarMayorAMenorInt(añoCreacion, nombreIAs,velocidades,tipos,creadores,cantMejoras,tiposInt);
 				        PrintListaStr(nombreIAs);
 				        PrintListaStr(añoCreacion);
 				        break;
 				    case 3:
-				    	OrdenarMayorAMenorStr(velocidades,nombreIAs,tipos,creadores,cantMejoras,añoCreacion,tiposInt);
+				    	OrdenarMayorAMenorInt(velocidades,nombreIAs,tipos,creadores,cantMejoras,añoCreacion,tiposInt);
 				        PrintListaStr(nombreIAs);
 				        PrintListaStr(velocidades);
 				        break;
@@ -121,7 +122,7 @@ public class app {
 				        PrintListaStr(creadores);
 				        break;
 				    case 6:
-				    	OrdenarMayorAMenorStr(cantMejoras,nombreIAs,tipos,añoCreacion,velocidades,creadores,tiposInt);
+				    	OrdenarMayorAMenorInt(cantMejoras,nombreIAs,tipos,añoCreacion,velocidades,creadores,tiposInt);
 				        PrintListaStr(nombreIAs);
 				        PrintListaStr(cantMejoras);
 				        break;
@@ -130,6 +131,7 @@ public class app {
 			        System.out.print("Ingrese el nombre de la I.A. que desea editar: ");
 			        String editarIA = scan.nextLine().toLowerCase();
 			        int posicion = Buscar(nombreIAs, nombreIAs.length, editarIA);
+			        IACorrupta(nombreIAs, creadores, posicion);
 			        while(posicion == nombreIAs.length){
 			        	System.out.println("no se encontró la I.A, intente denuevo");
 			            editarIA = scan.nextLine().toLowerCase();
@@ -234,10 +236,9 @@ public class app {
 		                				listaUser[tam] = users[i];
 		                				tam++;
 		                				}
-		                			max++;
 		                			}
 		                		}
-		                	int porcUser = tam * 100 / max;
+		                	int porcUser = (tam * 100) / max;
 		                	PrintListaStr(listaUser);  
 		                	System.out.println("Los Usuarios nomales son el "+ porcUser+" % de los usuarios");
 		                	break;
@@ -459,10 +460,14 @@ public class app {
 		            	break;
 		            	}
 		            break;
+		        case 3:
+		        	break;
 		            }
 		        }
 			System.out.println("¿Desea finalizar la sesión?");
-			inicio = scan.nextLine();
+			System.out.println("'si' para finalizar");
+			System.out.println("Cualquier tecla para continuar");
+			inicio = scan.nextLine().toLowerCase();
 		}
 		
 		//corromperTXT
@@ -582,6 +587,13 @@ public class app {
 		escribirIA.close();
 		escribirCreadores.close();
 		escribirUsuarios.close();
+	}
+	private static void IACorrupta(String[] listaNombres, String[] listaCreadores, int posicion){
+		if(listaNombres[posicion] != null){
+				if(listaNombres[posicion].equals("¡@IA¿WIN$#".toLowerCase()) && listaCreadores[posicion].equals("¡@IA¿WIN$#".toLowerCase())){
+					System.out.println("ATENCIÓN!! ESTA IA ESTÁ CORRUPTA");
+				}
+			}
 	}
 	private static void OrdenarCreadores(String[] creadores,String[] nombresCreadores, String[]experiencias, String[]especialidades, String[] edades){
 		int i;
@@ -708,6 +720,37 @@ public class app {
 	                String temp1 = lista[j-1];
 	                lista[j-1] = lista[j];
 	                lista[j] = temp1;
+	                String temp2 = lista2[j-1];
+	                lista2[j-1] = lista2[j];
+	                lista2[j] = temp2;
+	                String temp3 = lista3[j-1];
+	                lista3[j-1] = lista3[j];
+	                lista3[j] = temp3;
+	                String temp4 = lista4[j-1];
+	                lista4[j-1] = lista4[j];
+	                lista4[j] = temp4;
+	                if(!lista[j].equals(lista5[j])){
+	                	String temp5 = lista5[j-1];
+	                	lista5[j-1] = lista5[j];
+	                	lista5[j] = temp5;
+	                	String temp6 = lista6[j-1];
+	                	lista6[j-1] = lista6[j];
+	                	lista6[j] = temp6;
+	                	String temp7 = lista7[j-1];
+	                	lista7[j-1] = lista7[j];
+	                	lista7[j] = temp7;
+	                }
+	            }
+	        }
+	    }
+	}
+	public static void OrdenarMayorAMenorInt(String[] lista, String[] lista2, String lista3[], String lista4[],String lista5[],String lista6[], String lista7[]) {
+	    int tamaño = lista.length;
+	    for (int i = 0; i < tamaño; i++) {
+	    	for (int j = 1; j < tamaño; j++) {
+	        	if(lista[(j-1)] != null && lista[j] != null && Integer.parseInt(lista[(j-1)]) <Integer.parseInt(lista[j])){	                int temp1 = Integer.parseInt(lista[j-1]);
+	                lista[j-1] = String.valueOf(lista[j]);
+	                lista[j] = String.valueOf(temp1);
 	                String temp2 = lista2[j-1];
 	                lista2[j-1] = lista2[j];
 	                lista2[j] = temp2;
