@@ -9,12 +9,11 @@ public class App {
 		Scanner scan = new Scanner(System.in);
 		//Archivos para TXT de Usuarios
 		File txtUsuarios = new File("Usuarios.txt");
-		FileWriter escribirUsuarios = new FileWriter(txtUsuarios,true);
 		String users[] = new String [100];
+		int codigos[] = new int[100];
 		String passwords[] = new String[100];
-		String categorias[] = new String [100];
-		String creadoresUs[] = new String[100];
-		CrearListas3(txtUsuarios, users, passwords, categorias, creadoresUs);
+		int ids[] = new int[100];
+		CrearListas(txtUsuarios, users, codigos, passwords, ids);
 		
 		//Verificar existencia del usuario
 		System.out.println("LOGIN");
@@ -24,36 +23,23 @@ public class App {
 		String password = scan.nextLine();
 		
 		scan.close();
-		escribirUsuarios.close();
 	}
-	private static void CrearListas3(File txt, String users[],String passwords[],  String categorias[],  String creadores[]) throws FileNotFoundException{
+	private static void CrearListas(File txt, String users[], int codigos[], String passwords[],  int ids[]) throws FileNotFoundException{
 		int contador = 0;
 		int datosCorruptos = 0;
 		Scanner leer = new Scanner(txt);
 	
 		while(leer.hasNextLine()){
+			
 			String linea = leer.nextLine();
-			String partes3[] = linea.split(",");
-			String us = partes3[0].trim();
-			if(us.equals("�@IA�WIN$#")){
-				datosCorruptos++;
-			}
+			String partes[] = linea.split(",");
+			
+			String us = partes[0].trim();
 			String pass = partes3[1].trim();
-			if(pass.equals("�@IA�WIN$#")){
-				datosCorruptos++;
-			}
 			String rol = partes3[2].trim();
-			if(rol.equals("�@IA�WIN$#")){
-				datosCorruptos++;
-			}
 			String creator = partes3[3].trim();
-			if(creator.equals("�@IA�WIN$#")){
-				datosCorruptos++;
-			}
 			users[contador] = us.toLowerCase();
 			passwords[contador] = pass;
-			categorias[contador] = rol.toLowerCase();
-			creadores[contador] = creator.toLowerCase();
 			contador++;
 		}
 		leer.close();
