@@ -1,12 +1,14 @@
 package ucn.lyb.taller2.logica;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.Scanner;
+
+import ucn.lyb.taller2.dominio.Programador;
 
 public class App {
 
 	public static void main(String[] args) throws IOException {
+		
 		Scanner scan = new Scanner(System.in);
 		//Archivos para TXT de Usuarios
 		File txtUsuarios = new File("Usuarios.txt");
@@ -18,15 +20,10 @@ public class App {
 		
 		//Archivos para TXT de Programadores
 		File txtProgramadores = new File("Programadores.txt");
-		int[] idProg = new int[100];
-		String[] nombresProg = new String[100];
-		String[] apellidosProg = new String[100]; 
-		int[] añosExp = new int[100];
-		String[] lenguajes = new String[100];
-		String[] paises = new String[100];
-		String[] ciudades = new String[100];
-		ListasProgramadores(txtProgramadores, idProg, nombresProg,apellidosProg, añosExp, lenguajes,paises,ciudades);
-		System.out.println(Arrays.toString(lenguajes));
+		ListaProgramadores programadores = new ListaProgramadores(10);
+		CrearProgramadores(txtProgramadores, programadores);
+		
+		
 		//Verificar existencia del usuario
 		System.out.println("LOGIN");
 		System.out.println("\nUser: ");
@@ -34,8 +31,50 @@ public class App {
 		System.out.println("Password: ");
 		String password = scan.nextLine();
 		
+		//Menu Admin
+		/*
+		 * empanadasconchapalele
+		 * suricatarabiosa
+		 */
 		if(user.equals("empanadasconchapalele") && password.equals("suricatarabiosa")){
-			System.out.println("ADMIN");
+			System.out.println("HA ACCEDIDO CORRECTAMENTE AL MENÚ ADMINISTRADOR");
+			System.out.println("\nProgramadores:");
+			System.out.println("\n¿Cómo desea ordenarlos?");
+			System.out.println("1) Por País");
+			System.out.println("2) Por Ciudad");
+			System.out.println("3) Por años de experiencia");
+			System.out.println("4) Por Cantidad de lenguajes");
+			System.out.println("5) Por ID");
+			System.out.println("0) No Ordenar");
+			int sort = Integer.parseInt(scan.nextLine());
+			sort = Limitar(0,5,sort, scan);
+			
+			/*• Ver todos los programadores, y dentro de esto implementar un filtro, que pueda seleccionar
+			a los programadores por:
+				o País o Ciudad o Años experiencia
+				o Cantidad de lenguajes que conoce o Por ID(Se ordenan los
+				programadores de mayor a menor según su ID)
+				• Ver todos las IA, y dentro de esto implementar un filtro, que pueda seleccionar a las IA por:
+				o Tipo
+				o Nombre (Ordenar en orden alfabético) o Precisión o País o Nivel
+				de peligrosidad
+				• Editar datos Programador: En esta ventana se podrán editar los datos del programador,
+				(Agregar lenguaje, años de experiencia, modifica país, ciudad, id, nombre, apellido), tener
+				en cuenta que si se cambia el id no se puede repetir con otra ya existente. Además de tener
+				que modificarlo en los datos de usuario.
+				• Editar datos IA: En esta ventana se podrán editar los datos de la IA, (Nombre, nivel de
+				peligrosidad, debilidad, precisión, País, Id creador)
+				• Editar datos de Usuario: Se pueden modificar todos los datos de usuario (Nombre usuario,
+				contraseña, id). Tener en cuenta que no se puede repetir el id en otro usuario.
+				• Crear y visualizar debilidades: Aquí se deben visualizar todas las debilidades y dar la
+				posibilidad de agregar una nueva con sus respectivos datos
+				• Crear una IA, programador, País: se podrán crear Una IA, Programador y País con los datos
+				necesarios para cada uno
+				• Dar estadísticas por países:
+				o Porcentaje de IA y programadores por países según el total o
+				Porcentaje de IA y programadores por Ciudad según el total
+			*/
+			
 		}else{
 			boolean valido = Login(users.length, user, password, users, passwords);
 			while(valido == false){
@@ -51,7 +90,14 @@ public class App {
 		}
 		scan.close();
 	}
-	private static void ListasProgramadores(File txt,int idProg[], String[] nombresProg, String[] apellidosProg, int[] añosExp,String[] lenguajes, String[] paises, String[] ciudades) throws FileNotFoundException{
+	private static int Limitar(int minimo, int maximo, int variable, Scanner scan) {
+		while(variable < minimo || variable > maximo){
+			System.out.println("Ingrese una opcion valida");
+	        variable = Integer.parseInt(scan.nextLine());
+	    }
+	    return variable;
+	}
+	private static void CrearProgramadores(File txt, ListaProgramadores programadores) throws FileNotFoundException{
 		int contador = 0;
 		Scanner leer = new Scanner(txt);
 		while(leer.hasNextLine()){
@@ -69,13 +115,8 @@ public class App {
 			String pais = partesP[partesP.length-2];
 			String ciudad = partesP[partesP.length-1];
 			
-			idProg[contador] = id;
-			nombresProg[contador] = nombre;
-			apellidosProg[contador] = apellido;
-			añosExp[contador] = experiencia;
-			lenguajes[contador] = totalLenguajes;
-			paises[contador] = pais;
-			ciudades[contador] = ciudad;
+			Programador p = new Programador(id, nombre, apellido, experiencia, totalLenguajes, pais, ciudad);
+			programadores.agregarProgramador(p, contador);
 			contador++;
 		}
 		leer.close();
@@ -112,6 +153,14 @@ public class App {
 			}
 		}
 		return valido;
+	}
+	private static void ImprimirPorDato(String[] lista){
+		for(int i=0;i<lista.length;i++){
+			if(lista[i] != null){
+				System.out.println("-"+lista[i]);
+			}
+		}
+		
 	}
 }
 
