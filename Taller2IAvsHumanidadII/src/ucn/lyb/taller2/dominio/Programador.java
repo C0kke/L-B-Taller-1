@@ -7,15 +7,17 @@ public class Programador {
 	private String apellido;
 	private int añosExperiencia;
 	private String lenguajes;
+	private int cantLenguajes;
 	private String pais;
 	private String ciudad;
 	
-	public Programador(int id, String nombre, String apellido,int añosExperiencia, String lenguajes, String pais, String ciudad) {
+	public Programador(int id, String nombre, String apellido,int añosExperiencia, String lenguajes, int cantLenguajes, String pais, String ciudad) {
 		this.id = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.añosExperiencia = añosExperiencia;
 		this.lenguajes = lenguajes;
+		this.cantLenguajes = cantLenguajes;
 		this.pais = pais;
 		this.ciudad = ciudad;
 	}
@@ -55,6 +57,9 @@ public class Programador {
 	public String getLenguajes() {
 		return lenguajes;
 	}
+	public int getCantLenguajes(){
+		return cantLenguajes;
+	}
 
 	public void setLenguajes(String lenguajes) {
 		this.lenguajes = lenguajes;
@@ -77,13 +82,7 @@ public class Programador {
 	}
 
 	public String toString() {
-		return "Programador [id=" + id + ", nombre=" + nombre + ", apellido="
-				+ apellido + ", añosExperiencia=" + añosExperiencia
-				+ ", lenguajes=" + lenguajes + ", pais=" + pais + ", ciudad="
-				+ ciudad + "]";
+		return "Programador "+id + ": "+ nombre + " "+ apellido;
 	}
-	
-	
-	
 	
 }

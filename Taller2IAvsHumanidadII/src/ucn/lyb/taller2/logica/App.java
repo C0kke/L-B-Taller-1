@@ -23,7 +23,6 @@ public class App {
 		ListaProgramadores programadores = new ListaProgramadores(10);
 		CrearProgramadores(txtProgramadores, programadores);
 		
-		
 		//Verificar existencia del usuario
 		System.out.println("LOGIN");
 		System.out.println("\nUser: ");
@@ -31,23 +30,19 @@ public class App {
 		System.out.println("Password: ");
 		String password = scan.nextLine();
 		
+	
 		//Menu Admin
 		/*
 		 * empanadasconchapalele
 		 * suricatarabiosa
 		 */
 		if(user.equals("empanadasconchapalele") && password.equals("suricatarabiosa")){
-			System.out.println("HA ACCEDIDO CORRECTAMENTE AL MENÚ ADMINISTRADOR");
-			System.out.println("\nProgramadores:");
-			System.out.println("\n¿Cómo desea ordenarlos?");
-			System.out.println("1) Por País");
-			System.out.println("2) Por Ciudad");
-			System.out.println("3) Por años de experiencia");
-			System.out.println("4) Por Cantidad de lenguajes");
-			System.out.println("5) Por ID");
-			System.out.println("0) No Ordenar");
+			MenuAdmin(programadores);
 			int sort = Integer.parseInt(scan.nextLine());
 			sort = Limitar(0,5,sort, scan);
+			
+			OrdenarProgramadores(sort, programadores);
+			
 			
 			/*• Ver todos los programadores, y dentro de esto implementar un filtro, que pueda seleccionar
 			a los programadores por:
@@ -90,6 +85,18 @@ public class App {
 		}
 		scan.close();
 	}
+	private static void MenuAdmin(ListaProgramadores programadores) { //Imprimir Menú Admininstrador
+		System.out.println("HA ACCEDIDO CORRECTAMENTE AL MENÚ ADMINISTRADOR");
+		System.out.println("\nProgramadores:");
+		programadores.getProgramadores();
+		System.out.println("\n¿Cómo desea ordenarlos?");
+		System.out.println("1) Por País");
+		System.out.println("2) Por Ciudad");
+		System.out.println("3) Por años de experiencia");
+		System.out.println("4) Por Cantidad de lenguajes");
+		System.out.println("5) Por ID");
+		System.out.println("0) No Ordenar");
+	}
 	private static int Limitar(int minimo, int maximo, int variable, Scanner scan) {
 		while(variable < minimo || variable > maximo){
 			System.out.println("Ingrese una opcion valida");
@@ -109,13 +116,15 @@ public class App {
 			String apellido = partesP[2].trim();
 			int experiencia = Integer.parseInt(partesP[3].trim());
 			String totalLenguajes = "";
+			int cantLenguajes= 0;
 			for(int i=4;i<partesP.length-2;i++){
 				totalLenguajes += partesP[i]+" ";
+				cantLenguajes++;
 			}
 			String pais = partesP[partesP.length-2];
 			String ciudad = partesP[partesP.length-1];
 			
-			Programador p = new Programador(id, nombre, apellido, experiencia, totalLenguajes, pais, ciudad);
+			Programador p = new Programador(id, nombre, apellido, experiencia, totalLenguajes,cantLenguajes, pais, ciudad);
 			programadores.agregarProgramador(p, contador);
 			contador++;
 		}
@@ -156,11 +165,90 @@ public class App {
 	}
 	private static void ImprimirPorDato(String[] lista){
 		for(int i=0;i<lista.length;i++){
-			if(lista[i] != null){
+			if(lista[i] != null && !lista[i].equals("0")){
 				System.out.println("-"+lista[i]);
 			}
 		}
 		
+	}
+	private static void OrdenarProgramadores(int ordenarPor, ListaProgramadores programadores){
+		String[] listaStr = new String[10]; 
+		int[] listaInt = new int[10];
+		switch(ordenarPor){
+		case 1://Por Pais
+			programadores.getDato("pais",listaStr,listaInt);
+			OrdenarStrings(listaStr);
+			ImprimirPorDato(listaStr);
+			break;
+		case 2: //Por Ciudad
+			programadores.getDato("ciudad",listaStr,listaInt);
+			OrdenarStrings(listaStr);
+			ImprimirPorDato(listaStr);
+			break;
+		case 3: //Por años de experiencia
+			programadores.getDato("experiencia",listaStr,listaInt);
+			OrdenarInts(listaInt);
+			TransformarIntString(listaInt, listaStr);
+			ImprimirPorDato(listaStr);
+			break;
+		case 4: //Por Cantidad de Lenguajes
+			programadores.getDato("cantLenguajes",listaStr,listaInt);
+			OrdenarLenguajes(listaInt, listaStr);
+			ImprimirPorDato(listaStr);
+			break;
+		case 5: //Por ID
+			programadores.getDato("id",listaStr,listaInt);
+			OrdenarInts(listaInt);
+			TransformarIntString(listaInt, listaStr);
+			ImprimirPorDato(listaStr);
+			break;
+		case 0: //No ordenar
+			break;
+		}
+	}	
+	private static void OrdenarLenguajes(int[] listaInt, String[] listaStr) { //Ordenar lenguajes
+		for(int i=0; i<listaInt.length;i++){
+	    	for (int j = 1; j < listaInt.length; j++) {
+	    		if(listaInt[j-1] != 0 && listaInt[j] != 0 && listaInt[j-1] < listaInt[j]){                
+	    			int temp1 = listaInt[j-1];
+	    			listaInt[j-1] = listaInt[j];
+	    			listaInt[j] = temp1;
+	    			String temp2 = listaStr[j-1];
+	    			listaStr[j-1] = listaStr[j];
+	    			listaStr[j] = temp2;
+	    		}
+			}
+		}
+	}
+	private static void TransformarIntString(int[] listaInt, String[] listaStr) { //Cambiar lista Int a String
+		for(int i=0; i<listaInt.length;i++){
+			if(listaInt[i] !=0){
+				listaStr[i] = String.valueOf(listaInt[i]);
+			}
+		}
+		
+	}
+	private static void OrdenarStrings(String[] lista){ //Ordenar a-z
+		for(int i=0; i<lista.length;i++){
+	    	for (int j = 1; j < lista.length; j++) {
+	    		if(lista[j-1] !=null && lista[j] != null && lista[j-1].compareTo(lista[j]) > 0){                
+			        String temp1 = lista[j-1];
+			        lista[j-1] = lista[j];
+			        lista[j] = temp1;
+	    		}
+			}
+		}
+	}
+	private static void OrdenarInts(int[] lista){ //Ordenar mayor a menor numero
+		for(int i=0; i<lista.length;i++){
+	    	for (int j = 1; j < lista.length; j++) {
+	    		if(lista[j-1] != 0 && lista[j] != 0 && lista[j-1] < lista[j]){                
+	    			int temp1 = lista[j-1];
+			        lista[j-1] = lista[j];
+			        lista[j] = temp1;
+	    		}
+			}
+		}
 	}
 }
 
