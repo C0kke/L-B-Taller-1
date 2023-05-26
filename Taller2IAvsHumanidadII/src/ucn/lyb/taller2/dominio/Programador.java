@@ -81,8 +81,12 @@ public class Programador {
 		this.ciudad = ciudad;
 	}
 
+	@Override
 	public String toString() {
-		return "Programador "+id + ": "+ nombre + " "+ apellido;
+		return "\nProgramador (id=" + id + ", nombre=" + nombre + ", apellido="
+				+ apellido + ", añosExperiencia=" + añosExperiencia
+				+ ", lenguajes=" + lenguajes+ " pais=" + pais + ", ciudad=" + ciudad + ")";
 	}
+
 	
 }

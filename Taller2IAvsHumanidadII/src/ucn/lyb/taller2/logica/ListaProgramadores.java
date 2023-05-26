@@ -1,5 +1,7 @@
 package ucn.lyb.taller2.logica;
 
+import java.util.Arrays;
+import java.util.Scanner;
 
 import ucn.lyb.taller2.dominio.Programador;
 
@@ -12,18 +14,42 @@ public class ListaProgramadores {
 	public void agregarProgramador(Programador p, int posicion){
 		listaProgramadores[posicion] = p;
 	}
-	public void getProgramadores() {
-		for(int i=0;i<10;i++){
-			if(listaProgramadores[i] != null){
-				System.out.println(listaProgramadores[i]);
+	
+	public Programador buscarProgramador(int posicion){
+		return listaProgramadores[posicion];
+	}
+	
+	public int buscarID(Scanner scan){
+		int posicion = -1;
+		while(posicion == -1){
+			System.out.println("Ingrese el ID del programador con el que desee trabajar");
+			int id = Integer.parseInt(scan.nextLine());
+			for(int i=0; i<listaProgramadores.length;i++){
+				if(listaProgramadores[i] != null && listaProgramadores[i].getId() == id){
+					posicion = i;
+				}
+			}
+			if(posicion == -1){
+				System.out.println("No se encontró el Programador");
 			}
 		}
+		return posicion;
 	}
-	public Programador getDato(String dato, String[] listaStr, int[] listaInt){
-		int pos = 0;
+	
+	@Override
+	public String toString() {
+		return Arrays.toString(listaProgramadores);
+	}
+	public void getDato(String dato, String[] listaStr, int[] listaInt){
 		for(int i=0;i<listaProgramadores.length;i++){
 			if(listaProgramadores[i] != null){
 				switch(dato){
+				case "nombre":
+					listaStr[i] = listaProgramadores[i].getNombre();
+					break;
+				case "apellido":
+					listaStr[i] = listaProgramadores[i].getApellido();
+					break;
 				case "pais":
 					listaStr[i] = listaProgramadores[i].getPais();
 					break;
@@ -33,7 +59,7 @@ public class ListaProgramadores {
 				case "experiencia":
 					listaInt[i] = listaProgramadores[i].getAñosExperiencia();
 					break;
-				case "cantLenguajes":
+				case "lenguajes":
 					listaStr[i] = listaProgramadores[i].getLenguajes();
 					listaInt[i] = listaProgramadores[i].getCantLenguajes();
 					break;
@@ -43,6 +69,5 @@ public class ListaProgramadores {
 				}
 			}
 		}
-		return listaProgramadores[pos];
 	}
 }
