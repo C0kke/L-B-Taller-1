@@ -1,0 +1,3 @@
+Helios, Java, 5, desconocida, España, 99%, IA autónoma militar, 2
+Nova, C#, 2, Desconectar Su base de datos, Chile, 53%, IA social, 5
+Amaterasu, Python, 1, Reiniciar, Alemania, 35%, IA transhumanista, 152
