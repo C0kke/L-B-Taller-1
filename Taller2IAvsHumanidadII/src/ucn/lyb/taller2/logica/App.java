@@ -26,6 +26,12 @@ public class App {
 		ListaIAs ias = new ListaIAs(10);
 		CrearIAs(txtIAs, ias);
 		
+		//Archivos para TXT de Paises
+		File txtPaises = new File("Países.txt");
+		ListaPaises paises = new ListaPaises(10);
+		CrearPaises(txtPaises, paises);
+		
+		//Archivos para TXT de Debilidades
 		//Verificar existencia del usuario
 		/*System.out.println("LOGIN");
 		System.out.println("\nUser: ");
@@ -82,6 +88,7 @@ public class App {
 		int sort;
 		switch(menu){
 			case 1:
+				
 				System.out.println(programadores.toString());
 				System.out.println("\n¿Cómo desea ordenarlos?");
 				System.out.println("1) Por País \n2) Por Ciudad \n3) Por años de experiencia \n"
@@ -96,9 +103,6 @@ public class App {
 			case 2:
 				/*
 		
-			
-			• Editar datos IA: En esta ventana se podrán editar los datos de la IA, (Nombre, nivel de
-			peligrosidad, debilidad, precisión, País, Id creador)
 			• Editar datos de Usuario: Se pueden modificar todos los datos de usuario (Nombre usuario,
 			contraseña, id). Tener en cuenta que no se puede repetir el id en otro usuario.
 			• Crear y visualizar debilidades: Aquí se deben visualizar todas las debilidades y dar la
@@ -109,13 +113,15 @@ public class App {
 			o Porcentaje de IA y programadores por países según el total o
 			Porcentaje de IA y programadores por Ciudad según el total
 				 */
-				
+				System.out.println(ias.toString());
 				System.out.println("\n¿Cómo desea ordenarlas?");
 				System.out.println("1) Por Tipo \n2) Por Nombre \n3) Por Precision "
 						+ "\n4) Por Pais \n5) Por Nivel de Peligrosidad \n0) No Ordenar");
 				sort = Integer.parseInt(scan.nextLine());
 				sort = Limitar(0,5,sort, scan);
 				OrdenarIAs(sort, ias);
+				EditarIAs(scan,ias, programadores);
+				
 				break;
 		}
 	}
@@ -420,6 +426,82 @@ public class App {
 	        }
 	    }
 	}
+	public static void EditarIAs(Scanner scan, ListaIAs ias, ListaProgramadores programadores){
+		int pos = (ias.buscarNombreIA(scan));
+		System.out.println(ias.buscarIA(pos));
+		
+		System.out.println("¿Qué operación desea realizar?");
+		System.out.println("1) Cambiar Nombre \n2) Modificar Nivel de Peligrosidad \n3) Modificar debilidad "
+				+ "\n4) Ajustar precision \n5) Cambiar Pais ID \n6) Cambiar ID del Programador \n0) Cancelar");
+		int edicion = Integer.parseInt(scan.nextLine());
+		edicion = Limitar(0,6,edicion,scan);
+		boolean existe;
+		switch(edicion){
+		case 1: //Cambiar Nombre
+			System.out.print("Ingrese nuevo Nombre: ");
+			String nombre = scan.nextLine();
+			ias.buscarIA(pos).setNombre(nombre);
+			System.out.println(ias.toString());
+			break;
+		case 2: // Modificar Nivel de Peligrosidad
+			System.out.println("¿Cuál es su Nivel de Peligrosidad?");
+			int amenaza = Integer.parseInt(scan.nextLine());
+			ias.buscarIA(pos).setNivelDeAmenaza(amenaza);
+			System.out.println(ias.toString());
+			break;
+		case 3: //Modificar Debilidad, Falta Verificar que exista la debilidad
+			System.out.print("Ingrese La Debilidad: ");
+			String debilidad = scan.nextLine();
+			ias.buscarIA(pos).setDebilidad(debilidad);
+			System.out.println(ias.toString());
+			break;
+		case 4: //Ajustar Precisión
+			System.out.print("Ingrese La Precision: (%)");
+			int precision = Integer.parseInt(scan.nextLine());
+			precision = Limitar(0,100,precision,scan);
+			String precisionPorc = String.valueOf(precision)+"%";
+			ias.buscarIA(pos).setDebilidad(precisionPorc);
+			System.out.println(ias.toString());
+			break;
+		case 5: //Cambiar Pais, Falta Verificar que el pais exista
+			System.out.println("Escriba el nombre del nuevo Pais");
+			String pais = scan.nextLine();
+			ias.buscarIA(pos).setPais(pais);
+			System.out.println(ias.toString());
+			break;
+		case 6://Modificar ID, Falta modificar en usuario
+			String[] listaStr = new String[10];
+			int[] ids = new int[10];
+			existe = false;
+			
+			System.out.println("Ingrese nueva ID");
+			int id = Integer.parseInt(scan.nextLine());
+			programadores.getDato("id", listaStr, ids);
+			
+			for(int i=0;i<ids.length;i++){
+				if(id == ids[i]){
+					existe = true;
+					break;
+				}
+			}
+			while(existe != true){
+				System.out.println("ID no existe, ingrese ID valida");
+				id = Integer.parseInt(scan.nextLine());
+				for(int i=0;i<ids.length;i++){
+					if(id == ids[i]){
+						existe = true;
+						break;
+					}
+				}
+			}
+			ias.buscarIA(pos).setIdCreador(id);
+			System.out.println(ias.toString());
+			break;
+			
+		case 0: //Cancelar
+			break;
+		}
+	}
 	private static void CrearUsuarios(File txt,ListaUsuarios usuarios) throws FileNotFoundException{
 		int contador = 0;
 		Scanner leer = new Scanner(txt);
@@ -438,6 +520,11 @@ public class App {
 			contador++;
 		}
 		leer.close();
+	}
+
+	private static void CrearPaises(File txtPaises, ListaPaises paises) {
+		// TODO Auto-generated method stub
+		
 	}
 	private static void TransformarPorcentajes(int[] listaInt, String[] listaStr){ //Ordenar precisiones en IA's
 		for(int i=0;i<listaInt.length;i++){

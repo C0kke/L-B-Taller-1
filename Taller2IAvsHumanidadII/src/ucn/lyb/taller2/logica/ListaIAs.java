@@ -1,6 +1,7 @@
 package ucn.lyb.taller2.logica;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 import ucn.lyb.taller2.dominio.IA;
 
@@ -53,5 +54,22 @@ public class ListaIAs {
 				}
 			}
 		}
+	}
+	
+	public int buscarNombreIA(Scanner scan){
+		int posicion = -1;
+		while(posicion == -1){
+			System.out.println("Ingrese el Nombre de la IA con la que desee trabajar");
+			String nombre = scan.nextLine();
+			for(int i=0; i<listaIAs.length;i++){
+				if(listaIAs[i] != null && (listaIAs[i].getNombre()).equals(nombre)){
+					posicion = i;
+				}
+			}
+			if(posicion == -1){
+				System.out.println("No se encontró la IA");
+			}
+		}
+		return posicion;
 	}
 }
