@@ -28,6 +28,12 @@ public class ListaPaises {
 	}
 		
 	public String toString() {
-		return listaPaises.toString();
+		String paises = "";
+		for(int a=0;a<listaPaises.length;a++){
+			if(listaPaises[a] != null){
+				paises += listaPaises[a].toString();
+			}
+		}
+		return paises;
 	}
 }

@@ -42,7 +42,7 @@ public class App {
 		CrearDebilidades(txtDebilidades, debilidades);
 		
 		//Verificar existencia del usuario
-		boolean admin = false;
+		boolean admin = true;
 		System.out.println("LOGIN");
 		System.out.println("\nUser: ");
 		String user = scan.nextLine().toLowerCase();
@@ -53,14 +53,17 @@ public class App {
 			admin = true;
 		}
 		if(admin == true){
-			System.out.println("HA ACCEDIDO CORRECTAMENTE AL MENÚ ADMINISTRADOR");
-			while(!terminar.equals("si")){
-				MenuAdmin(programadores, ias, usuarios, paises, debilidades, scan);
-				System.out.println("¿Desea finalizar la sesion?");
-				System.out.println("'si' para finalizar");
-				System.out.println("Cualquier tecla para continuar");
-				terminar = scan.nextLine().toLowerCase();
-			
+			System.out.println("HA ACCEDIDO CORRECTAMENTE AL MENÚ ADMINISTRADOR\n");
+				while(!terminar.equals("si")){
+					int cerrar = MenuAdmin(programadores, ias, usuarios, paises, debilidades, scan);
+					if(cerrar == 0){
+						break;
+					}else{
+						System.out.println("¿Desea finalizar la sesion?");
+						System.out.println("'si' para finalizar");
+						System.out.println("Cualquier tecla para continuar");
+						terminar = scan.nextLine().toLowerCase();
+				}
 			}
 		}else{
 			boolean valido = Login(usuarios.getCantidad(), usuarios, user, password);
@@ -82,6 +85,7 @@ public class App {
 				terminar = scan.nextLine().toLowerCase();
 			}
 		}
+		System.out.println("Adios");
 		scan.close();
 	}
 	private static boolean Login(int tam, ListaUsuarios usuarios, String user, String pass){
@@ -94,16 +98,16 @@ public class App {
 		}
 		return valido;
 	}
-	private static void MenuAdmin(ListaProgramadores programadores, ListaIAs ias, ListaUsuarios usuarios, ListaPaises paises, ListaDebilidades debilidades, Scanner scan) { //Imprimir Menú Admininstrador
+	private static int MenuAdmin(ListaProgramadores programadores, ListaIAs ias, ListaUsuarios usuarios, ListaPaises paises, ListaDebilidades debilidades, Scanner scan) { //Imprimir Menú Admininstrador
 		
-		System.out.println("¿Desea ver las ias o los programadores?");
-		System.out.println("1)Programadores \n2)IA's");
+		System.out.println("¿A que menu desea acceder?");
+		System.out.println("1) Programadores \n2) IA's\n3) Usuarios\n4) Debilidades\n0) Cerrar Programa");
 		int menu = Integer.parseInt(scan.nextLine());
-		menu = Limitar(1, 2, menu, scan);
+		menu = Limitar(0, 5, menu, scan);
 		int sort;
 		switch(menu){
 			case 1:
-				
+				System.out.println("PROGRAMADORES:");
 				System.out.println(programadores.toString());
 				System.out.println("\n¿Cómo desea ordenarlos?");
 				System.out.println("1) Por País \n2) Por Ciudad \n3) Por años de experiencia \n"
@@ -116,18 +120,7 @@ public class App {
 				
 				break;
 			case 2:
-				/*
-		
-			• Editar datos de Usuario: Se pueden modificar todos los datos de usuario (Nombre usuario,
-			contraseña, id). Tener en cuenta que no se puede repetir el id en otro usuario.
-			• Crear y visualizar debilidades: Aquí se deben visualizar todas las debilidades y dar la
-			posibilidad de agregar una nueva con sus respectivos datos
-			• Crear una IA, programador, País: se podrán crear Una IA, Programador y País con los datos
-			necesarios para cada uno
-			• Dar estadísticas por países:
-			o Porcentaje de IA y programadores por países según el total o
-			Porcentaje de IA y programadores por Ciudad según el total
-				 */
+				System.out.println("INTELIGENCIAS ARTIFICIALES:");
 				System.out.println(ias.toString());
 				System.out.println("\n¿Cómo desea ordenarlas?");
 				System.out.println("1) Por Tipo \n2) Por Nombre \n3) Por Precision "
@@ -135,10 +128,45 @@ public class App {
 				sort = Integer.parseInt(scan.nextLine());
 				sort = Limitar(0,5,sort, scan);
 				OrdenarIAs(sort, ias);
-				EditarIAs(scan,ias, programadores, paises, debilidades);
-				
+				System.out.println("Desea crear o editar una IA?");
+				System.out.println("1) Crear\n2) Editar");
+				int opcionIA = Integer.parseInt(scan.nextLine());
+				switch(opcionIA){
+				case 1:
+					AgregarIA(scan, ias, programadores, debilidades, paises);
+					break;
+				case 2:
+					EditarIAs(scan,ias, programadores, paises, debilidades);
+					break;
+				}
+				break;
+			case 3:
+				System.out.println("USUARIOS:");
+				System.out.println(usuarios.toString());
+				System.out.println("EDICION DE USUARIOS");
+				EditarUsuarios(scan, usuarios, programadores, paises);
+				break;
+			case 4:
+				System.out.println("DEBILIDADES:");
+				System.out.println(debilidades.toString());
+				System.out.println("¿Desea Agregar una Debilidad? (si/no)");
+				if(scan.nextLine().equals("si")){
+					AgregarDebilidad(scan, debilidades);
+				}
+				System.out.println(debilidades.toString());
+				break;
+				/*
+		
+			• Crear una IA, programador, País: se podrán crear Una IA, Programador y País con los datos
+			necesarios para cada uno
+			• Dar estadísticas por países:
+			o Porcentaje de IA y programadores por países según el total o
+			Porcentaje de IA y programadores por Ciudad según el total
+				 */
+			case 0:
 				break;
 		}
+		return menu;
 	}
 	private static int Limitar(int minimo, int maximo, int variable, Scanner scan) { //Funcion para limitar las opciones
 		while(variable < minimo || variable > maximo){
@@ -250,7 +278,14 @@ public class App {
 	    }
 	}
 	public static void EditarProgramador(Scanner scan, ListaProgramadores programadores, ListaPaises paises, ListaUsuarios usuarios){
-		int pos = (programadores.buscarID(scan));
+		System.out.println("Ingrese el ID del programador con el que desee trabajar");
+		int id = Integer.parseInt(scan.nextLine());
+		int pos = (programadores.buscarID(id));
+		while(pos == -1){
+			System.out.println("No se encontró el Programador");
+			id = Integer.parseInt(scan.nextLine());
+			pos = (programadores.buscarID(id));
+		}
 		System.out.println(programadores.buscarProgramador(pos));
 		
 		System.out.println("¿Qué operación desea realizar?");
@@ -334,13 +369,13 @@ public class App {
 			System.out.println(programadores.toString());
 			break;
 			
-		case 5: //Modificar ID, Falta modificar en usuario
+		case 5: //Modificar ID
 			
 			String[] listaStr = new String[10];
 			int[] ids = new int[10];
 			programadores.getDato("id", listaStr, ids);
 			existe = true;
-			int id = programadores.buscarProgramador(pos).getId();
+			id = programadores.buscarProgramador(pos).getId();
 			int nuevaId = 0;
 			while(existe == true){
 				existe = false;
@@ -363,7 +398,6 @@ public class App {
 			}
 			programadores.buscarProgramador(pos).setId(nuevaId);
 			System.out.println(programadores.toString());
-			System.out.println(usuarios.toString());
 			break;
 		case 6: //Cambiar Nombre
 			System.out.print("Ingrese nuevo Nombre: ");
@@ -482,7 +516,14 @@ public class App {
 	    }
 	}
 	public static void EditarIAs(Scanner scan, ListaIAs ias, ListaProgramadores programadores, ListaPaises paises, ListaDebilidades debilidades){
-		int pos = (ias.buscarNombreIA(scan));
+		System.out.println("Ingrese el Nombre de la IA con la que desee trabajar");
+		String nombre = scan.nextLine().toUpperCase();
+		int pos = (ias.buscarNombreIA( nombre));
+		while(pos == -1){
+			System.out.println("No se encontró la IA");
+			nombre = scan.nextLine().toUpperCase();
+			pos = (ias.buscarNombreIA(nombre));
+		}
 		System.out.println(ias.buscarIA(pos));
 		
 		System.out.println("¿Qué operación desea realizar?");
@@ -494,7 +535,7 @@ public class App {
 		switch(edicion){
 		case 1: //Cambiar Nombre
 			System.out.print("Ingrese nuevo Nombre: ");
-			String nombre = scan.nextLine();
+			nombre = scan.nextLine();
 			ias.buscarIA(pos).setNombre(nombre);
 			System.out.println(ias.toString());
 			break;
@@ -504,21 +545,35 @@ public class App {
 			ias.buscarIA(pos).setNivelDeAmenaza(amenaza);
 			System.out.println(ias.toString());
 			break;
-		case 3: //Modificar Debilidad, Falta Verificar que exista la debilidad
+		case 3: //Modificar Debilidad
 			System.out.print("Ingrese La Debilidad: ");
-			String debilidad = scan.nextLine();
+			String debilidad = scan.nextLine().toLowerCase();
 			existe = false;
+			if(debilidad.equals("desconocida"))
+			{
+				existe = true;
+			}
+			boolean nivelValido = false;
 			while(existe != true){
 				for(int a=0;a<10;a++){
-					if(debilidades.buscarDebilidad(a) != null && debilidad.equals(debilidades.buscarDebilidad(a).getDebilidad())){
+					if(debilidades.buscarDebilidad(a) != null && debilidad.equals(debilidades.buscarDebilidad(a).getDebilidad().toLowerCase())){
 						existe = true;
+						if(debilidades.buscarDebilidad(a).getNivelMaximo()>= ias.buscarIA(pos).getNivelDeAmenaza()){
+							nivelValido = true;
+						}
 						break;
 					}
 				}
 				if(existe != true){
 					System.out.println("Debilidad no existente en nuestra base de datos, intente denuevo");
 					System.out.println("Ingrese La Debilidad");
-					debilidad = scan.nextLine();
+					debilidad = scan.nextLine().toLowerCase();
+				}
+				if(nivelValido != true){
+					System.out.println("Nivel de amenaza mayor ");
+					existe = false;
+					System.out.println("Ingrese La Debilidad");
+					debilidad = scan.nextLine().toLowerCase();
 				}
 			}
 			ias.buscarIA(pos).setDebilidad(debilidad);
@@ -586,6 +641,52 @@ public class App {
 			break;
 		}
 	}
+	public static void AgregarIA(Scanner scan, ListaIAs ias, ListaProgramadores programadores, ListaDebilidades debilidades, ListaPaises paises){
+		boolean existe = false;
+		System.out.print("Ingrese nombre de la IA:");
+		String nombreIA = scan.nextLine();
+		System.out.print("Ingrese el lenguaje de programacion de la IA:");
+		String lenguajeIA = scan.nextLine();
+		System.out.print("Ingrese el nivel de amenaza de la IA:");
+		int amenazaIA = Integer.parseInt(scan.nextLine());
+		Limitar(1,5,amenazaIA, scan);
+		String debilidadIA = "";
+		while(existe != true){
+			System.out.print("Ingrese la debilidad de la IA:");
+			debilidadIA = scan.nextLine();
+			for(int i=0;i<debilidades.getCantidad();i++){
+				if(debilidadIA.equals(debilidades.buscarDebilidad(i).getDebilidad())){
+					existe = true;
+					break;
+				}
+			}
+		}
+		System.out.print("Ingrese el pais de la IA:");
+		String paisIA = scan.nextLine();
+		System.out.print("Ingrese la precision de la IA:");
+		String precisionIA = scan.nextLine();
+		String[] precision = precisionIA.split("%");
+		int precisionInt = Integer.parseInt(precision[0]);
+		Limitar(0, 100, precisionInt, scan);
+		System.out.print("Ingrese el tipo de la IA:");
+		int idIA = 0;
+		String tipoIA = scan.nextLine();
+		existe = false;
+		while(existe != true){
+			System.out.print("Ingrese el codigo del programador de la IA:");
+			idIA = Integer.parseInt(scan.nextLine());
+			for(int i=0;i<programadores.getCantidad();i++){
+				if(idIA == programadores.buscarProgramador(i).getId()){
+					existe = true;
+					break;
+				}
+			}
+		}
+		IA ia = new IA(nombreIA, lenguajeIA, amenazaIA, debilidadIA, paisIA, precisionIA, tipoIA, idIA);
+		int posicion = ias.getCantidad();
+		ias.agregarIA(ia, posicion);
+		System.out.println(ias.toString());
+	}
 	private static void CrearUsuarios(File txt,ListaUsuarios usuarios) throws FileNotFoundException{
 		int contador = 0;
 		Scanner leer = new Scanner(txt);
@@ -606,6 +707,74 @@ public class App {
 			contador++;
 		}
 		leer.close();
+	}
+	private static void EditarUsuarios(Scanner scan, ListaUsuarios usuarios, ListaProgramadores programadores, ListaPaises paises){
+		System.out.println("Ingrese el Nombre del Usuario a Editar (Sin #");
+		String nombre = scan.nextLine().toUpperCase();
+		int pos = (usuarios.buscarNombre(nombre));
+		while(pos == -1){
+			System.out.println("No se encontró el Usuario");
+			nombre = scan.nextLine().toUpperCase();
+			pos = (usuarios.buscarNombre(nombre));
+		}
+		System.out.println(usuarios.buscarUsuario(pos));
+		
+		System.out.println("¿Que dato desea editar?");
+		System.out.println("1) Cambiar Nombre \n2) Cambiar Contraseña \n3) Editar ID Programador\n0) Cancelar");
+		int edicion = Integer.parseInt(scan.nextLine());
+		edicion = Limitar(0,3,edicion,scan);
+		
+		boolean existe;
+		switch(edicion){
+		case 1: //Cambiar Nombre
+			System.out.print("Ingrese nuevo Nombre: ");
+			nombre = scan.nextLine();
+			usuarios.buscarUsuario(pos).setNombre(nombre);
+			System.out.println(usuarios.toString());
+			break;
+		case 2: // Cambiar Contraseña
+			System.out.println("Ingrese Nueva Contraseña");
+			String contraseña = scan.nextLine();
+			usuarios.buscarUsuario(pos).setContraseña(contraseña);
+			System.out.println(usuarios.toString());
+			break;
+		case 3: //Modificar ID
+			existe = true;
+			int id = usuarios.buscarUsuario(pos).getId();
+			int nuevaId = 0;
+			while(existe == true){
+				existe = false;
+				System.out.println("Ingrese nueva ID");
+				nuevaId = Integer.parseInt(scan.nextLine());
+				for(int i=0;i<usuarios.getCantidad();i++){
+					if(nuevaId == usuarios.buscarUsuario(i).getId()){
+						existe = true;
+						break;
+					}
+				}
+				for(int b = 0;b<programadores.getCantidad();b++){
+					if(nuevaId == programadores.buscarProgramador(b).getId()){
+						existe = true;
+						break;
+					}
+				}
+				if(existe == true){
+					System.out.println("ID ya existente, ingrese ID valida");
+				}
+			}
+			for(int a = 0; a<programadores.getCantidad();a++){
+				if(id == programadores.buscarProgramador(a).getId()){
+					programadores.buscarProgramador(a).setId(nuevaId);
+				}
+			}
+			usuarios.buscarUsuario(pos).setId(nuevaId);
+			System.out.println(usuarios.toString());
+			System.out.println(programadores.toString());
+			
+			break;
+		case 0: //Cancelar
+			break;
+		}
 	}
 	private static void CrearPaises(File txt, ListaPaises paises) throws FileNotFoundException {
 		int contador = 0;
@@ -644,6 +813,16 @@ public class App {
 			contador++;
 		}
 		leer.close();
+	}
+	private static void AgregarDebilidad(Scanner scan, ListaDebilidades debilidades){
+		System.out.print("Ingrese la debilidad: ");
+		String nombreDebilidad = scan.nextLine();
+		System.out.print("Ingrese el nivel de amenaza maximo: ");
+		int nivelMaximo = Integer.parseInt(scan.nextLine());
+		Debilidad deb = new Debilidad(nombreDebilidad, nivelMaximo);
+		int posicion = debilidades.getCantidad();
+		debilidades.agregarDebilidad(deb, posicion);
+		
 	}
 	private static void TransformarPorcentajes(int[] listaInt, String[] listaStr){ //Ordenar precisiones en IA's
 		for(int i=0;i<listaInt.length;i++){

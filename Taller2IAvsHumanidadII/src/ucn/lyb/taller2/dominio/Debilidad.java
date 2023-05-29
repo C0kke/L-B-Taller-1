@@ -27,8 +27,8 @@ public class Debilidad {
 
 	@Override
 	public String toString() {
-		return "Debilidad [debilidad=" + debilidad + ", nivelMaximo="
-				+ nivelMaximo + "]";
+		return "*"+debilidad + ", Nivel de amenaza maximo = "
+				+ nivelMaximo +"\n";
 	}
 	
 }

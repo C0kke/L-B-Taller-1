@@ -28,7 +28,7 @@ public class Pais {
 
 	@Override
 	public String toString() {
-		return nombre+" [regiones=" + regiones + "]";
+		return nombre+" Ciudades: " + regiones + "\n";
 	}
 	
 }

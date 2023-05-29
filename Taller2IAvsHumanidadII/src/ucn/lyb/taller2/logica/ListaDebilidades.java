@@ -1,7 +1,4 @@
 package ucn.lyb.taller2.logica;
-
-import java.util.Arrays;
-
 import ucn.lyb.taller2.dominio.Debilidad;
 
 public class ListaDebilidades {
@@ -19,8 +16,13 @@ public class ListaDebilidades {
 	}
 	@Override
 	public String toString() {
-		return "ListaDebilidades [listaDebilidades="
-				+ Arrays.toString(listaDebilidades) + "]";
+		String debilidades = "";
+		for(int a=0;a<listaDebilidades.length;a++){
+			if(listaDebilidades[a] != null){
+				debilidades += listaDebilidades[a].toString();
+			}
+		}
+		return debilidades;
 	}
 	public int getCantidad(){
 		int cantidad = 0;

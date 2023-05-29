@@ -1,8 +1,5 @@
 package ucn.lyb.taller2.logica;
 
-import java.util.Arrays;
-import java.util.Scanner;
-
 import ucn.lyb.taller2.dominio.IA;
 
 public class ListaIAs {
@@ -21,7 +18,13 @@ public class ListaIAs {
 	}
 	
 	public String toString() {
-		return Arrays.toString(listaIAs);
+		String ias = "";
+		for(int a=0;a<listaIAs.length;a++){
+			if(listaIAs[a] != null){
+				ias += listaIAs[a].toString();
+			}
+		}
+		return ias;
 	}
 	public void getDato(String dato, String[] listaStr, int[] listaInt){
 		for(int i=0;i<listaIAs.length;i++){
@@ -64,18 +67,13 @@ public class ListaIAs {
 		}
 		return cantidad;
 	}
-	public int buscarNombreIA(Scanner scan){
+	public int buscarNombreIA(String nombre){
 		int posicion = -1;
 		while(posicion == -1){
-			System.out.println("Ingrese el Nombre de la IA con la que desee trabajar");
-			String nombre = scan.nextLine().toUpperCase();
 			for(int i=0; i<listaIAs.length;i++){
 				if(listaIAs[i] != null && (listaIAs[i].getNombre().toUpperCase()).equals(nombre)){
 					posicion = i;
 				}
-			}
-			if(posicion == -1){
-				System.out.println("No se encontró la IA");
 			}
 		}
 		return posicion;

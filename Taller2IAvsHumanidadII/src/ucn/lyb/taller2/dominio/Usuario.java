@@ -48,8 +48,8 @@ public class Usuario {
 
 	@Override
 	public String toString() {
-		return "\nUsuario [nombre=" +nombre+"#"+ codigo
-				+ ", contraseña=" + contraseña + ", id=" + id + "]";
+		return "Nombre: " +nombre+"#"+ codigo
+				+ ", contraseña=" + contraseña + ", id=" + id + "\n";
 	}
 
 }

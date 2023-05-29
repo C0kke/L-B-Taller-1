@@ -88,10 +88,10 @@ public class IA {
 
 	@Override
 	public String toString() {
-		return "\nIA (Nombre: " + nombre + ", Lenguaje: " + lenguaje
+		return "Nombre: " + nombre + ", Lenguaje: " + lenguaje
 				+ ", Nivel de Amenaza= " + nivelDeAmenaza + ", Debilidad: "
 				+ debilidad + ", Pais: " + pais + ", Precision =" + precision
-				+ ", Tipo de IA: " + tipo + ", ID Creador: " + idCreador + ")";
+				+ ", Tipo de IA: " + tipo + ", ID Creador: " + idCreador + "\n";
 	}
 	
 	

@@ -1,8 +1,4 @@
 package ucn.lyb.taller2.logica;
-
-import java.util.Arrays;
-import java.util.Scanner;
-
 import ucn.lyb.taller2.dominio.Programador;
 
 public class ListaProgramadores {
@@ -19,19 +15,13 @@ public class ListaProgramadores {
 		return listaProgramadores[posicion];
 	}
 	
-	public int buscarID(Scanner scan){
+	public int buscarID(int id){
 		int posicion = -1;
-		while(posicion == -1){
-			System.out.println("Ingrese el ID del programador con el que desee trabajar");
-			int id = Integer.parseInt(scan.nextLine());
 			for(int i=0; i<listaProgramadores.length;i++){
 				if(listaProgramadores[i] != null && listaProgramadores[i].getId() == id){
 					posicion = i;
 				}
-			}
-			if(posicion == -1){
-				System.out.println("No se encontró el Programador");
-			}
+			
 		}
 		return posicion;
 	}
@@ -46,7 +36,13 @@ public class ListaProgramadores {
 	}
 	@Override
 	public String toString() {
-		return Arrays.toString(listaProgramadores);
+		String programadores = "";
+		for(int a=0;a<listaProgramadores.length;a++){
+			if(listaProgramadores[a] != null){
+				programadores += listaProgramadores[a].toString();
+			}
+		}
+		return programadores;
 	}
 	public void getDato(String dato, String[] listaStr, int[] listaInt){
 		for(int i=0;i<listaProgramadores.length;i++){

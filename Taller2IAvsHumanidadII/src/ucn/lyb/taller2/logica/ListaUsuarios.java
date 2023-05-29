@@ -1,7 +1,4 @@
 package ucn.lyb.taller2.logica;
-
-import java.util.Arrays;
-
 import ucn.lyb.taller2.dominio.Usuario;
 
 public class ListaUsuarios {
@@ -29,7 +26,24 @@ public class ListaUsuarios {
 		}
 		return cantidad;
 	}
+	public int buscarNombre(String nombre){
+		int posicion = -1;
+		while(posicion == -1){
+			for(int i=0; i<listaUsuarios.length;i++){
+				if(listaUsuarios[i] != null && (listaUsuarios[i].getNombre().toUpperCase()).equals(nombre)){
+					posicion = i;
+				}
+			}
+		}
+		return posicion;
+	}
 	public String toString() {
-		return Arrays.toString(listaUsuarios);
+		String usuarios = "";
+		for(int a=0;a<listaUsuarios.length;a++){
+			if(listaUsuarios[a] != null){
+				usuarios += listaUsuarios[a].toString();
+			}
+		}
+		return usuarios;
 	}
 }
