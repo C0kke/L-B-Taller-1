@@ -55,14 +55,22 @@ public class ListaIAs {
 			}
 		}
 	}
-	
+	public int getCantidad(){
+		int cantidad = 0;
+		for(int i=0; i<listaIAs.length;i++){
+			if(listaIAs[i] != null){
+				cantidad++;
+			}
+		}
+		return cantidad;
+	}
 	public int buscarNombreIA(Scanner scan){
 		int posicion = -1;
 		while(posicion == -1){
 			System.out.println("Ingrese el Nombre de la IA con la que desee trabajar");
-			String nombre = scan.nextLine();
+			String nombre = scan.nextLine().toUpperCase();
 			for(int i=0; i<listaIAs.length;i++){
-				if(listaIAs[i] != null && (listaIAs[i].getNombre()).equals(nombre)){
+				if(listaIAs[i] != null && (listaIAs[i].getNombre().toUpperCase()).equals(nombre)){
 					posicion = i;
 				}
 			}
@@ -72,4 +80,5 @@ public class ListaIAs {
 		}
 		return posicion;
 	}
+	
 }

@@ -1,9 +1,11 @@
 package ucn.lyb.taller2.logica;
 
 import java.io.*;
-import java.util.Scanner;
+import java.util.*;
 
+import ucn.lyb.taller2.dominio.Debilidad;
 import ucn.lyb.taller2.dominio.IA;
+import ucn.lyb.taller2.dominio.Pais;
 import ucn.lyb.taller2.dominio.Programador;
 import ucn.lyb.taller2.dominio.Usuario;
 
@@ -11,76 +13,89 @@ public class App {
 	public static void main(String[] args) throws IOException {
 		
 		Scanner scan = new Scanner(System.in);
-		//Archivos para TXT de Usuarios
+		String terminar = "no";
+		//Archivos para Objeto Usuario
 		File txtUsuarios = new File("Usuarios.txt");
 		ListaUsuarios usuarios = new ListaUsuarios(10);
-		CrearUsuarios(txtUsuarios, usuarios);
 		
-		//Archivos para TXT de Programadores
+		//Archivos para Objeto Programador
 		File txtProgramadores = new File("Programadores.txt");
 		ListaProgramadores programadores = new ListaProgramadores(10);
-		CrearProgramadores(txtProgramadores, programadores);
 		
-		//Archivos para TXT de IA´s
+		//Archivos para Objeto IA
 		File txtIAs = new File("IA.txt");
 		ListaIAs ias = new ListaIAs(10);
-		CrearIAs(txtIAs, ias);
 		
-		//Archivos para TXT de Paises
+		//Archivos para Objeto Pais
 		File txtPaises = new File("Países.txt");
 		ListaPaises paises = new ListaPaises(10);
-		CrearPaises(txtPaises, paises);
 		
-		//Archivos para TXT de Debilidades
+		//Archivos para Objeto Debilidad
+		File txtDebilidades = new File("Debilidades.txt");
+		ListaDebilidades debilidades = new ListaDebilidades(10);
+		
+		//Creacion de objetos
+		CrearUsuarios(txtUsuarios, usuarios);
+		CrearProgramadores(txtProgramadores, programadores);
+		CrearIAs(txtIAs, ias);
+		CrearPaises(txtPaises, paises);
+		CrearDebilidades(txtDebilidades, debilidades);
+		
 		//Verificar existencia del usuario
-		/*System.out.println("LOGIN");
+		boolean admin = false;
+		System.out.println("LOGIN");
 		System.out.println("\nUser: ");
 		String user = scan.nextLine().toLowerCase();
 		System.out.println("Password: ");
 		String password = scan.nextLine();
 		
-		boolean valido = Login(users.length, user, password, users, passwords);
-		
-		*/
-				
+		if(user.equals("empanadasconchapalele") && password.equals("suricatarabiosa")){
+			admin = true;
+		}
+		if(admin == true){
+			System.out.println("HA ACCEDIDO CORRECTAMENTE AL MENÚ ADMINISTRADOR");
+			while(!terminar.equals("si")){
+				MenuAdmin(programadores, ias, usuarios, paises, debilidades, scan);
+				System.out.println("¿Desea finalizar la sesion?");
+				System.out.println("'si' para finalizar");
+				System.out.println("Cualquier tecla para continuar");
+				terminar = scan.nextLine().toLowerCase();
 			
-		//while(valido == false){
-			//if(user.equals("empanadasconchapalele") && password.equals("suricatarabiosa")){
-
-				//Menu Admin
-				/*
-				 * empanadasconchapalele
-				 * suricatarabiosa
-				 */
-				
-				MenuAdmin(programadores, ias, scan);
-				
-			/*	break;
-			}else{
+			}
+		}else{
+			boolean valido = Login(usuarios.getCantidad(), usuarios, user, password);
+			while(valido == false){
 				System.out.println("Credeciales invalidas,");
 				System.out.println("\nUser: ");
 				user = scan.nextLine().toLowerCase();
 				System.out.println("Password: ");
 				password = scan.nextLine();
 				
-				valido = Login(users.length, user, password, users, passwords);
+				valido = Login(usuarios.getCantidad(), usuarios, user, password);
 			}
-			System.out.println("Acceso Correcto");
-		}*/
+			while(!terminar.equals("si")){
+		
+				//Menu usuarios
+				System.out.println("¿Desea finalizar la sesion?");
+				System.out.println("'si' para finalizar");
+				System.out.println("Cualquier tecla para continuar");
+				terminar = scan.nextLine().toLowerCase();
+			}
+		}
 		scan.close();
 	}
-	private static boolean Login(int tamano, String user, String pass, String listaUser[], String listaPassword[]){
+	private static boolean Login(int tam, ListaUsuarios usuarios, String user, String pass){
 		boolean valido = false;
-		for(int i = 0; i<tamano;i++){
-			if(listaUser[i] != null && user.equals(listaUser[i]) && pass.equals(listaPassword[i])){
+		for(int i = 0; i<tam;i++){
+			if((usuarios.buscarUsuario(i).getNombre()).equals(user.toLowerCase()) && (usuarios.buscarUsuario(i).getContraseña()).equals(pass)){
 				valido = true;
+				break;
 			}
 		}
 		return valido;
 	}
-	private static void MenuAdmin(ListaProgramadores programadores, ListaIAs ias, Scanner scan) { //Imprimir Menú Admininstrador
+	private static void MenuAdmin(ListaProgramadores programadores, ListaIAs ias, ListaUsuarios usuarios, ListaPaises paises, ListaDebilidades debilidades, Scanner scan) { //Imprimir Menú Admininstrador
 		
-		System.out.println("HA ACCEDIDO CORRECTAMENTE AL MENÚ ADMINISTRADOR");
 		System.out.println("¿Desea ver las ias o los programadores?");
 		System.out.println("1)Programadores \n2)IA's");
 		int menu = Integer.parseInt(scan.nextLine());
@@ -97,7 +112,7 @@ public class App {
 				sort = Limitar(0,5,sort, scan);
 				
 				OrdenarProgramadores(sort, programadores);
-				EditarProgramador(scan, programadores);
+				EditarProgramador(scan, programadores, paises, usuarios);
 				
 				break;
 			case 2:
@@ -120,7 +135,7 @@ public class App {
 				sort = Integer.parseInt(scan.nextLine());
 				sort = Limitar(0,5,sort, scan);
 				OrdenarIAs(sort, ias);
-				EditarIAs(scan,ias, programadores);
+				EditarIAs(scan,ias, programadores, paises, debilidades);
 				
 				break;
 		}
@@ -234,22 +249,24 @@ public class App {
 	        }
 	    }
 	}
-	public static void EditarProgramador(Scanner scan, ListaProgramadores programadores){
+	public static void EditarProgramador(Scanner scan, ListaProgramadores programadores, ListaPaises paises, ListaUsuarios usuarios){
 		int pos = (programadores.buscarID(scan));
 		System.out.println(programadores.buscarProgramador(pos));
 		
 		System.out.println("¿Qué operación desea realizar?");
 		System.out.println("1) Agregar Lenguaje \n2) Modificar Años de Experiencia \n3) Cambiar Pais "
-				+ "\n4) Cambiar Ciudad \n5) Modificar ID \n6) Cambiar Nombre \n7)Cambiar Apellido \n0) Cancelar");
+				+ "\n4) Cambiar Ciudad \n5) Modificar ID \n6) Cambiar Nombre \n7) Cambiar Apellido \n0) Cancelar");
 		int edicion = Integer.parseInt(scan.nextLine());
 		edicion = Limitar(0,7,edicion,scan);
 		boolean existe;
 		switch(edicion){
 		case 1://Agregar Lenguaje
+			
 			System.out.println("¿Que Lenguaje desea agregar?");
 			String lenguaje = scan.nextLine();
 			String lenguajesProgramador = programadores.buscarProgramador(pos).getLenguajes();
 			String lenguajes[] = lenguajesProgramador.split(",");
+			
 			existe = false;
 			for(int i=0;i<lenguajes.length;i++){
 				if((lenguaje.toUpperCase()).equals(lenguajes[i].toUpperCase().trim())){
@@ -263,6 +280,7 @@ public class App {
 			programadores.buscarProgramador(pos).setLenguajes(lenguajesProgramador);
 			System.out.println(programadores.toString());
 			break;
+			
 		case 2: // Modificar Años de Experiencia
 			System.out.println("¿Cuántos años de experiencia tiene?");
 			int experiencia = Integer.parseInt(scan.nextLine());
@@ -272,43 +290,80 @@ public class App {
 		case 3: //Cambiar Pais
 			System.out.println("Escriba el nombre del nuevo Pais");
 			String pais = scan.nextLine();
+			existe = false;
+			while(existe != true){
+				for(int a=0;a<paises.getCantidad();a++){
+					if(pais.equals(paises.buscarPais(a).getNombre())){
+						existe = true;
+						break;
+					}
+				}
+				if(existe != true){
+					System.out.println("Pais no existente en nuestra base de datos, intente denuevo");
+					System.out.println("Escriba el nombre del nuevo Pais");
+					pais = scan.nextLine();
+				}
+			}
+			
 			programadores.buscarProgramador(pos).setPais(pais);
 			System.out.println(programadores.toString());
 			break;
+			
 		case 4: //Cambiar Ciudad
 			System.out.println("Escriba el nombre de la nueva Ciudad");
-			String ciudad = scan.nextLine();
+			String ciudad = scan.nextLine().toLowerCase();
+			existe = false;
+			while(existe != true){
+				for(int a=0;a<paises.getCantidad();a++){
+					String regiones = paises.buscarPais(a).getRegiones();
+					String[] cadaCiudad = regiones.split(",");
+					for(int b=0;b<cadaCiudad.length;b++){
+						if((cadaCiudad[b].toLowerCase().trim()).equals(ciudad)){
+							existe = true;
+							break;
+						}
+					}
+				}
+				if(existe != true){
+					System.out.println("Ciudad no existente en nuestra base de datos, intente denuevo");
+					System.out.println("Escriba el nombre de la nueva Ciudad");
+					ciudad = scan.nextLine().toLowerCase();
+				}
+			}
 			programadores.buscarProgramador(pos).setCiudad(ciudad);
 			System.out.println(programadores.toString());
 			break;
+			
 		case 5: //Modificar ID, Falta modificar en usuario
 			
 			String[] listaStr = new String[10];
 			int[] ids = new int[10];
 			programadores.getDato("id", listaStr, ids);
-			existe = false;
-			
-			System.out.println("Ingrese nueva ID");
-			int id = Integer.parseInt(scan.nextLine());
-			for(int i=0;i<ids.length;i++){
-				if(id == ids[i]){
-					existe = true;
-					break;
-				}
-			}
+			existe = true;
+			int id = programadores.buscarProgramador(pos).getId();
+			int nuevaId = 0;
 			while(existe == true){
-				System.out.println("ID ya existente, ingrese ID valida");
 				existe = false;
-				id = Integer.parseInt(scan.nextLine());
+				System.out.println("Ingrese nueva ID");
+				nuevaId = Integer.parseInt(scan.nextLine());
 				for(int i=0;i<ids.length;i++){
-					if(id == ids[i]){
+					if(nuevaId == ids[i]){
 						existe = true;
 						break;
 					}
 				}
+				if(existe == true){
+					System.out.println("ID ya existente, ingrese ID valida");
+				}
 			}
-			programadores.buscarProgramador(pos).setId(id);
+			for(int a = 0;a<usuarios.getCantidad();a++){
+				if(id == usuarios.buscarUsuario(a).getId()){
+					usuarios.buscarUsuario(a).setId(nuevaId);
+				}
+			}
+			programadores.buscarProgramador(pos).setId(nuevaId);
 			System.out.println(programadores.toString());
+			System.out.println(usuarios.toString());
 			break;
 		case 6: //Cambiar Nombre
 			System.out.print("Ingrese nuevo Nombre: ");
@@ -426,7 +481,7 @@ public class App {
 	        }
 	    }
 	}
-	public static void EditarIAs(Scanner scan, ListaIAs ias, ListaProgramadores programadores){
+	public static void EditarIAs(Scanner scan, ListaIAs ias, ListaProgramadores programadores, ListaPaises paises, ListaDebilidades debilidades){
 		int pos = (ias.buscarNombreIA(scan));
 		System.out.println(ias.buscarIA(pos));
 		
@@ -452,20 +507,49 @@ public class App {
 		case 3: //Modificar Debilidad, Falta Verificar que exista la debilidad
 			System.out.print("Ingrese La Debilidad: ");
 			String debilidad = scan.nextLine();
+			existe = false;
+			while(existe != true){
+				for(int a=0;a<10;a++){
+					if(debilidades.buscarDebilidad(a) != null && debilidad.equals(debilidades.buscarDebilidad(a).getDebilidad())){
+						existe = true;
+						break;
+					}
+				}
+				if(existe != true){
+					System.out.println("Debilidad no existente en nuestra base de datos, intente denuevo");
+					System.out.println("Ingrese La Debilidad");
+					debilidad = scan.nextLine();
+				}
+			}
 			ias.buscarIA(pos).setDebilidad(debilidad);
 			System.out.println(ias.toString());
 			break;
 		case 4: //Ajustar Precisión
-			System.out.print("Ingrese La Precision: (%)");
+			System.out.print("Ingrese La Precision(%): ");
 			int precision = Integer.parseInt(scan.nextLine());
 			precision = Limitar(0,100,precision,scan);
 			String precisionPorc = String.valueOf(precision)+"%";
-			ias.buscarIA(pos).setDebilidad(precisionPorc);
+			ias.buscarIA(pos).setPrecision(precisionPorc);
 			System.out.println(ias.toString());
 			break;
-		case 5: //Cambiar Pais, Falta Verificar que el pais exista
+		case 5: //Cambiar Pais
 			System.out.println("Escriba el nombre del nuevo Pais");
 			String pais = scan.nextLine();
+			existe = false;
+			while(existe != true){
+				for(int a=0;a<10;a++){
+					if(paises.buscarPais(a) != null && pais.equals(paises.buscarPais(a).getNombre())){
+						existe = true;
+						break;
+					}
+				}
+				if(existe != true){
+					System.out.println("Pais no existente en nuestra base de datos, intente denuevo");
+					System.out.println("Escriba el nombre del nuevo Pais");
+					pais = scan.nextLine();
+				}
+			}
+			
 			ias.buscarIA(pos).setPais(pais);
 			System.out.println(ias.toString());
 			break;
@@ -511,20 +595,55 @@ public class App {
 			String linea = leer.nextLine();
 			String partes[] = linea.split(",");
 			
-			String nombreId  = partes[0].trim();
+			String nombreCod[]  = partes[0].split("#");
+			String user = nombreCod[0];
+			int cod = Integer.parseInt(nombreCod[1]);
 			String pass = partes[1].trim();
 			int id = Integer.parseInt(partes[2].trim());
 
-			Usuario u = new Usuario(nombreId, pass, id);
+			Usuario u = new Usuario(user, cod, pass, id);
 			usuarios.agregarUsuario(u, contador);
 			contador++;
 		}
 		leer.close();
 	}
-
-	private static void CrearPaises(File txtPaises, ListaPaises paises) {
-		// TODO Auto-generated method stub
-		
+	private static void CrearPaises(File txt, ListaPaises paises) throws FileNotFoundException {
+		int contador = 0;
+		Scanner leer = new Scanner(txt);
+		while(leer.hasNextLine()){
+			String linea = leer.nextLine();
+			String partes[] = linea.split(",");
+			
+			String nombrePais = partes[0].trim();
+			String regiones = "";
+			for(int i=1;i<partes.length;i++){
+				if(i != 1){
+					regiones += ", ";
+				}
+				regiones += partes[i].trim();
+			}
+			
+			Pais pais = new Pais(nombrePais, regiones);
+			paises.agregarPais(pais, contador);
+			contador++;
+		}
+		leer.close();
+	}
+	private static void CrearDebilidades(File txtDebilidades, ListaDebilidades debilidades) throws FileNotFoundException {
+		int contador = 0;
+		Scanner leer = new Scanner(txtDebilidades);
+		while(leer.hasNextLine()){
+			String linea = leer.nextLine();
+			String partes[] = linea.split(",");
+			
+			String nombreDebilidad= partes[0].trim();
+			int nivelMax = Integer.parseInt(partes[1].trim());
+			
+			Debilidad debilidad = new Debilidad(nombreDebilidad, nivelMax);
+			debilidades.agregarDebilidad(debilidad, contador);
+			contador++;
+		}
+		leer.close();
 	}
 	private static void TransformarPorcentajes(int[] listaInt, String[] listaStr){ //Ordenar precisiones en IA's
 		for(int i=0;i<listaInt.length;i++){

@@ -1,5 +1,7 @@
 package ucn.lyb.taller2.logica;
 
+import java.util.Arrays;
+
 import ucn.lyb.taller2.dominio.Usuario;
 
 public class ListaUsuarios {
@@ -18,7 +20,16 @@ public class ListaUsuarios {
 		return listaUsuarios[posicion];
 	}
 		
+	public int getCantidad(){
+		int cantidad = 0;
+		for(int i=0; i<listaUsuarios.length;i++){
+			if(listaUsuarios[i] != null){
+				cantidad++;
+			}
+		}
+		return cantidad;
+	}
 	public String toString() {
-		return listaUsuarios.toString();
+		return Arrays.toString(listaUsuarios);
 	}
 }

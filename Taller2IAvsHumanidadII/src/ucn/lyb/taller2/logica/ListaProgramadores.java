@@ -35,7 +35,15 @@ public class ListaProgramadores {
 		}
 		return posicion;
 	}
-	
+	public int getCantidad(){
+		int cantidad = 0;
+		for(int i=0; i<listaProgramadores.length;i++){
+			if(listaProgramadores[i] != null){
+				cantidad++;
+			}
+		}
+		return cantidad;
+	}
 	@Override
 	public String toString() {
 		return Arrays.toString(listaProgramadores);
