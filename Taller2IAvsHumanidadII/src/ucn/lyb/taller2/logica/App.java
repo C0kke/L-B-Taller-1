@@ -101,7 +101,7 @@ public class App {
 	private static int MenuAdmin(ListaProgramadores programadores, ListaIAs ias, ListaUsuarios usuarios, ListaPaises paises, ListaDebilidades debilidades, Scanner scan) { //Imprimir Menú Admininstrador
 		
 		System.out.println("¿A que menu desea acceder?");
-		System.out.println("1) Programadores \n2) IA's\n3) Usuarios\n4) Debilidades\n0) Cerrar Programa");
+		System.out.println("1) Programadores \n2) IA's\n3) Usuarios\n4) Debilidades\n5) Paises\n0) Cerrar Programa");
 		int menu = Integer.parseInt(scan.nextLine());
 		menu = Limitar(0, 5, menu, scan);
 		int sort;
@@ -114,13 +114,25 @@ public class App {
 								   + "4) Por Cantidad de lenguajes \n5) Por ID \n0) No Ordenar");
 				sort = Integer.parseInt(scan.nextLine());
 				sort = Limitar(0,5,sort, scan);
-				
 				OrdenarProgramadores(sort, programadores);
-				EditarProgramador(scan, programadores, paises, usuarios);
-				
+
+				System.out.println("Desea crear o editar un Programador?");
+				System.out.println("1) Crear\n2) Editar");
+				int opcionProgramador = Integer.parseInt(scan.nextLine());
+				switch(opcionProgramador){
+				case 1:
+					AgregarProgramador(scan, ias, programadores, debilidades, paises);
+					break;
+				case 2:
+					EditarProgramador(scan, programadores, paises, usuarios);
+					break;
+				}
 				break;
 			case 2:
 				System.out.println("INTELIGENCIAS ARTIFICIALES:");
+				String[] listaTiposIA = new String[5];
+				TiposIAs(listaTiposIA);
+				System.out.println(Arrays.toString(listaTiposIA));
 				System.out.println(ias.toString());
 				System.out.println("\n¿Cómo desea ordenarlas?");
 				System.out.println("1) Por Tipo \n2) Por Nombre \n3) Por Precision "
@@ -133,7 +145,7 @@ public class App {
 				int opcionIA = Integer.parseInt(scan.nextLine());
 				switch(opcionIA){
 				case 1:
-					AgregarIA(scan, ias, programadores, debilidades, paises);
+					AgregarIA(scan, ias, listaTiposIA, programadores, debilidades, paises);
 					break;
 				case 2:
 					EditarIAs(scan,ias, programadores, paises, debilidades);
@@ -155,10 +167,12 @@ public class App {
 				}
 				System.out.println(debilidades.toString());
 				break;
+			case 5:
+				System.out.println("PAISES:\n");
+				System.out.println(paises.toString());
+				System.out.println("Agregar un Pais\n");
+				AgregarPais(scan, paises);
 				/*
-		
-			• Crear una IA, programador, País: se podrán crear Una IA, Programador y País con los datos
-			necesarios para cada uno
 			• Dar estadísticas por países:
 			o Porcentaje de IA y programadores por países según el total o
 			Porcentaje de IA y programadores por Ciudad según el total
@@ -415,6 +429,82 @@ public class App {
 			break;
 		}
 	}
+	public static void AgregarProgramador(Scanner scan, ListaIAs ias, ListaProgramadores programadores, ListaDebilidades debilidades, ListaPaises paises){
+		boolean existe = true;
+		int idPr = 0;
+		while(existe == true){
+			existe = false;
+			System.out.print("Ingrese la id del programador: ");
+			idPr = Integer.parseInt(scan.nextLine());
+			for(int i=0;i<programadores.getCantidad();i++){
+				if(idPr == programadores.buscarProgramador(i).getId()){
+				existe = true;
+				break;
+				}
+			}
+			if(existe == true){
+				System.out.println("Id ya existente");
+			}
+		}
+		System.out.print("Ingrese nombre del Programador: ");
+		String nombrePr = scan.nextLine();
+		
+		System.out.print("Ingrese el apellido del Programador: ");
+		String ApellidoPr = scan.nextLine();
+		
+		System.out.print("Ingrese los años de experiencia del Programador: ");
+		int expPr = Integer.parseInt(scan.nextLine());
+		
+		System.out.print("¿Cuantos lenguajes conoce el programador?: ");
+		int cantLenguajesPr = Integer.parseInt(scan.nextLine());
+		
+		String lenguajesPr = " ";
+		for(int i=0;i<cantLenguajesPr;i++){
+			System.out.print("Ingrese lenguaje: ");
+			lenguajesPr += scan.nextLine()+", "; 
+		}
+		String paisPr ="";
+		existe = false;
+		while(existe != true){
+			System.out.print("Ingrese el pais del Programador: ");
+			paisPr = scan.nextLine().toLowerCase();
+			for(int a=0;a<paises.getCantidad();a++){
+				if(paisPr.equals((paises.buscarPais(a).getNombre().toLowerCase()))){
+					existe = true;
+					break;
+				}
+			}
+			if(existe == false){
+				System.out.println("Pais no existente en nuestra base de datos");
+			}
+		}
+		existe = false;
+		String ciudadPr ="";
+		while(existe != true){
+			System.out.print("Ingrese la Ciudad del Programador: ");
+			ciudadPr = scan.nextLine().toLowerCase();
+			for(int a=0;a<paises.getCantidad();a++){
+				if(paisPr.equals((paises.buscarPais(a).getNombre().toLowerCase()))){
+					String[] ciudadesPais = paises.buscarPais(a).getRegiones().split(",");
+					System.out.println(Arrays.toString(ciudadesPais));
+					for(int b=0;b<ciudadesPais.length;b++){
+						if(ciudadPr.equals(ciudadesPais[b].toLowerCase().trim())){
+							existe = true;
+							break;
+						}
+					}
+					if(existe == true){break;}
+				}
+			}
+			if(existe == false){
+				System.out.println("Ciudad no existente en nuestra base de datos");
+			}
+		}
+		Programador p = new Programador(idPr, nombrePr, ApellidoPr, expPr, lenguajesPr, cantLenguajesPr, paisPr, ciudadPr);
+		int posicion = programadores.getCantidad();
+		programadores.agregarProgramador(p, posicion);
+		System.out.println(programadores.toString());
+	}
 	public static void CrearIAs(File txt, ListaIAs ias) throws FileNotFoundException{
 		int contador = 0;
 		Scanner leer = new Scanner(txt);
@@ -436,6 +526,13 @@ public class App {
 			contador++;
 		}
 		leer.close();
+	}
+	public static void TiposIAs(String[] lista){
+		lista[0] = "IA autónoma militar";
+		lista[1] = "IA supervisora";
+		lista[2] = "IA transhumanista";
+		lista[3] = "IA social";
+		lista[4] = "IA de realidad virtual";
 	}
 	public static void OrdenarIAs(int ordenarPor, ListaIAs ias){
 		
@@ -641,18 +738,21 @@ public class App {
 			break;
 		}
 	}
-	public static void AgregarIA(Scanner scan, ListaIAs ias, ListaProgramadores programadores, ListaDebilidades debilidades, ListaPaises paises){
+	public static void AgregarIA(Scanner scan, ListaIAs ias, String[] listaTiposIA, ListaProgramadores programadores, ListaDebilidades debilidades, ListaPaises paises){
 		boolean existe = false;
-		System.out.print("Ingrese nombre de la IA:");
+		System.out.print("Ingrese nombre de la IA: ");
 		String nombreIA = scan.nextLine();
-		System.out.print("Ingrese el lenguaje de programacion de la IA:");
+		
+		System.out.print("Ingrese el lenguaje de programacion de la IA: ");
 		String lenguajeIA = scan.nextLine();
-		System.out.print("Ingrese el nivel de amenaza de la IA:");
+		
+		System.out.print("Ingrese el nivel de amenaza de la IA: ");
 		int amenazaIA = Integer.parseInt(scan.nextLine());
 		Limitar(1,5,amenazaIA, scan);
+		
 		String debilidadIA = "";
 		while(existe != true){
-			System.out.print("Ingrese la debilidad de la IA:");
+			System.out.print("Ingrese la debilidad de la IA: ");
 			debilidadIA = scan.nextLine();
 			for(int i=0;i<debilidades.getCantidad();i++){
 				if(debilidadIA.equals(debilidades.buscarDebilidad(i).getDebilidad())){
@@ -660,26 +760,58 @@ public class App {
 					break;
 				}
 			}
+			if(existe == false){
+				System.out.println("Debilidad no existente");
+			}
 		}
-		System.out.print("Ingrese el pais de la IA:");
-		String paisIA = scan.nextLine();
-		System.out.print("Ingrese la precision de la IA:");
+		String paisIA ="";
+		existe = false;
+		while(existe != true){
+			System.out.print("Ingrese el pais de la IA: ");
+			paisIA = scan.nextLine().toLowerCase();
+			for(int a=0;a<paises.getCantidad();a++){
+				if(paisIA.equals((paises.buscarPais(a).getNombre().toLowerCase()))){
+					existe = true;
+					break;
+				}
+			}
+			if(existe == false){
+				System.out.println("Pais no existente en nuestra base de datos");
+			}
+		}
+		
+		System.out.print("Ingrese la precision de la IA: ");
 		String precisionIA = scan.nextLine();
+		
 		String[] precision = precisionIA.split("%");
 		int precisionInt = Integer.parseInt(precision[0]);
 		Limitar(0, 100, precisionInt, scan);
-		System.out.print("Ingrese el tipo de la IA:");
-		int idIA = 0;
-		String tipoIA = scan.nextLine();
+		
+		boolean tipoValido = false;
+		String tipoIA = "";
+		while(tipoValido != true){
+			System.out.print("Ingrese el tipo de la IA: ");
+			tipoIA = scan.nextLine().toLowerCase();
+			for(int a=0;a<listaTiposIA.length;a++){
+				if(tipoIA.equals(listaTiposIA[a].toLowerCase())){
+					tipoValido = true;
+					break;
+				}
+			}
+		}
 		existe = false;
+		int idIA = 0;
 		while(existe != true){
-			System.out.print("Ingrese el codigo del programador de la IA:");
+			System.out.print("Ingrese la id del programador de la IA:");
 			idIA = Integer.parseInt(scan.nextLine());
 			for(int i=0;i<programadores.getCantidad();i++){
 				if(idIA == programadores.buscarProgramador(i).getId()){
 					existe = true;
 					break;
 				}
+			}
+			if(existe == false){
+				System.out.println("Id no existente");
 			}
 		}
 		IA ia = new IA(nombreIA, lenguajeIA, amenazaIA, debilidadIA, paisIA, precisionIA, tipoIA, idIA);
@@ -797,6 +929,34 @@ public class App {
 			contador++;
 		}
 		leer.close();
+	}
+	private static void AgregarPais(Scanner scan, ListaPaises paises) {
+		String nombrePais ="";
+		boolean existe = true;
+		while(existe == true){
+			existe = false;
+			System.out.print("Ingrese nombre del Pais: ");
+			nombrePais = scan.nextLine().toLowerCase();
+			for(int a=0;a<paises.getCantidad();a++){
+				if(nombrePais.equals((paises.buscarPais(a).getNombre().toLowerCase()))){
+					existe = true;
+					System.out.println("Pais existente en nuestra base de datos");
+					break;
+				}
+			}
+		}
+		String ciudadesPais = "";
+		System.out.print("Ingrese ciudad, para finalizar escriba 'fin': ");
+		String ciudad = scan.nextLine().toLowerCase();
+		while(!ciudad.equals("fin")){
+			ciudadesPais += ciudad;
+			System.out.println("Ingrese ciudad, para finalizar escriba 'fin':");
+			ciudad = scan.nextLine().toLowerCase().trim();
+			if(!ciudad.equals("fin")){ciudadesPais += ", ";}
+		}
+		Pais p = new Pais(nombrePais, ciudadesPais);
+		paises.agregarPais(p, paises.getCantidad());
+		System.out.println(paises.toString());
 	}
 	private static void CrearDebilidades(File txtDebilidades, ListaDebilidades debilidades) throws FileNotFoundException {
 		int contador = 0;

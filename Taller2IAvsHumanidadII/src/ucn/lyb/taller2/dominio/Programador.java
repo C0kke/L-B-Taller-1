@@ -84,7 +84,7 @@ public class Programador {
 	@Override
 	public String toString() {
 		return "Programador "+ id + ", Nombre:" + nombre + " " + apellido + ", Años de Experiencia:" + añosExperiencia
-				+ "años, Lenguajes:" + lenguajes+ " pais=" + pais + ", ciudad=" + ciudad + "\n";
+				+ " años, Lenguajes:" + lenguajes+ " pais: " + pais + ", ciudad: " + ciudad + "\n";
 	}
 
 	

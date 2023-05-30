@@ -1,2 +1,3 @@
-Chile, Santiago, Coquimbo, Arica, Tarapaca, Atacama, Valparaiso, O'Higgins, Maule, Ñuble, Los Rios, Los Lagos 
+Chile, Santiago, Coquimbo, Arica, Iquique, Valparaiso
 España, Madrid, Barcelona
+Alemania, Dortmund, Munich
