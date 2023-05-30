@@ -1,5 +1,8 @@
 package ucn.lyb.taller2.logica;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 import ucn.lyb.taller2.dominio.IA;
 
 public class ListaIAs {
@@ -78,5 +81,9 @@ public class ListaIAs {
 		}
 		return posicion;
 	}
-	
+	public void Sobreescribir(FileWriter write) throws IOException {
+		for(int i=0;i<this.getCantidad();i++){
+			write.write(listaIAs[i].reWrite());
+		}
+	}
 }

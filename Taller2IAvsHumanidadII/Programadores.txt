@@ -1,4 +1,6 @@
-12544, Pablo, Bocchi, 2, Java, C, Python, Uganda, Coquimbo
-2, Jaime, Rivera, 3, Java, C, Python, C#, C++, Chile, Santiago
-66630, Jorge, Bustos, 1, Java, Python, C#, España, Madrid
-568, Julio, Vergara, 5, Java, C, Python, C#, C++, HTML, Suiza, Estocolmo
+153, Mario, Casas, 2, C, C++, C++, España, Barcelona
+12453, Pablo, Bocchi, 2, Java, C, Python, Chile, Coquimbo
+666, Jorge, Bustos, 1, Java, Python, C#,  España, Madrid
+568, Julio, Vergara, 5, Java, C, Python, C#, C++, HTML, Alemania, Munich
+2, Jaime, Rivera, 3,  Java, C, Python, C#, C++, HTML, Chile, Santiago
+963, Juan, Liester, 1, Python, China, Taiwan

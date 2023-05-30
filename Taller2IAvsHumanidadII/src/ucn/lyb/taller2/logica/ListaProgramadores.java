@@ -1,4 +1,7 @@
 package ucn.lyb.taller2.logica;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import ucn.lyb.taller2.dominio.Programador;
 
 public class ListaProgramadores {
@@ -6,6 +9,7 @@ public class ListaProgramadores {
 	
 	public ListaProgramadores(int max){
 		listaProgramadores = new Programador[max];
+		
 	}
 	public void agregarProgramador(Programador p, int posicion){
 		listaProgramadores[posicion] = p;
@@ -72,6 +76,11 @@ public class ListaProgramadores {
 					break;
 				}
 			}
+		}
+	}
+	public void Sobreescribir(FileWriter write) throws IOException {
+		for(int i=0;i<this.getCantidad();i++){
+			write.write(listaProgramadores[i].reWrite());
 		}
 	}
 }

@@ -30,5 +30,7 @@ public class Debilidad {
 		return "*"+debilidad + ", Nivel de amenaza maximo = "
 				+ nivelMaximo +"\n";
 	}
-	
+	public String reWrite(){
+		return debilidad+", "+nivelMaximo+"\n";
+	}
 }

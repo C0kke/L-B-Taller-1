@@ -1,4 +1,7 @@
 package ucn.lyb.taller2.logica;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import ucn.lyb.taller2.dominio.Debilidad;
 
 public class ListaDebilidades {
@@ -32,5 +35,10 @@ public class ListaDebilidades {
 			}
 		}
 		return cantidad;
+	}
+	public void Sobreescribir(FileWriter write) throws IOException {
+		for(int i=0;i<this.getCantidad();i++){
+			write.write(listaDebilidades[i].reWrite());
+		}
 	}
 }

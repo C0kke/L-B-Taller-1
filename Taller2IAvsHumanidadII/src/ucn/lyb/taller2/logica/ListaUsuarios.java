@@ -1,4 +1,7 @@
 package ucn.lyb.taller2.logica;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import ucn.lyb.taller2.dominio.Usuario;
 
 public class ListaUsuarios {
@@ -45,5 +48,10 @@ public class ListaUsuarios {
 			}
 		}
 		return usuarios;
+	}
+	public void Sobreescribir(FileWriter write) throws IOException {
+		for(int i=0;i<this.getCantidad();i++){
+			write.write(listaUsuarios[i].reWrite());
+		}
 	}
 }

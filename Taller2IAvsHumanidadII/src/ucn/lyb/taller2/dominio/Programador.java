@@ -83,9 +83,10 @@ public class Programador {
 
 	@Override
 	public String toString() {
-		return "Programador "+ id + ", Nombre:" + nombre + " " + apellido + ", Años de Experiencia:" + añosExperiencia
-				+ " años, Lenguajes:" + lenguajes+ " pais: " + pais + ", ciudad: " + ciudad + "\n";
+		return "Programador "+ id + ", Nombre: " + nombre + " " + apellido + ", Años de Experiencia: " + añosExperiencia
+				+ ", Lenguajes:" + lenguajes+ ", Pais:" + pais + ", Ciudad:" + ciudad + "\n";
 	}
-
-	
+	public String reWrite(){
+		return id+", "+nombre+", "+apellido+", "+añosExperiencia+","+lenguajes+","+pais+","+ciudad+"\n";
+	}
 }

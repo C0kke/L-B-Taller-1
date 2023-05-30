@@ -28,7 +28,10 @@ public class Pais {
 
 	@Override
 	public String toString() {
-		return nombre+" Ciudades: " + regiones + "\n";
+		return "Pais: "+ nombre+", Ciudades: " + regiones + "\n";
+	}
+	public String reWrite(){
+		return nombre+", "+regiones+"\n";
 	}
 	
 }

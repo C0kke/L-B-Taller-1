@@ -93,6 +93,17 @@ public class IA {
 				+ debilidad + ", Pais: " + pais + ", Precision =" + precision
 				+ ", Tipo de IA: " + tipo + ", ID Creador: " + idCreador + "\n";
 	}
-	
-	
+	/*
+	 * private String nombre;
+	private String lenguaje;
+	private int nivelDeAmenaza;
+	private String debilidad;
+	private String pais;
+	private String precision;
+	private String tipo;
+	private int idCreador;
+	 */
+	public String reWrite(){
+		return nombre+", "+lenguaje+", "+nivelDeAmenaza+", "+debilidad+", "+pais+", "+precision+", "+tipo+", "+idCreador+"\n";
+	}
 }

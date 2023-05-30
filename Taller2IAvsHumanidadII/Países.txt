@@ -1,3 +1,4 @@
 Chile, Santiago, Coquimbo, Arica, Iquique, Valparaiso
 España, Madrid, Barcelona
 Alemania, Dortmund, Munich
+china, taiwan, pekin

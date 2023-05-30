@@ -51,5 +51,8 @@ public class Usuario {
 		return "Nombre: " +nombre+"#"+ codigo
 				+ ", contraseña=" + contraseña + ", id=" + id + "\n";
 	}
+	public String reWrite(){
+		return nombre+"#"+codigo+", "+contraseña+", "+id+"\n";
+	}
 
 }
