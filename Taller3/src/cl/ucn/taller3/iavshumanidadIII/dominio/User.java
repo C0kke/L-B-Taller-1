@@ -1,21 +1,13 @@
 package cl.ucn.taller3.iavshumanidadIII.dominio;
 
 public class User {
-	private String name, user, password, country;
+	private String user, password, country;
 
-	public User(String name, String user, String password, String country) {
-		this.name = name;
+	public User(String user, String password, String country) {
+		
 		this.user = user;
 		this.password = password;
 		this.country = country;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getUser() {
