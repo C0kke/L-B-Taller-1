@@ -1,0 +1,10 @@
+jsmith12, abc123, Estados Unidos
+amy_walker, p@ssw0rd, Canadá
+david98, mypassword, Reino Unido
+lily.green, secret123, Australia
+mikebrown, securepass, Alemania
+sarah_jones, ilovecats, Francia
+robert_miller, 12345678, España
+emily.wilson, passw0rd!, Italia
+chris1987, mysecretpass, Brasil
+anna_smith, qwerty123, México

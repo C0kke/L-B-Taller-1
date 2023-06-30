@@ -1,0 +1,11 @@
+EtaOS, S+, 2000
+AlphaX, S+, 1000
+BetaBot, A, 800
+GammaAI, B, 650
+DeltaSys, C, 500
+EpsilonOS, S, 950
+ZetaCore, D, 350
+OmegaMega, A, 780
+SigmaNet, C, 480
+ThetaProto, B, 720
+KappaAI, S, 900
