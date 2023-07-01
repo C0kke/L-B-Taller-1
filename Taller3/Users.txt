@@ -1,10 +1,11 @@
-jsmith12, abc123, Estados Unidos
-amy_walker, p@ssw0rd, Canadá
-david98, mypassword, Reino Unido
-lily.green, secret123, Australia
-mikebrown, securepass, Alemania
-sarah_jones, ilovecats, Francia
-robert_miller, 12345678, España
-emily.wilson, passw0rd!, Italia
-chris1987, mysecretpass, Brasil
-anna_smith, qwerty123, México
+jsmith12, abc123, Estados Unidos, admin
+amy_walker, p@ssw0rd, Canadá, jugador
+david98, mypassword, Reino Unido, jugador
+lily.green, secret123, Australia, jugador
+mikebrown, securepass, Alemania, jugador
+sarah_jones, ilovecats, Francia, jugador
+robert_miller, 12345678, España, jugador
+emily.wilson, passw0rd!, Italia, jugador
+chris1987, mysecretpass, Brasil, jugador
+anna_smith, qwerty123, México, admin
+cokke, jrg666, Francia, admin
