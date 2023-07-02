@@ -23,4 +23,10 @@ public class Infantry extends Soldier {
 	public void setWeapon(String weapen) {
 		this.weapen = weapen;
 	}
+	@Override
+	public String toString() {
+		return "Infantry "+super.toString()+"completedMissions=" + completedMissions + ", weapen="
+				+ weapen + "]";
+	}
+	
 }

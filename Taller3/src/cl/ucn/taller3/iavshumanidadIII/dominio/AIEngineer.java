@@ -27,4 +27,11 @@ public class AIEngineer extends Programmer{
 	public void setImplementedAlgorithms(int implementedAlgorithms) {
 		this.implementedAlgorithms = implementedAlgorithms;
 	}
+
+	@Override
+	public String toString() {
+		return "AIEngineer "+super.toString()+", experience=" + experience
+				+ ", implementedAlgorithms=" + implementedAlgorithms + "]";
+	}
+	
 }

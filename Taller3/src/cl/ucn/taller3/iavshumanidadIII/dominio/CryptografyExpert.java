@@ -46,5 +46,14 @@ public class CryptografyExpert extends Programmer {
 	public void setSuccesfulImplementations(int succesfulImplementations) {
 		this.succesfulImplementations = succesfulImplementations;
 	}
+
+	@Override
+	public String toString() {
+		return "CryptografyExpert "+super.toString()+", knowledge=" + knowledge
+				+ ", securityExperience=" + securityExperience
+				+ ", obfuscationAbility=" + obfuscationAbility
+				+ ", succesfulImplementations=" + succesfulImplementations
+				+ "]";
+	}
 	
 }

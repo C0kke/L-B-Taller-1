@@ -1,8 +1,8 @@
 001, John, Smith, Sniper, Infantería,45,50, Uzi
 002, Sarah, Johnson, Demolition Expert, Infantería, 4, 35, AK-47
-003, David, Thompson, Gunner, Artillería, 455, 100, 85.
-004, Emily, Davis, Mortar Operator, Artillería, 411, 75, 92.
-005, Mark, Wilson, Scout, Inteligencia de Combate, 452,1000,500.
+003, David, Thompson, Gunner, Artillería, 455, 100, 85
+004, Emily, Davis, Mortar Operator, Artillería, 411, 75, 92
+005, Mark, Wilson, Scout, Inteligencia de Combate, 452,1000,500
 006, Olivia, Anderson, Surveillance Operator, Inteligencia de Combate, 76, 150,400
 007, James, Thomas, Infiltrator, Operaciones Especiales, 425,30,66,500000
 008, Emma, White, Saboteur, Operaciones Especiales, 451,25,50, 350000

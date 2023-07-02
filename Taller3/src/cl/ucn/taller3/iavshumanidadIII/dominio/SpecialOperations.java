@@ -36,6 +36,13 @@ public class SpecialOperations extends Soldier {
 	public void setObtainedResources(int obtainedResources) {
 		this.obtainedResources = obtainedResources;
 	}
+
+	@Override
+	public String toString() {
+		return "SpecialOperations "+super.toString()+", hiddenMissions=" + hiddenMissions
+				+ ", totalMissions=" + totalMissions + ", obtainedResources="
+				+ obtainedResources + "]";
+	}
 	
 	
 }

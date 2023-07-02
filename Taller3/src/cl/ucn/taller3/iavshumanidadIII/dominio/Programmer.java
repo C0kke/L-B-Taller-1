@@ -3,13 +3,13 @@ package cl.ucn.taller3.iavshumanidadIII.dominio;
 public class Programmer {
 	
 	private int idProgrammer;
-	private String name, lastName, specialism;
+	private String name, lastName, speciality;
 	
-	public Programmer(int id, String name, String lastName, String specialism) {
+	public Programmer(int id, String name, String lastName, String speciality) {
 		this.idProgrammer = id;
 		this.name = name;
 		this.lastName = lastName;
-		this.specialism = specialism;
+		this.speciality = speciality;
 	}
 	
 	public int getId() {
@@ -37,10 +37,16 @@ public class Programmer {
 	}
 
 	public String getSpecialism() {
-		return specialism;
+		return speciality;
 	}
 
-	public void setSpecialism(String specialism) {
-		this.specialism = specialism;
+	public void setSpecialism(String speciality) {
+		this.speciality = speciality;
+	}
+
+	@Override
+	public String toString() {
+		return "Programmer [idProgrammer=" + idProgrammer + ", name=" + name
+				+ ", lastName=" + lastName + ", specialism=" + speciality + "]";
 	}
 }

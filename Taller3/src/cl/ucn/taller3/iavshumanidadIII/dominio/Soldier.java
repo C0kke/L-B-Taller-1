@@ -4,12 +4,11 @@ public class Soldier {
 	
 	private String name, lastName, nick, specialism;
 	private int idSoldier, soldierValue;
-	public Soldier(int idSoldier,String name , String lastName, String nick,
-			String specialism, int soldierValue) {
+	public Soldier(int idSoldier,String name , String lastName, String nick,String speciality, int soldierValue) {
 		this.name = name;
 		this.lastName = lastName;
 		this.nick = nick;
-		this.specialism = specialism;
+		this.specialism = speciality;
 		this.idSoldier = idSoldier;
 		this.soldierValue = soldierValue;
 	}
@@ -48,6 +47,12 @@ public class Soldier {
 	}
 	public void setSoldierValue(int soldierValue) {
 		this.soldierValue = soldierValue;
+	}
+	@Override
+	public String toString() {
+		return "Soldier [name=" + name + ", lastName=" + lastName + ", nick="
+				+ nick + ", specialism=" + specialism + ", idSoldier="
+				+ idSoldier + ", soldierValue=" + soldierValue;
 	}
 	
 }

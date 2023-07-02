@@ -1,36 +1,42 @@
 package cl.ucn.taller3.iavshumanidadIII.dominio;
 
 public class AI {
-	private String nombreIA, clase; 
-	private int vida;
+	private String name, clas; 
+	private int hp;
 	
-	public AI(String nombreIA, String clase, int vida) {
-		this.nombreIA = nombreIA;
-		this.clase = clase;
-		this.vida = vida;
+	public AI(String name, String clas, int hp) {
+		this.name = name;
+		this.clas = clas;
+		this.hp = hp;
 	}
 
-	public String getNombreIA() {
-		return nombreIA;
+	public String getName() {
+		return name;
 	}
 
-	public void setNombreIA(String nombreIA) {
-		this.nombreIA = nombreIA;
+	public void setNombreIA(String name) {
+		this.name = name;
 	}
 
-	public String getClase() {
-		return clase;
+	public String getClas() {
+		return clas;
 	}
 
-	public void setClase(String clase) {
-		this.clase = clase;
+	public void setClase(String clas) {
+		this.clas = clas;
 	}
 
-	public int getVida() {
-		return vida;
+	public int getHp() {
+		return hp;
 	}
 
-	public void setVida(int vida) {
-		this.vida = vida;
+	public void setHp(int hp) {
+		this.hp = hp;
 	}
+
+	@Override
+	public String toString() {
+		return "AI [name=" + name + ", clas=" + clas + ", hp=" + hp + "]";
+	}
+	
 }

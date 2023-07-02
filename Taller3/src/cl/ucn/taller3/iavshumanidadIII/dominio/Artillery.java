@@ -22,6 +22,11 @@ public class Artillery extends Soldier {
 	public void setPrecision(String precision) {
 		this.precision = precision;
 	}
-	
+	@Override
+	public String toString() {
+		return "Artillery "+super.toString()
+				+ ", destroyedObjectives=" + destroyedObjectives
+				+ ", precision=" + precision + "]";
+	}
 	
 }

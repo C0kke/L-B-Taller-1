@@ -27,5 +27,11 @@ public class ThreatAnalyst extends Programmer {
 	public void setDetectedThreats(int detectedThreats) {
 		this.detectedThreats = detectedThreats;
 	}
+
+	@Override
+	public String toString() {
+		return "ThreatAnalyst "+super.toString()+", capacity=" + capacity + ", detectedThreats="
+				+ detectedThreats + "]";
+	}
 	
 }

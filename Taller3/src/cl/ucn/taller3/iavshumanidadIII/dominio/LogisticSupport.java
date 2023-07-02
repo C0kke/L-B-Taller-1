@@ -27,6 +27,12 @@ public class LogisticSupport extends Soldier {
 	public void setSupportsTroops(int supportsTroops) {
 		this.supportsTroops = supportsTroops;
 	}
+
+	@Override
+	public String toString() {
+		return "LogisticSupport "+super.toString()+"distributedSupplies=" + distributedSupplies
+				+ ", supportsTroops=" + supportsTroops + "]";
+	}
 	
 	
 }	
