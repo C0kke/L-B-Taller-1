@@ -50,9 +50,9 @@ public class Soldier {
 	}
 	@Override
 	public String toString() {
-		return "Soldier [name=" + name + ", lastName=" + lastName + ", nick="
-				+ nick + ", specialism=" + specialism + ", idSoldier="
-				+ idSoldier + ", soldierValue=" + soldierValue;
+		return "Soldier [name: " + name + " " + lastName + ", nick: "
+				+ nick + ", speciality: " + specialism + ", idSoldier: "
+				+ idSoldier + ", ";
 	}
 	
 }

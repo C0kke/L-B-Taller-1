@@ -1,16 +1,21 @@
 package cl.ucn.taller3.iavshumanidadIII.logica;
-import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 import cl.ucn.taller3.iavshumanidadIII.dominio.AI;
+import cl.ucn.taller3.iavshumanidadIII.dominio.AIEngineer;
+import cl.ucn.taller3.iavshumanidadIII.dominio.CryptografyExpert;
 import cl.ucn.taller3.iavshumanidadIII.dominio.Programmer;
 import cl.ucn.taller3.iavshumanidadIII.dominio.Soldier;
+import cl.ucn.taller3.iavshumanidadIII.dominio.ThreatAnalyst;
 import cl.ucn.taller3.iavshumanidadIII.dominio.User;
 
 public class App {
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws IOException {
 		
 		Scanner scan = new Scanner(System.in);
+		FileWriter writerPlayers = new FileWriter("stats-players.txt", true);
 		Sistema sistema = new SistemaImpl();
 		
 		List<User> users = new LinkedList<User>();
@@ -18,42 +23,183 @@ public class App {
 		List<AI> ais = new LinkedList<AI>();
 		List<Programmer> programmers = new LinkedList<Programmer>();
 		
-		System.out.println("Username: ");
-		String user = scan.nextLine().toLowerCase(); 
-		System.out.println("\nPassword: ");
-		String password = scan.nextLine().toLowerCase();
+		sistema.Reading(users, soldiers, ais, programmers);
+		String user = login(scan, sistema, users);
 		
-		sistema.LecturaArchivosYLogin(users, soldiers, ais, programmers, user, password);
-		
-		while(!sistema.LecturaArchivosYLogin(users, soldiers, ais, programmers, user, password)){
-			System.out.println("Denied access, retry\n");
-			System.out.println("Username: ");
-			user = scan.nextLine().toLowerCase(); 
-			System.out.println("\nPassword: ");
-			password = scan.nextLine().toLowerCase();
-		}
 		String category = "";
 		for(User player : users){
 			if(user.equals(player.getUser())){
 				category = player.getType();
 			}
 		}
-		if(category.equals("jugador")){
-			//Menu Jugador
-			System.out.println("Welcome to menu");
-		}else if(category.equals("admin")){
-			//Menu Admin
-			System.out.println("Succesful access");	
-			System.out.println("Choose an option: ");
-			System.out.println("1) Watch Data\n2) Change Data\n3) Watch Stats\n4) Simulation\n0) Back");
+		if(category.equals("jugador")){ //Menu Jugador
+			List<String> team = new ArrayList<String>();
+			int teamValue = 0;
+			
+			System.out.println("Welcome to menu "+user+"\nChoose an option: ");
+			System.out.println("1) Watch Soldiers Gallery\n2) Watch Programmers Gallery\n3) Create Team\n4) Battle Record\n5) Change Profile\n6) Watch Top\n7) Fight vs AI\n0) Exit");
 			int option = Integer.parseInt(scan.nextLine());
-			option = limits(0, 4, option, scan);
-			AdminMenu(option, users,soldiers, ais, programmers, scan);
+			while(option != 0){
+				option = limits(0, 7, option, scan);
+				PlayerMenu(option,user, users,soldiers, ais, programmers,team, teamValue, scan, writerPlayers);
+				System.out.println(("¿Do you want do anything else?"));
+				System.out.println("1) Watch Soldiers Gallery\n2) Watch Programmers Gallery\n3) Create Team\n4) Battle Record\n5) Change Profile\n6) Watch Top\n7) Fight vs AI\n0) Exit");
+				option = Integer.parseInt(scan.nextLine());
+			}
+		}else if(category.equals("admin")){//Menu Admin
+			
+			System.out.println("Succesful access\nChoose an option: ");	
+			System.out.println("1) Watch Data\n2) Change Data\n3) Watch Stats\n4) Simulation\n0) Exit");
+			int option = Integer.parseInt(scan.nextLine());
+			while(option != 0){
+				option = limits(0, 4, option, scan);
+				AdminMenu(option, users,soldiers, ais, programmers, scan);
+				System.out.println(("¿Do you want do anything else?"));
+				System.out.println("1) Watch Data\n2) Change Data\n3) Watch Stats\n4) Simulation\n0) Exit");
+				option = Integer.parseInt(scan.nextLine());
+			}
 			
 		}
+		saveChanges();
 		scan.close();
 	}
-
+	private static String login(Scanner scan, Sistema sistema, List<User> users){
+		System.out.println("Username: ");
+		String user = scan.nextLine().toLowerCase().trim(); 
+		System.out.println("\nPassword: ");
+		String password = scan.nextLine().toLowerCase().trim();
+		while(!sistema.Login(users, user, password)){
+			System.out.println("Denied access, retry\n");
+			System.out.println("Username: ");
+			user = scan.nextLine().toLowerCase().trim(); 
+			System.out.println("\nPassword: ");
+			password = scan.nextLine().toLowerCase().trim();
+		}
+		return user;
+	}
+	private static void PlayerMenu(int option, String user, List<User> users,List<Soldier> soldiers, List<AI> ais, List<Programmer> programmers, List<String> team, int teamValue, Scanner scan, FileWriter writer) throws IOException {
+		
+		switch(option){
+		case 1: // Watch soldiers gallery
+			for(Soldier s : soldiers){
+				System.out.println(s.toString());
+			}
+			break;
+		case 2:// Watch programmers gallery
+			for(Programmer p : programmers){
+				System.out.println(p.toString());
+			}
+			break;
+		case 3:// Create a team
+			if(team.size()!= 0){
+				System.out.println("Team has been created yet");
+			}else{
+				boolean exists;
+				for(int i = 0;i<2;i++){
+					exists = false;
+					System.out.println("Input the NAME of de Proggrammer "+ (i+1));
+					String progName = scan.nextLine().toLowerCase();
+					for(Programmer p : programmers){
+						if(progName.equals(p.getName().toLowerCase())){
+							exists = true;
+							team.add(progName);
+						}
+					}
+					if(!exists){
+						System.out.println("Programmer doesn't exists");
+						i -= 1;
+					}
+				}
+				for(int j=0;j<3;j++){
+					exists = false;
+					System.out.println("Input the Nick of de Soldier "+ (j+1));
+					String soldNick = scan.nextLine().toLowerCase();
+					for(Soldier s : soldiers){
+						if(soldNick.equals(s.getNick().toLowerCase())){
+							exists = true;
+							team.add(soldNick);
+						}
+					}
+					if(!exists){
+						System.out.println("Soldier doesn't exists");
+						j -= 1;
+					}
+				}
+				
+			}
+			System.out.println(team.toString());
+			break;
+		case 4://Registro de batallas: Se debe mostrar un historial que muestre contra que IA combatiste y el resultado de esta batalla, además de un porcentaje de victorias en la parte superior.
+			break;
+		case 5: //Cambiar Perfil
+			int pos = 0;
+			for(User u : users){
+				if(!user.equals(u.getUser().toLowerCase())){
+					pos +=1 ;
+				}else{
+					break;
+				}
+			}
+			System.out.println(users.get(pos).toString());
+			System.out.println("Do you want change the username? (y/n)");
+			if(scan.nextLine().equals("y")){
+				System.out.println("Input the new username: ");
+				users.get(pos).setUser(scan.nextLine());
+			}
+			System.out.println("Do you want change the password? (y/n)");
+			if(scan.nextLine().equals("y")){
+				System.out.println("Input the new password: ");
+				users.get(pos).setPassword(scan.nextLine());
+			}
+			System.out.println("Do you want change the Country? (y/n)");
+			if(scan.nextLine().equals("y")){
+				System.out.println("Input the new country: ");
+				users.get(pos).setCountry(scan.nextLine());
+			}
+			System.out.println("New user: "+users.get(pos).toString());
+			break;
+		case 6: // Ver top: Aquí podrás ver un top con los jugadores más puntos [Este deberá tener la opción de ser top mundial y Top nacional]
+			System.out.println("Do you want watch the Nacional(1) or Mundial(2) top?");
+			int top = Integer.parseInt(scan.nextLine());
+			String country;
+			top = limits(1, 2, top, scan);
+			switch(top){
+			case 1:
+				break;
+			case 2:
+				break;
+			}
+			break;
+		case 7: // pelear contra una ia
+			if(team.size()==0){
+				System.out.println("There's no team created");
+			}else{
+				teamValue = calculateValue(team, programmers, soldiers, teamValue);
+				System.out.println("Your team: "+team.toString()+"\nPower: "+ teamValue);
+				int posAI = (int)(Math.random()*(ais.size()-1));
+				int hpAI = addHPAI(ais, posAI);
+				System.out.println("Enemy A.I.: "+ ais.get(posAI).getName()+ " Vida: "+ hpAI);
+				String result;
+				int points = 0;
+				if(teamValue > hpAI){
+					result = "Victory";
+					points += 3;
+					System.out.println(result);
+				}else if(teamValue == hpAI){
+					result =  "Tie";
+					points -= 3;
+					System.out.println(result);
+				}else{
+					result =  "Defeat";
+					System.out.println(result);
+				}
+				writer.write(user+", "+ais.get(posAI).getName()+", "+result+", "+points);
+			}
+			break;
+		case 0:
+			break;
+		}
+	}
 	private static void AdminMenu(int option, List<User> users, List<Soldier> soldiers, List<AI> ais, List<Programmer> programmers, Scanner scan){
 		switch(option){
 		case 1://Ver datos
@@ -70,20 +216,13 @@ public class App {
 						countries.add(user.getCountry());
 					}
 				}
-				for (int i = 0; i < countries.size(); i++) {
-			    	for (int j = 1; j < countries.size(); j++) {
-			        	if(countries.get(j).compareTo(countries.get(j-1))<0){
-			        		String aux = countries.get(j-1);
-			                countries.set(j-1, countries.get(j));
-			                countries.set(j, aux);
-			            }
-			        }
-			    }
+				order(countries);
+				
 				for(String country : countries){
 					System.out.println(country);
 					for(User user : users){
 						if(country.equals(user.getCountry())){
-							System.out.println(user.toString());;
+							System.out.println(user.toString());
 						}
 					}
 				}
@@ -94,15 +233,7 @@ public class App {
 				for(Soldier s : soldiers){
 					if(!specialities.contains(s.getSpecialism())){specialities.add(s.getSpecialism());}
 				}
-				for (int i = 0; i < specialities.size(); i++) {
-			    	for (int j = 1; j < specialities.size(); j++) {
-			        	if(specialities.get(j).compareTo(specialities.get(j-1))<0){
-			        		String aux = specialities.get(j-1);
-			        		specialities.set(j-1, specialities.get(j));
-			        		specialities.set(j, aux);
-			            }
-			        }
-			    }
+				order(specialities);
 				for(String speciality : specialities){
 					System.out.println("SPECIALITY: "+speciality);
 					for(Soldier s : soldiers){
@@ -129,15 +260,7 @@ public class App {
 				for(Programmer p : programmers){
 					if(!specialitiesP.contains(p.getSpecialism())){specialitiesP.add(p.getSpecialism());}
 				}
-				for (int i = 0; i < specialitiesP.size(); i++) {
-			    	for (int j = 1; j < specialitiesP.size(); j++) {
-			        	if(specialitiesP.get(j).compareTo(specialitiesP.get(j-1))<0){
-			        		String aux = specialitiesP.get(j-1);
-			        		specialitiesP.set(j-1, specialitiesP.get(j));
-			        		specialitiesP.set(j, aux);
-			            }
-			        }
-			    }
+				order(specialitiesP);
 				for(String speciality : specialitiesP){
 					System.out.println("SPECIALITY: "+speciality);
 					for(Programmer p : programmers){
@@ -150,7 +273,6 @@ public class App {
 			case 0:
 				break;
 			}
-			
 			break;
 		case 2://Cambiar Datos
 			break;
@@ -168,5 +290,87 @@ public class App {
 			option = Integer.parseInt(scan.nextLine());
 	    }
 	    return option;
+	}
+	private static void order(List<String> list){
+		for (int i = 0; i < list.size(); i++) {
+	    	for (int j = 1; j < list.size(); j++) {
+	        	if(list.get(j).compareTo(list.get(j-1))<0){
+	        		String aux = list.get(j-1);
+	                list.set(j-1, list.get(j));
+	                list.set(j, aux);
+	            }
+	        }
+	    }
+	}
+	private static int calculateValue(List<String> team, List<Programmer> programmers, List<Soldier> soldiers, int teamValue){
+		for(String member :team){
+			for(Programmer p : programmers){
+				if(p.getName().toLowerCase().equals(member)){
+					switch(p.getSpecialism().toLowerCase()){
+					case "ingeniero de ia":
+						AIEngineer pe = (AIEngineer) p;
+						teamValue += addValue(pe.getExperience().toLowerCase(), teamValue);
+						break;
+					case "analista de amenazas":
+						ThreatAnalyst pa = (ThreatAnalyst) p;
+						teamValue += addValue(pa.getCapacity().toLowerCase(), teamValue);
+						break;
+					case "experto en criptografía":
+						int cryptoValue = 0;
+						CryptografyExpert pc = (CryptografyExpert) p;
+						cryptoValue += addValue(pc.getObfuscationAbility().toLowerCase(), cryptoValue);
+						cryptoValue += addValue(pc.getSecurityExperience().toLowerCase(), cryptoValue);					
+						teamValue += cryptoValue;
+						break;
+					}
+				}
+			}
+			for(Soldier s : soldiers){
+				if(s.getNick().toLowerCase().equals(member)){
+					teamValue += s.getSoldierValue();			
+				}
+			}
+		}
+		return teamValue;
+	}
+	private static int addValue(String level, int value){
+		switch(level.trim()){
+		case "avanzado":
+			value = 450;
+			break;
+		case "intermedio":
+			value = 300;
+			break;
+		case "bajo":
+			value = 150;
+			break;	
+		}
+		return value;
+	}
+	private static int addHPAI(List<AI> ais, int vsAI){
+		int hpAI = ais.get(vsAI).getHp();
+		switch(ais.get(vsAI).getClas().trim()){
+		case "S+":
+			hpAI += 2994;
+			break;
+		case "S":
+			hpAI += 1994;
+			break;
+		case "A":
+			hpAI += 994;
+			break;
+		case "B":
+			hpAI += 452;
+			break;
+		case "C":
+			hpAI += 226;
+			break;
+		case "D":
+			break;
+		}
+		return hpAI;
+	}
+	private static void saveChanges(){
+		
 	}
 }

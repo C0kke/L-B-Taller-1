@@ -17,5 +17,6 @@ public interface Sistema {
 	 * Post: 
 	 */
 	
-	boolean LecturaArchivosYLogin(List<User> users, List<Soldier> soldiers, List<AI> ais, List<Programmer> programmers, String user, String password) throws FileNotFoundException;
+	void Reading(List<User> users, List<Soldier> soldiers, List<AI> ais, List<Programmer> programmers) throws FileNotFoundException;
+	boolean Login(List<User> users, String user, String password);
 }

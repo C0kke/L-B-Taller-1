@@ -9,3 +9,4 @@ emily.wilson, passw0rd!, Italia, jugador
 chris1987, mysecretpass, Brasil, jugador
 anna_smith, qwerty123, México, admin
 cokke, jrg666, Francia, admin
+tobal, luna123, Chile, jugador

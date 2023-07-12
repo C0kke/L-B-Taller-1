@@ -20,8 +20,7 @@ import cl.ucn.taller3.iavshumanidadIII.dominio.User;
 
 public class SistemaImpl implements Sistema {
 
-	@Override
-	public boolean LecturaArchivosYLogin(List<User> users, List<Soldier> soldiers, List<AI> ais, List<Programmer> programmers, String user, String password) throws FileNotFoundException {
+	public void Reading(List<User> users, List<Soldier> soldiers, List<AI> ais, List<Programmer> programmers) throws FileNotFoundException {
 		Scanner readerUsers = new Scanner(new File("Users.txt"));
 		while(readerUsers.hasNextLine()){
 			String[] parts = readerUsers.nextLine().split(",");
@@ -123,7 +122,8 @@ public class SistemaImpl implements Sistema {
 			}
 		}
 		readerProgrammers.close();
-	
+	}
+	public boolean Login(List<User> users, String user, String password){
 		boolean exists = false;
 		for(int i=0;i< users.size();i++){
 			if(user.equals(users.get(i).getUser().toLowerCase()) && password.equals(users.get(i).getPassword().toLowerCase())){
