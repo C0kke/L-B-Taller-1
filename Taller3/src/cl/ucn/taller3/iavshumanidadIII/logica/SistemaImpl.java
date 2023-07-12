@@ -2,12 +2,16 @@ package cl.ucn.taller3.iavshumanidadIII.logica;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
 import cl.ucn.taller3.iavshumanidadIII.dominio.AI;
 import cl.ucn.taller3.iavshumanidadIII.dominio.AIEngineer;
 import cl.ucn.taller3.iavshumanidadIII.dominio.Artillery;
+import cl.ucn.taller3.iavshumanidadIII.dominio.Battle;
 import cl.ucn.taller3.iavshumanidadIII.dominio.CombatIntelligence;
 import cl.ucn.taller3.iavshumanidadIII.dominio.CryptografyExpert;
 import cl.ucn.taller3.iavshumanidadIII.dominio.Infantry;
@@ -20,7 +24,7 @@ import cl.ucn.taller3.iavshumanidadIII.dominio.User;
 
 public class SistemaImpl implements Sistema {
 
-	public void Reading(List<User> users, List<Soldier> soldiers, List<AI> ais, List<Programmer> programmers) throws FileNotFoundException {
+	public void Reading(List<User> users, List<Soldier> soldiers, List<AI> ais, List<Programmer> programmers, List<Battle> battles) throws FileNotFoundException {
 		Scanner readerUsers = new Scanner(new File("Users.txt"));
 		while(readerUsers.hasNextLine()){
 			String[] parts = readerUsers.nextLine().split(",");
@@ -122,6 +126,24 @@ public class SistemaImpl implements Sistema {
 			}
 		}
 		readerProgrammers.close();
+		
+		Scanner readerBattles = new Scanner(new File("stats-players.txt"));
+		while(readerBattles.hasNextLine()){
+			List<String> team = new LinkedList<String>();
+			String[] parts = readerBattles.nextLine().split(",");
+			String userName = parts[0].trim();
+			team.add(parts[1].trim());
+			team.add(parts[2].trim());
+			team.add(parts[3].trim());
+			team.add(parts[4].trim());
+			team.add(parts[5].trim()) ;
+			String aiName = parts[6].trim();
+			String result = parts[7].trim();
+			int score = Integer.parseInt(parts[8].trim());
+			Battle b = new Battle(userName, team, aiName, result, score);
+			battles.add(b);
+		}
+		readerBattles.close();
 	}
 	public boolean Login(List<User> users, String user, String password){
 		boolean exists = false;
@@ -132,5 +154,59 @@ public class SistemaImpl implements Sistema {
 			}
 		}
 		return exists;
+	}
+	public void saveChanges(List<User> users, List<Soldier> soldiers, List<AI> ais, List<Programmer> programmers, List<Battle> battles) throws IOException{
+		FileWriter saveUsers = new FileWriter("Users.txt", false);
+		for(User u : users){
+			saveUsers.write(u.getUser()+", "+u.getPassword()+", "+u.getCountry()+", "+u.getType()+"\n");
+		}
+		saveUsers.close();
+		FileWriter saveSoldiers = new FileWriter("stats-soldiers.txt", false);
+		for(Soldier s : soldiers){
+			saveSoldiers.write(s.getIdSoldier()+", "+s.getName()+", "+s.getLastName()+", "+s.getNick()+", "+s.getSpecialism()+", "+s.getSoldierValue()+", ");
+			switch(s.getSpecialism()){
+			case "infantería":
+				Infantry iS = (Infantry) s;
+				saveSoldiers.write(iS.getCompletedMissions()+", "+iS.getWeapon()+"\n");
+				break;
+			case "artillería":
+				Artillery aS = (Artillery) s;
+				saveSoldiers.write(aS.getDestroyedObjectives()+", "+aS.getPrecision()+"\n");
+				break;
+			case "inteligencia de combate":
+				CombatIntelligence cS = (CombatIntelligence) s;
+				saveSoldiers.write(cS.getIntelligenceReports()+", "+cS.getIdentifiedEnemies()+"\n");
+				break;
+			case "operaciones especiales":
+				SpecialOperations sS = (SpecialOperations) s;
+				saveSoldiers.write(sS.getHiddenMissions()+", "+sS.getTotalMissions()+", "+ sS.getObtainedResources()+"\n");
+				break;
+			case "apoyo logístico":
+				LogisticSupport lS = (LogisticSupport) s;
+				saveSoldiers.write(lS.getDistributedSupplies()+", "+lS.getSupportsTroops()+"\n");
+				break;
+			}
+		}
+		saveSoldiers.close();
+		FileWriter saveProgrammers = new FileWriter("stats-programmers.txt", false);
+		for(Programmer p : programmers){
+			saveProgrammers.write(p.getId()+", "+p.getName()+", "+p.getLastName()+", "+p.getSpecialism()+", ");
+			switch(p.getSpecialism()){
+			case "ingeniero de ia":
+				AIEngineer pe = (AIEngineer) p;
+				saveProgrammers.write(pe.getExperience()+", "+pe.getImplementedAlgorithms()+"\n");
+				break;
+			case "analista de amenazas":
+				ThreatAnalyst pt = (ThreatAnalyst) p;
+				saveProgrammers.write(pt.getCapacity()+", "+pt.getDetectedThreats()+"\n");
+				break;
+			case "experto en criptografía":
+				CryptografyExpert pc = (CryptografyExpert) p;
+				saveProgrammers.write(pc.getSuccesfulImplementations()+", "+pc.getKnowledge()+"\n");
+				break;
+			}
+		}
+		saveProgrammers.close();
+		
 	}
 }

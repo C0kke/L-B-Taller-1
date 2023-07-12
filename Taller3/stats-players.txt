@@ -1,0 +1,13 @@
+tobal, emma, john, scout, sniper, field medic, EtaOS, Defeat, -3
+tobal, emma, john, scout, sniper, field medic, EtaOS, Defeat, -3
+tobal, emma, john, scout, sniper, field medic, ZetaCore, Victory, 3
+tobal, emma, john, scout, sniper, field medic, GammaAI, Victory, 3
+tobal, emma, john, scout, sniper, field medic, EtaOS, Defeat, -3
+tobal, emma, john, scout, sniper, field medic, AlphaX, Defeat, -3
+tobal, emma, john, scout, sniper, field medic, AlphaX, Defeat, -3
+amy_walker, olivia, mark, saboteur, gunner, mortar operator, GammaAI, Victory, 3
+amy_walker, olivia, mark, saboteur, gunner, mortar operator, GammaAI, Victory, 3
+amy_walker, olivia, mark, saboteur, gunner, mortar operator, ZetaCore, Victory, 3
+amy_walker, olivia, mark, saboteur, gunner, mortar operator, AlphaX, Defeat, -3
+amy_walker, olivia, mark, saboteur, gunner, mortar operator, ThetaProto, Victory, 3
+tobal, emma, john, scout, sniper, field medic, ZetaCore, Victory, 3

@@ -5,6 +5,7 @@ import java.util.*;
 
 import cl.ucn.taller3.iavshumanidadIII.dominio.AI;
 import cl.ucn.taller3.iavshumanidadIII.dominio.AIEngineer;
+import cl.ucn.taller3.iavshumanidadIII.dominio.Battle;
 import cl.ucn.taller3.iavshumanidadIII.dominio.CryptografyExpert;
 import cl.ucn.taller3.iavshumanidadIII.dominio.Programmer;
 import cl.ucn.taller3.iavshumanidadIII.dominio.Soldier;
@@ -22,8 +23,9 @@ public class App {
 		List<Soldier> soldiers = new LinkedList<Soldier>();
 		List<AI> ais = new LinkedList<AI>();
 		List<Programmer> programmers = new LinkedList<Programmer>();
+		List<Battle> battles = new LinkedList<Battle>();
 		
-		sistema.Reading(users, soldiers, ais, programmers);
+		sistema.Reading(users, soldiers, ais, programmers, battles);
 		String user = login(scan, sistema, users);
 		
 		String category = "";
@@ -41,7 +43,13 @@ public class App {
 			int option = Integer.parseInt(scan.nextLine());
 			while(option != 0){
 				option = limits(0, 7, option, scan);
-				PlayerMenu(option,user, users,soldiers, ais, programmers,team, teamValue, scan, writerPlayers);
+				for(Battle battle : battles){
+					if(user.toLowerCase().equals(battle.getUserName().toLowerCase())){
+						team = battle.getTeam();
+						break;
+					}
+				}
+				PlayerMenu(option,user, users,soldiers, ais, programmers, battles,team, teamValue, scan, writerPlayers);
 				System.out.println(("¿Do you want do anything else?"));
 				System.out.println("1) Watch Soldiers Gallery\n2) Watch Programmers Gallery\n3) Create Team\n4) Battle Record\n5) Change Profile\n6) Watch Top\n7) Fight vs AI\n0) Exit");
 				option = Integer.parseInt(scan.nextLine());
@@ -60,8 +68,9 @@ public class App {
 			}
 			
 		}
-		saveChanges();
+		writerPlayers.close();
 		scan.close();
+		sistema.saveChanges(users, soldiers, ais, programmers, battles);
 	}
 	private static String login(Scanner scan, Sistema sistema, List<User> users){
 		System.out.println("Username: ");
@@ -77,7 +86,8 @@ public class App {
 		}
 		return user;
 	}
-	private static void PlayerMenu(int option, String user, List<User> users,List<Soldier> soldiers, List<AI> ais, List<Programmer> programmers, List<String> team, int teamValue, Scanner scan, FileWriter writer) throws IOException {
+	private static void PlayerMenu(int option, String user, List<User> users,List<Soldier> soldiers, List<AI> ais, 
+			List<Programmer> programmers, List<Battle> battles, List<String> team, int teamValue, Scanner scan, FileWriter writer) throws IOException {
 		
 		switch(option){
 		case 1: // Watch soldiers gallery
@@ -97,7 +107,7 @@ public class App {
 				boolean exists;
 				for(int i = 0;i<2;i++){
 					exists = false;
-					System.out.println("Input the NAME of de Proggrammer "+ (i+1));
+					System.out.println("Input the NAME of the Proggrammer "+ (i+1));
 					String progName = scan.nextLine().toLowerCase();
 					for(Programmer p : programmers){
 						if(progName.equals(p.getName().toLowerCase())){
@@ -112,7 +122,7 @@ public class App {
 				}
 				for(int j=0;j<3;j++){
 					exists = false;
-					System.out.println("Input the Nick of de Soldier "+ (j+1));
+					System.out.println("Input the Nick of the Soldier "+ (j+1));
 					String soldNick = scan.nextLine().toLowerCase();
 					for(Soldier s : soldiers){
 						if(soldNick.equals(s.getNick().toLowerCase())){
@@ -130,8 +140,16 @@ public class App {
 			System.out.println(team.toString());
 			break;
 		case 4://Registro de batallas: Se debe mostrar un historial que muestre contra que IA combatiste y el resultado de esta batalla, además de un porcentaje de victorias en la parte superior.
+			int score = 0;
+			for(Battle b : battles){
+				if(b.getUserName().toLowerCase().equals(user.toLowerCase())){
+					System.out.println(b.toString());
+					score += b.getScore();
+				}
+			}
+			System.out.println("Score = "+score);
 			break;
-		case 5: //Cambiar Perfil
+		case 5: //Change Profile
 			int pos = 0;
 			for(User u : users){
 				if(!user.equals(u.getUser().toLowerCase())){
@@ -159,14 +177,59 @@ public class App {
 			System.out.println("New user: "+users.get(pos).toString());
 			break;
 		case 6: // Ver top: Aquí podrás ver un top con los jugadores más puntos [Este deberá tener la opción de ser top mundial y Top nacional]
-			System.out.println("Do you want watch the Nacional(1) or Mundial(2) top?");
+			String country = "";
+			for(User u : users){
+				if(u.getUser().toLowerCase().equals(user)){
+					country = u.getCountry();
+				}
+			}
+			System.out.println("Do you want watch the Nacional(1) or Global(2) top?");
 			int top = Integer.parseInt(scan.nextLine());
-			String country;
-			top = limits(1, 2, top, scan);
+			int totalScoreTop;
+ 			top = limits(1, 2, top, scan);
 			switch(top){
 			case 1:
+				List<String> nacional = new LinkedList<String>();
+				List<Integer> nacionalScores = new LinkedList<Integer>();
+				String userName = "";
+				for(User u : users){
+					totalScoreTop = 0;
+					if(u.getCountry().toLowerCase().equals(country.toLowerCase())){
+						for(Battle battle : battles){
+							if(battle.getUserName().toLowerCase().equals(u.getUser().toLowerCase())){
+								userName = battle.getUserName();
+								totalScoreTop += battle.getScore();
+							}
+						}
+						nacionalScores.add(totalScoreTop);
+						nacional.add(userName);
+					}
+				}
+				for(int a = 0;a<nacional.size();a++){
+					System.out.println(nacional.get(a)+", SCORE: "+nacionalScores.get(a));
+				}
 				break;
 			case 2:
+				List<String> global = new LinkedList<String>();
+				List<Integer> globalScores = new LinkedList<Integer>();
+				for(User u : users){
+					userName = "";
+					totalScoreTop = 0;
+					for(Battle battle : battles){
+						if(battle.getUserName().toLowerCase().equals(u.getUser().toLowerCase())){
+							userName = battle.getUserName();
+							totalScoreTop += battle.getScore();
+						}
+					}
+					globalScores.add(totalScoreTop);
+					global.add(userName);
+				}
+
+				for(int a = 0;a<global.size();a++){
+					if(global.get(a) != ""){
+						System.out.println(global.get(a)+", SCORE: "+globalScores.get(a));
+					}
+				}
 				break;
 			}
 			break;
@@ -187,13 +250,17 @@ public class App {
 					System.out.println(result);
 				}else if(teamValue == hpAI){
 					result =  "Tie";
-					points -= 3;
 					System.out.println(result);
 				}else{
 					result =  "Defeat";
+					points -= 3;
 					System.out.println(result);
 				}
-				writer.write(user+", "+ais.get(posAI).getName()+", "+result+", "+points);
+				writer.write(user+", ");
+				for(String member : team){
+					writer.write(member+", ");
+				}
+				writer.write(ais.get(posAI).getName()+", "+result+", "+points+"\n");
 			}
 			break;
 		case 0:
@@ -369,8 +436,5 @@ public class App {
 			break;
 		}
 		return hpAI;
-	}
-	private static void saveChanges(){
-		
 	}
 }

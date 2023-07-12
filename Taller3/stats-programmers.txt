@@ -1,6 +1,6 @@
-001, John, Smith, Ingeniero de IA, Avanzado, 10
-002, Sarah, Johnson, Ingeniero de IA, Intermedio, 5	
-005, Mark, Wilson, Analista de Amenazas, Avanzado, 12
-006, Olivia, Anderson, Analista de Amenazas, Intermedio, 8
-007, James, Thomas, Experto en Criptografía, Avanzado, Alto, 5, Avanzado
-008, Emma, White, Experto en Criptografía, Intermedio, Medio, 3, Intermedio
+1, John, Smith, ingeniero de ia, Avanzado, 10
+2, Sarah, Johnson, ingeniero de ia, Intermedio, 5
+5, Mark, Wilson, analista de amenazas, Avanzado, 12
+6, Olivia, Anderson, analista de amenazas, Intermedio, 8
+7, James, Thomas, experto en criptografía, 5, Avanzado
+8, Emma, White, experto en criptografía, 3, Intermedio
