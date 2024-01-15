@@ -1,7 +1,7 @@
 Proyectos/Talleres Universitarios en Java
 
-Taller1 -> Enunciado Taller 1
+Taller 1 IA PARTE 1 (2).pdf -> Enunciado Taller 1
 
-Taller2 -> Enunciado Taller 2
+Taller 2 (1).pdf -> Enunciado Taller 2
 
-Taller3 -> Enunciado Taller 3
+Taller 3.pdf -> Enunciado Taller 3
