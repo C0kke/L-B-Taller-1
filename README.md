@@ -1,6 +1,6 @@
 ![image](https://github.com/user-attachments/assets/96871480-9cdb-4864-9e91-f4c4d760d68e)
 
-# Objetivo
+# Acerca del repositorio
 
 Este es un repositorio donde se subieron las resoluciones de los talleres de la asignatura Programación Avanzada de la Universidad católica del norte.
 
