@@ -1,13 +1,7 @@
-Proyectos/Talleres Universitarios en Java
+![image](https://github.com/user-attachments/assets/96871480-9cdb-4864-9e91-f4c4d760d68e)
 
-Taller 1 IA PARTE 1 (2).pdf -> Enunciado Taller 1
 
-Taller1IaVsHumanidad -> carpeta con archivos para ejecutar Taller 1 en IDE java
+# Este es un repositorio donde se subieron Proyectos/Talleres Universitarios para ser ejecutados en IDE de JAVA
 
-Taller 2 (1).pdf -> Enunciado Taller 2
-
-Taller2IaVsHumanidadII -> carpeta con archivos para ejecutar Taller 2 en IDE java
-
-Taller 3.pdf -> Enunciado Taller 3
-
-Taller3 -> carpeta con archivos para ejecutar Taller 3 en IDE java
+# Los talleres son problemas de la asignatura Programación Avanzada de la Universidad católica del norte
+# Ambos estudiantes autores de los códigos son Cristobal Luna y Jorge Bustos, estudiantes de Ingeniería civil en computación e informática de esta universidad
